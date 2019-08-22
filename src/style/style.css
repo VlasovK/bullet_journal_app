@@ -104,10 +104,13 @@ body, html {
 }
 .edit-task-close-icon {
   float: right;
-  padding: 6px 6px 8px 6px;
+  padding: 6px;
   margin: -6px -6px 0 0;
   color: #607d8b;
   cursor: pointer;
+}
+.edit-task-close-icon:hover {
+  color: tomato;
 }
 .basic {
   border: none !important;
@@ -178,4 +181,16 @@ body, html {
 .line-through {
   text-decoration: line-through;
   color: #aaa !important;
+}
+.log-menu {
+  position: absolute;
+  cursor: pointer;
+  padding: 6px;
+  color: white;
+  top: 3px;
+  left: 290px;
+}
+.log-menu:hover {
+  color: rgba(255, 255, 255, .75);
+  cursor: pointer;
 }

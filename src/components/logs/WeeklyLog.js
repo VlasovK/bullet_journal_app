@@ -35,7 +35,7 @@ export default class WeeklyLog extends React.Component {
             key={index}
             task={task} />
         );
-    } else {
+      } else {
         return (
           <EditTaskContainer
             key={index}

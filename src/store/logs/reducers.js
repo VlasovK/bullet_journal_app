@@ -12,7 +12,7 @@ let defaultState = {
   },
   monthlyLog: {
     year: currentDate.year(),
-    monthNumber: currentDate.month(),
+    month: currentDate.month(),
     isPending: false,
     data: []
   },

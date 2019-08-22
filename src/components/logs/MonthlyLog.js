@@ -35,7 +35,7 @@ export default class MonthlyLog extends React.Component {
             key={index}
             task={task} />
         );
-    } else {
+      } else {
         return (
           <EditTaskContainer
             key={index}

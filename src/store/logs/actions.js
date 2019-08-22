@@ -11,9 +11,8 @@ export const GET_WEEKLY_LOG_FULFILLED = 'GET_WEEKLY_LOG_FULFILLED';
 export const GET_DAILY_LOG = 'GET_DAILY_LOG';
 export const GET_DAILY_LOG_FULFILLED = 'GET_DAILY_LOG_FULFILLED';
 export const GET_LOG_DATA_REJECTED = 'GET_LOG_DATA_REJECTED';
-
+// sorting by task status and marking
 let sortTasks = tasks=>{
-  // sorting by task status and marking
   return tasks.sort((a, b)=>{
     if (a.status === b.status)
       return (a.mark - b.mark);

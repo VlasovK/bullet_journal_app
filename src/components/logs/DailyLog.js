@@ -35,7 +35,7 @@ export default class DailyLog extends React.Component {
             key={index}
             task={task} />
         );
-    } else {
+      } else {
         return (
           <EditTaskContainer
             key={index}
@@ -52,6 +52,7 @@ export default class DailyLog extends React.Component {
       <div className="table-card animated fadeIn">
         <MDBContainer>
           <MDBCard>
+            <MDBIcon icon="ellipsis-h" className="log-menu" />
             <MDBCardBody className="daily-log-title">
               <MDBCardTitle>Daily Log</MDBCardTitle>
               <MDBCardTitle tag="h6" sub>

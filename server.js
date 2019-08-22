@@ -81,7 +81,7 @@ app.delete('/delete_monthly_log_task/:year/:month/:id', (request, response)=>{
   tasks = journalData.monthlyLog[year][month].filter(task=> {
     return task.id !== +id;
  });
-  journalData.weeklyLog[year][month] = tasks;
+  journalData.monthlyLog[year][month] = tasks;
   response.send(tasks);
 });
 // get Weekly Log data by YEAR and WEEK number
