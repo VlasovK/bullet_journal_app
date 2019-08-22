@@ -1,7 +1,9 @@
 let express = require('express');
 let fs = require('fs');
 let bodyParser = require('body-parser');
-
+// create database file if not created
+if (!fs.existsSync('journal_data.json'))
+  fs.writeFileSync('journal_data.json', fs.readFileSync('journal_data_init.json'));
 let journalData = JSON.parse(fs.readFileSync('journal_data.json'));
 setInterval(()=> {
   fs.writeFileSync('journal_data.json', JSON.stringify(journalData));
