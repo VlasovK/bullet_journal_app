@@ -11,6 +11,9 @@ export default class MonthlyLog extends React.Component {
   componentDidMount() {
     this.props.getMonthlyLog();
   }
+  changeDate = ()=>{
+    console.log( 'change_date' );
+  };
   addAnotherTask = ()=>{
     this.props.setCurrentLogTask('newMonthlyTask');
   };
@@ -46,6 +49,8 @@ export default class MonthlyLog extends React.Component {
     });
   };
   render() {
+    let {year, month} = this.props.logsState.monthlyLog;
+    let selectedDate =  moment().set({month, year}).format('MMMM YYYY');
     let tasks = this.getTasks();
     let newTask = this.props.logsState.currentLogTask === 'newMonthlyTask';
     return (
@@ -54,8 +59,11 @@ export default class MonthlyLog extends React.Component {
           <MDBCard>
             <MDBCardBody className="monthly-log-title">
               <MDBCardTitle>Monthly Log</MDBCardTitle>
-              <MDBCardTitle tag="h6" sub>
-                August 2019
+              <MDBCardTitle
+                sub tag="h6"
+                className="date-selector"
+                onClick={this.changeDate}>
+                {selectedDate}
               </MDBCardTitle>
             </MDBCardBody>
           </MDBCard>

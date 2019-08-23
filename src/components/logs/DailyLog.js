@@ -11,6 +11,9 @@ export default class DailyLog extends React.Component {
   componentDidMount() {
     this.props.getDailyLog();
   }
+  changeDate = ()=>{
+    console.log( 'change_date' );
+  };
   addAnotherTask = ()=>{
     this.props.setCurrentLogTask('newDailyTask');
   };
@@ -46,17 +49,20 @@ export default class DailyLog extends React.Component {
     });
   };
   render() {
+    let selectedDate = moment(this.props.logsState.dailyLog.date).format('MMMM Do YYYY dddd');
     let tasks = this.getTasks();
     let newTask = this.props.logsState.currentLogTask === 'newDailyTask';
     return (
       <div className="table-card animated fadeIn">
         <MDBContainer>
           <MDBCard>
-            <MDBIcon icon="ellipsis-h" className="log-menu" />
             <MDBCardBody className="daily-log-title">
               <MDBCardTitle>Daily Log</MDBCardTitle>
-              <MDBCardTitle tag="h6" sub>
-                08/26/2019 Tuesday
+              <MDBCardTitle
+                sub tag="h6"
+                className="date-selector"
+                onClick={this.changeDate}>
+                {selectedDate}
               </MDBCardTitle>
             </MDBCardBody>
           </MDBCard>

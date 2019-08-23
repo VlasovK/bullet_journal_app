@@ -12,10 +12,10 @@ export default class MainView extends React.Component {
   }
   render() {
     let currentTime = moment(this.props.commonState.currentTime)
-      .format('MMMM Do YYYY, h:mm:ss a');
+      .format('MMMM Do YYYY dddd, h:mm:ss a');
     return (
       <div className="header animated fadeInDown">
-        <h3 className="app-name">Bullet<b>Journal</b>App</h3>
+        <h3 className="app-name"><b>J</b>b</h3>
         <MDBBtn
           outline
           color={this.props.workspaceState.isProjectsShown ? 'white' : 'grey'}

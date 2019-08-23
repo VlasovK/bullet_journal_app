@@ -11,6 +11,9 @@ export default class WeeklyLog extends React.Component {
   componentDidMount() {
     this.props.getWeeklyLog();
   }
+  changeDate = ()=>{
+    console.log( 'change_date' );
+  };
   addAnotherTask = ()=>{
     this.props.setCurrentLogTask('newWeeklyTask');
   };
@@ -46,6 +49,10 @@ export default class WeeklyLog extends React.Component {
     });
   };
   render() {
+    let {week, year} = this.props.logsState.weeklyLog;
+    let firstDayOfWeek = moment().week(week).year(year).day(1).format('MMM Do YYYY');
+    let lastDayOfWeek = moment().week(week).year(year).day(7).format('MMM Do YYYY');
+    let selectedDate = `${firstDayOfWeek} - ${lastDayOfWeek} (#${week})`;
     let tasks = this.getTasks();
     let newTask = this.props.logsState.currentLogTask === 'newWeeklyTask';
     return (
@@ -54,8 +61,11 @@ export default class WeeklyLog extends React.Component {
           <MDBCard>
             <MDBCardBody className="weekly-log-title">
               <MDBCardTitle>Weekly Log</MDBCardTitle>
-              <MDBCardTitle tag="h6" sub>
-                (#33) 08/26/2019 - 09/1/2019
+              <MDBCardTitle
+                sub tag="h6"
+                className="date-selector"
+                onClick={this.changeDate}>
+                {selectedDate}
               </MDBCardTitle>
             </MDBCardBody>
           </MDBCard>

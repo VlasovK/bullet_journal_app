@@ -18,7 +18,7 @@ let defaultState = {
   },
   weeklyLog: {
     year: currentDate.year(),
-    week: currentDate.week(),
+    week: currentDate.isoWeek(),
     isPending: false,
     data: []
   },
