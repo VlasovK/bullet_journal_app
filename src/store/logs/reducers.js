@@ -1,5 +1,6 @@
 import * as moment from 'moment';
-import {SET_CURRENT_LOG_TASK, GET_LOG_DATA_REJECTED, GET_FUTURE_LOG,
+import {SET_CURRENT_LOG_TASK, SET_MONTHLY_LOG_DATE, SET_WEEKLY_LOG_DATE,
+  SET_DAILY_LOG_DATE, GET_LOG_DATA_REJECTED, GET_FUTURE_LOG,
   GET_FUTURE_LOG_FULFILLED, GET_MONTHLY_LOG, GET_MONTHLY_LOG_FULFILLED,
   GET_WEEKLY_LOG, GET_WEEKLY_LOG_FULFILLED, GET_DAILY_LOG, GET_DAILY_LOG_FULFILLED} from './actions';
 
@@ -23,7 +24,7 @@ let defaultState = {
     data: []
   },
   dailyLog: {
-    date: currentDate.format('MM-DD-YYYY'),
+    date: currentDate,
     isPending: false,
     data: []
   },
@@ -33,6 +34,14 @@ export let logsReducer = (state=defaultState, action)=>{
   switch (action.type) {
     case SET_CURRENT_LOG_TASK:
       return {...state, currentLogTask: action.payload};
+    case SET_MONTHLY_LOG_DATE:
+      return {...state, monthlyLog: {
+        ...state.monthlyLog, year: action.payload.year, month: action.payload.month}};
+    case SET_WEEKLY_LOG_DATE:
+      return {...state, weeklyLog: {
+        ...state.weeklyLog, year: action.payload.year, week: action.payload.week}};
+    case SET_DAILY_LOG_DATE:
+      return {...state, dailyLog: {...state.dailyLog, date: action.payload}};
     case GET_FUTURE_LOG:
       return {...state, futureLog: {...state.futureLog, isPending: true}};
     case GET_FUTURE_LOG_FULFILLED:

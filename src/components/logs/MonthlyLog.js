@@ -6,13 +6,18 @@ import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
 import EditTaskContainer from '../../containers/logs/EditTaskContainer';
 import * as moment from 'moment';
+import DatePicker, {registerLocale} from 'react-datepicker';
+import enGB from 'date-fns/locale/en-GB';
+registerLocale('en-GB', enGB);
 
 export default class MonthlyLog extends React.Component {
   componentDidMount() {
     this.props.getMonthlyLog();
   }
-  changeDate = ()=>{
-    console.log( 'change_date' );
+  handleDatePicker = date=>{
+    let data = {month: moment(date).month(), year: moment(date).year()};
+    this.props.setMonthlyLogDate(data);
+    this.props.getMonthlyLog();
   };
   addAnotherTask = ()=>{
     this.props.setCurrentLogTask('newMonthlyTask');
@@ -34,9 +39,7 @@ export default class MonthlyLog extends React.Component {
     return monthlyLog.data.map((task, index)=>{
       if (typeof currentLogTask === 'string' || currentLogTask.id !== task.id) {
         return (
-          <TaskContainer
-            key={index}
-            task={task} />
+          <TaskContainer key={index} task={task} />
         );
       } else {
         return (
@@ -48,9 +51,17 @@ export default class MonthlyLog extends React.Component {
       }
     });
   };
-  render() {
+  getCustomInput = ()=>{
     let {year, month} = this.props.logsState.monthlyLog;
     let selectedDate =  moment().set({month, year}).format('MMMM YYYY');
+    return (
+      <MDBCardTitle sub tag="h6">
+        {selectedDate}
+      </MDBCardTitle>
+    );
+  };
+  render() {
+    let customInput = this.getCustomInput();
     let tasks = this.getTasks();
     let newTask = this.props.logsState.currentLogTask === 'newMonthlyTask';
     return (
@@ -59,12 +70,12 @@ export default class MonthlyLog extends React.Component {
           <MDBCard>
             <MDBCardBody className="monthly-log-title">
               <MDBCardTitle>Monthly Log</MDBCardTitle>
-              <MDBCardTitle
-                sub tag="h6"
-                className="date-selector"
-                onClick={this.changeDate}>
-                {selectedDate}
-              </MDBCardTitle>
+              <DatePicker
+                showMonthYearPicker
+                customInput={customInput}
+                locale="en-GB"
+                className="date-picker"
+                onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>
         </MDBContainer>

@@ -9,16 +9,16 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
 }
-.spiner-fullscreen-mask {
+.fullscreen-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, .3);
-  position: absolute;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  padding-top: 45vh;
+  height: 100%;
   z-index: 5;
+  padding-top: 45vh;
+  text-align: center;
+  background-color: rgba(0, 0, 0, .3);
 }
 .header {
   height: 58px;
@@ -34,10 +34,17 @@ body, html {
 .tomato-error {
   color: tomato;
 }
+.stop-propagation {
+  width: max-content;
+  margin: auto;
+}
 .app-name {
-  margin: 16px 0 0 16px;
+  border: 1px solid white;
+  padding: 3px;
+  margin: 9px 0 0 16px;
   float: left;
   font-weight: 300;
+  text-decoration: underline;
 }
 .the-time {
   margin: 16px 16px 0 0;
@@ -56,6 +63,9 @@ body, html {
 }
 .card-body {
   padding: 10px 20px !important;
+}
+.card-title {
+  margin-bottom: 2px !important;
 }
 .table-card {
   width: 352px;
@@ -175,6 +185,12 @@ body, html {
   text-align: center;
   font-size: .7rem;
 }
+.mt-5-px {
+  margin-top: 5px !important;
+}
+.mb-2-px {
+  margin-bottom: 2px !important;
+}
 .mb-12 {
   margin-bottom: 12px !important;
 }
@@ -182,9 +198,9 @@ body, html {
   text-decoration: line-through;
   color: #aaa !important;
 }
-.date-selector {
+.date-picker {
   cursor: pointer;
 }
-.date-selector:hover {
+.date-picker:hover {
   color: rgba(255, 255, 255, .75);
 }

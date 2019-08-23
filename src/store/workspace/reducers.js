@@ -3,11 +3,12 @@ import {TOGGLE_PROJECTS_DISPLAY, TOGGLE_MY_LOGS_DISPLAY, TOGGLE_NOTES_DISPLAY,
 
 let defaultState = {
   isProjectsShown: false,
-  isMyLogsShown: true,
+  isMyLogsShown: false,
   isNotesShown: false,
-  isLifestyleShown: false
+  isLifestyleShown: false,
+  isCalendarShown: 'daily' // false or calendarType
 };
-export let workspaceReducer = (state = defaultState, action)=>{
+export let workspaceReducer = (state=defaultState, action)=>{
   switch (action.type) {
     case TOGGLE_PROJECTS_DISPLAY:
       return {

@@ -45,7 +45,7 @@ app.delete('/delete_future_log_task/:id', (request, response)=>{
   response.send(tasks);
 });
 // get Monthly Log data by YEAR and MONTH number
-app.get('/get_monthly_log/:year/:week', (request, response)=>{
+app.get('/get_monthly_log/:year/:month', (request, response)=>{
   let {year, month} = request.params;
   if (journalData.monthlyLog[year] && journalData.monthlyLog[year][month])
     response.send(journalData.monthlyLog[year][month]);

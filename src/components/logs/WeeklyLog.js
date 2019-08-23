@@ -6,13 +6,18 @@ import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
 import EditTaskContainer from '../../containers/logs/EditTaskContainer';
 import * as moment from 'moment';
+import DatePicker, {registerLocale} from 'react-datepicker';
+import enGB from 'date-fns/locale/en-GB';
+registerLocale('en-GB', enGB);
 
 export default class WeeklyLog extends React.Component {
   componentDidMount() {
     this.props.getWeeklyLog();
   }
-  changeDate = ()=>{
-    console.log( 'change_date' );
+  handleDatePicker = date=>{
+    let data = {week: moment(date).isoWeek(), year: moment(date).year()};
+    this.props.setWeeklyLogDate(data);
+    this.props.getWeeklyLog();
   };
   addAnotherTask = ()=>{
     this.props.setCurrentLogTask('newWeeklyTask');
@@ -34,9 +39,7 @@ export default class WeeklyLog extends React.Component {
     return weeklyLog.data.map((task, index)=>{
       if (typeof currentLogTask === 'string' || currentLogTask.id !== task.id) {
         return (
-          <TaskContainer
-            key={index}
-            task={task} />
+          <TaskContainer key={index} task={task} />
         );
       } else {
         return (
@@ -48,11 +51,19 @@ export default class WeeklyLog extends React.Component {
       }
     });
   };
-  render() {
+  getCustomInput = ()=>{
     let {week, year} = this.props.logsState.weeklyLog;
     let firstDayOfWeek = moment().week(week).year(year).day(1).format('MMM Do YYYY');
     let lastDayOfWeek = moment().week(week).year(year).day(7).format('MMM Do YYYY');
     let selectedDate = `${firstDayOfWeek} - ${lastDayOfWeek} (#${week})`;
+    return (
+      <MDBCardTitle sub tag="h6">
+        {selectedDate}
+      </MDBCardTitle>
+    );
+  };
+  render() {
+    let customInput = this.getCustomInput();
     let tasks = this.getTasks();
     let newTask = this.props.logsState.currentLogTask === 'newWeeklyTask';
     return (
@@ -61,12 +72,12 @@ export default class WeeklyLog extends React.Component {
           <MDBCard>
             <MDBCardBody className="weekly-log-title">
               <MDBCardTitle>Weekly Log</MDBCardTitle>
-              <MDBCardTitle
-                sub tag="h6"
-                className="date-selector"
-                onClick={this.changeDate}>
-                {selectedDate}
-              </MDBCardTitle>
+              <DatePicker
+                showWeekNumbers
+                customInput={customInput}
+                locale="en-GB"
+                className="date-picker"
+                onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>
         </MDBContainer>

@@ -8,10 +8,9 @@ export default class Spinner extends React.Component {
       || !this.props.logsState.dailyLog.isPending)
       return null;
 
-    return null; // loader temporarily disabled
     return (
-      <div className="spiner-fullscreen-mask">
-        <div class="spinner-border text-info" role="status" />
+      <div className="fullscreen-mask">
+        <div className="spinner-border text-info" role="status" />
       </div>
     );
   }

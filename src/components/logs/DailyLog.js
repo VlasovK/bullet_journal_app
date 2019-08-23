@@ -6,13 +6,18 @@ import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
 import EditTaskContainer from '../../containers/logs/EditTaskContainer';
 import * as moment from 'moment';
+import DatePicker, {registerLocale} from 'react-datepicker';
+import enGB from 'date-fns/locale/en-GB';
+registerLocale('en-GB', enGB);
+
 
 export default class DailyLog extends React.Component {
   componentDidMount() {
     this.props.getDailyLog();
   }
-  changeDate = ()=>{
-    console.log( 'change_date' );
+  handleDatePicker = date=>{
+    this.props.setDailyLogDate(moment(date));
+    this.props.getDailyLog();
   };
   addAnotherTask = ()=>{
     this.props.setCurrentLogTask('newDailyTask');
@@ -34,9 +39,7 @@ export default class DailyLog extends React.Component {
     return dailyLog.data.map((task, index)=>{
       if (typeof currentLogTask === 'string' || currentLogTask.id !== task.id) {
         return (
-          <TaskContainer
-            key={index}
-            task={task} />
+          <TaskContainer key={index} task={task} />
         );
       } else {
         return (
@@ -48,8 +51,16 @@ export default class DailyLog extends React.Component {
       }
     });
   };
-  render() {
+  getCustomInput = ()=>{
     let selectedDate = moment(this.props.logsState.dailyLog.date).format('MMMM Do YYYY dddd');
+    return (
+      <MDBCardTitle sub tag="h6">
+        {selectedDate}
+      </MDBCardTitle>
+    );
+  };
+  render() {
+    let customInput = this.getCustomInput();
     let tasks = this.getTasks();
     let newTask = this.props.logsState.currentLogTask === 'newDailyTask';
     return (
@@ -58,12 +69,11 @@ export default class DailyLog extends React.Component {
           <MDBCard>
             <MDBCardBody className="daily-log-title">
               <MDBCardTitle>Daily Log</MDBCardTitle>
-              <MDBCardTitle
-                sub tag="h6"
-                className="date-selector"
-                onClick={this.changeDate}>
-                {selectedDate}
-              </MDBCardTitle>
+              <DatePicker
+                customInput={customInput}
+                locale="en-GB"
+                className="date-picker"
+                onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>
         </MDBContainer>

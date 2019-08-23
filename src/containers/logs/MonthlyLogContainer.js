@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {setCurrentLogTask, getMonthlyLog, addMonthlyLogTask, editMonthlyLogTask,
-  deleteMonthlyLogTask} from '../../store/logs/actions';
+import {setMonthlyLogDate, setCurrentLogTask, getMonthlyLog, addMonthlyLogTask,
+  editMonthlyLogTask, deleteMonthlyLogTask} from '../../store/logs/actions';
 import MonthlyLog from '../../components/logs/MonthlyLog';
 
 class MonthlyLogContainer extends React.Component {
@@ -9,6 +9,7 @@ class MonthlyLogContainer extends React.Component {
     return (
       <MonthlyLog
         logsState={this.props.logsState}
+        setMonthlyLogDate={this.props.setMonthlyLogDate}
         setCurrentLogTask={this.props.setCurrentLogTask}
         getMonthlyLog={this.props.getMonthlyLog}
         addMonthlyLogTask={this.props.addMonthlyLogTask}
@@ -23,6 +24,6 @@ let mapStateToProps = state=>{
     logsState: state.logsState
   };
 };
-let mapDispatchToProps = {setCurrentLogTask, getMonthlyLog, addMonthlyLogTask,
-  editMonthlyLogTask, deleteMonthlyLogTask};
+let mapDispatchToProps = {setMonthlyLogDate, setCurrentLogTask, getMonthlyLog,
+  addMonthlyLogTask, editMonthlyLogTask, deleteMonthlyLogTask};
 export default connect(mapStateToProps, mapDispatchToProps)(MonthlyLogContainer);

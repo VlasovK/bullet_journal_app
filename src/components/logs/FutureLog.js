@@ -31,9 +31,7 @@ export default class FutureLog extends React.Component {
     return futureLog.data.map((task, index)=>{
       if (typeof currentLogTask === 'string' || currentLogTask.id !== task.id) {
         return (
-          <TaskContainer
-            key={index}
-            task={task} />
+          <TaskContainer key={index} task={task} />
         );
       } else {
         return (
@@ -54,7 +52,7 @@ export default class FutureLog extends React.Component {
           <MDBCard>
             <MDBCardBody className="future-log-title">
               <MDBCardTitle>Future Log</MDBCardTitle>
-              <MDBCardTitle tag="h6" sub>
+              <MDBCardTitle tag="h6" sub className="mt-5-px mb-2-px">
                 Sometime
               </MDBCardTitle>
             </MDBCardBody>

@@ -2,6 +2,9 @@ import axios from 'axios';
 import logsApi from '../../api/logsApi';
 
 export const SET_CURRENT_LOG_TASK = 'SET_CURRENT_LOG_TASK';
+export const SET_MONTHLY_LOG_DATE = 'SET_MONTHLY_LOG_DATE';
+export const SET_WEEKLY_LOG_DATE = 'SET_WEEKLY_LOG_DATE';
+export const SET_DAILY_LOG_DATE = 'SET_DAILY_LOG_DATE';
 export const GET_FUTURE_LOG = 'GET_FUTURE_LOG';
 export const GET_FUTURE_LOG_FULFILLED = 'GET_FUTURE_LOG_FULFILLED';
 export const GET_MONTHLY_LOG = 'GET_MONTHLY_LOG';
@@ -20,7 +23,9 @@ let sortTasks = tasks=>{
   });
 };
 export let setCurrentLogTask = id=>({type: SET_CURRENT_LOG_TASK, payload: id});
-
+export let setMonthlyLogDate = data=>({type: SET_MONTHLY_LOG_DATE, payload: data});
+export let setWeeklyLogDate = data=>({type: SET_WEEKLY_LOG_DATE, payload: data});
+export let setDailyLogDate = date=>({type: SET_DAILY_LOG_DATE, payload: date});
 export let getFutureLog = ()=>{
   return (dispatch, getState)=>{
     dispatch({type: GET_FUTURE_LOG});
@@ -65,7 +70,6 @@ export let deleteFutureLogTask = id=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-
 export let getMonthlyLog = ()=>{
   return (dispatch, getState)=>{
     let {year, month} = getState().logsState.monthlyLog;
@@ -118,7 +122,6 @@ export let deleteMonthlyLogTask = id=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-
 export let getWeeklyLog = ()=>{
   return (dispatch, getState)=>{
     let {year, week} = getState().logsState.weeklyLog;
@@ -171,10 +174,10 @@ export let deleteWeeklyLogTask = id=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-
 export let getDailyLog = ()=>{
   return (dispatch, getState)=>{
     let {date} = getState().logsState.dailyLog;
+    date = date.format('MM-DD-YYYY');
     dispatch({type: GET_DAILY_LOG});
     logsApi.getDailyLog(date)
       .then(response=> {
@@ -187,6 +190,7 @@ export let getDailyLog = ()=>{
 export let addDailyLogTask = task=>{
   return (dispatch, getState)=>{
     let {date} = getState().logsState.dailyLog;
+    date = date.format('MM-DD-YYYY');
     let data = {date, task};
     dispatch({type: GET_DAILY_LOG});
     logsApi.addDailyLogTask(data)
@@ -200,6 +204,7 @@ export let addDailyLogTask = task=>{
 export let editDailyLogTask = task=>{
   return (dispatch, getState)=>{
     let {date} = getState().logsState.dailyLog;
+    date = date.format('MM-DD-YYYY');
     let data = {date, task};
     dispatch({type: GET_DAILY_LOG});
     logsApi.editDailyLogTask(data)
@@ -213,6 +218,7 @@ export let editDailyLogTask = task=>{
 export let deleteDailyLogTask = id=>{
   return (dispatch, getState)=>{
     let {date} = getState().logsState.dailyLog;
+    date = date.format('MM-DD-YYYY');
     let data = {date, id};
     dispatch({type: GET_DAILY_LOG});
     logsApi.deleteDailyLogTask(data)
