@@ -18,7 +18,7 @@ body, html {
   z-index: 5;
   padding-top: 45vh;
   text-align: center;
-  background-color: rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, .0);
 }
 .header {
   height: 58px;
