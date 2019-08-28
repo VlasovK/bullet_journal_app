@@ -2,7 +2,8 @@ import * as moment from 'moment';
 import {SET_CURRENT_LOG_TASK, SET_MONTHLY_LOG_DATE, SET_WEEKLY_LOG_DATE,
   SET_DAILY_LOG_DATE, GET_LOG_DATA_REJECTED, GET_FUTURE_LOG,
   GET_FUTURE_LOG_FULFILLED, GET_MONTHLY_LOG, GET_MONTHLY_LOG_FULFILLED,
-  GET_WEEKLY_LOG, GET_WEEKLY_LOG_FULFILLED, GET_DAILY_LOG, GET_DAILY_LOG_FULFILLED} from './actions';
+  GET_WEEKLY_LOG, GET_WEEKLY_LOG_FULFILLED, GET_DAILY_LOG,
+  GET_DAILY_LOG_FULFILLED, SET_TASK_TO_MIGRATE, RESET_MIGRATE_DATA} from './actions';
 
 let currentDate = moment();
 let defaultState = {
@@ -27,6 +28,11 @@ let defaultState = {
     date: currentDate,
     isPending: false,
     data: []
+  },
+  migrateTaskDates: {
+    taskToMigrate: {},
+    newMigrateLogType: null,
+    currentMigrateDate: null
   },
   error: null
 };
@@ -65,6 +71,19 @@ export let logsReducer = (state=defaultState, action)=>{
     case GET_LOG_DATA_REJECTED:
       return {...state, error: 'something went wrong!',
         weeklyLog: {...state.weeklyLog, isPending: false}};
+    case SET_TASK_TO_MIGRATE:
+      return {...state, migrateTaskDates: {
+        ...state.migrateTaskDates,
+        taskToMigrate: action.payload.task,
+        newMigrateLogType: action.payload.newMigrateLogType,
+        currentMigrateDate: action.payload.date
+      }};
+    case RESET_MIGRATE_DATA:
+      return {...state, migrateTaskDates: {
+        taskToMigrate: {},
+        newMigrateLogType: null,
+        currentMigrateDate: null
+      }};
   }
   return state;
 };

@@ -45,6 +45,7 @@ export default class WeeklyLog extends React.Component {
         return (
           <EditTaskContainer
             key={index}
+            logType={'weeklyLog'}
             editTask={this.editTask}
             deleteTask={this.deleteTask} />
         );
@@ -58,7 +59,7 @@ export default class WeeklyLog extends React.Component {
     let selectedDate = `${firstDayOfWeek} - ${lastDayOfWeek} (#${week})`;
     return (
       <MDBCardTitle sub tag="h6">
-        {selectedDate}
+        <span onClick={this.closeNewTask}>{selectedDate}</span>
       </MDBCardTitle>
     );
   };

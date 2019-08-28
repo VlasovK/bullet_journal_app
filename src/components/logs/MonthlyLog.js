@@ -45,6 +45,7 @@ export default class MonthlyLog extends React.Component {
         return (
           <EditTaskContainer
             key={index}
+            logType={'monthlyLog'}
             editTask={this.editTask}
             deleteTask={this.deleteTask} />
         );
@@ -56,7 +57,7 @@ export default class MonthlyLog extends React.Component {
     let selectedDate =  moment().set({month, year}).format('MMMM YYYY');
     return (
       <MDBCardTitle sub tag="h6">
-        {selectedDate}
+        <span onClick={this.closeNewTask}>{selectedDate}</span>
       </MDBCardTitle>
     );
   };

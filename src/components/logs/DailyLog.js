@@ -45,6 +45,7 @@ export default class DailyLog extends React.Component {
         return (
           <EditTaskContainer
             key={index}
+            logType={'dailyLog'}
             editTask={this.editTask}
             deleteTask={this.deleteTask} />
         );
@@ -55,7 +56,7 @@ export default class DailyLog extends React.Component {
     let selectedDate = moment(this.props.logsState.dailyLog.date).format('MMMM Do YYYY dddd');
     return (
       <MDBCardTitle sub tag="h6">
-        {selectedDate}
+        <span onClick={this.closeNewTask}>{selectedDate}</span>
       </MDBCardTitle>
     );
   };

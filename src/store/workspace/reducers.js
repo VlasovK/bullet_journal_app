@@ -1,12 +1,12 @@
 import {TOGGLE_PROJECTS_DISPLAY, TOGGLE_MY_LOGS_DISPLAY, TOGGLE_NOTES_DISPLAY,
-  TOGGLE_LIFESTYLE_DISPLAY} from './actions';
+  TOGGLE_LIFESTYLE_DISPLAY, TOGGLE_MIGRATE_DATEPICKER} from './actions';
 
 let defaultState = {
   isProjectsShown: false,
-  isMyLogsShown: false,
+  isMyLogsShown: true,
   isNotesShown: false,
   isLifestyleShown: false,
-  isCalendarShown: 'daily' // false or calendarType
+  isMigrateDatepickerShown: false
 };
 export let workspaceReducer = (state=defaultState, action)=>{
   switch (action.type) {
@@ -42,6 +42,8 @@ export let workspaceReducer = (state=defaultState, action)=>{
         isNotesShown: false,
         isLifestyleShown: !state.isLifestyleShown
       };
+    case TOGGLE_MIGRATE_DATEPICKER:
+      return {...state, isMigrateDatepickerShown: action.payload}
   }
   return state;
 };

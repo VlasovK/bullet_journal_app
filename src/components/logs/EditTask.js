@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {MDBContainer, MDBCard, MDBCardBody, MDBIcon, MDBBtnGroup, MDBBtn,
   MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem} from 'mdbreact';
+
 export default class EditTask extends React.Component {
   constructor(props) {
     super(props);
@@ -44,6 +45,28 @@ export default class EditTask extends React.Component {
   onDelete = id=>()=>{
     this.props.deleteTask(id);
     this.props.setCurrentLogTask({});
+  };
+  // set task, current migrateDate and current logType for migrate
+  setTaskToMigrate = newMigrateLogType=>()=>{
+    let {logType} = this.props;
+    let {task} = this.state;
+    let year, month, week, date;
+    switch (logType) {
+      case 'monthlyLog':
+        year = this.props.logsState.monthlyLog.year;
+        month = this.props.logsState.monthlyLog.month;
+        break;
+      case 'weeklyLog':
+        year = this.props.logsState.weeklyLog.year;
+        week = this.props.logsState.weeklyLog.week;
+        break;
+      case 'dailyLog':
+        date = this.props.logsState.dailyLog.date;
+    }
+    let data = {year, month, week, date}
+    this.props.setTaskToMigrate({logType, task}, newMigrateLogType, data);
+    if (newMigrateLogType === 'futureLog')
+      this.props.migrateTask(newMigrateLogType);
   };
   onCancel = ()=>{
     this.props.setCurrentLogTask({});
@@ -116,14 +139,25 @@ export default class EditTask extends React.Component {
                 save
               </MDBBtn>
               <MDBDropdown dropup>
-                <MDBDropdownToggle caret outline color="blue-grey" size="sm">
+                <MDBDropdownToggle
+                  caret outline
+                  color="blue-grey"
+                  size="sm">
                   migrate to
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic className="dropdown-left-50">
-                  <MDBDropdownItem>Future Log</MDBDropdownItem>
-                  <MDBDropdownItem>Monthly Log</MDBDropdownItem>
-                  <MDBDropdownItem>Weekly Log</MDBDropdownItem>
-                  <MDBDropdownItem>Daily Log</MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.setTaskToMigrate('futureLog')}>
+                    Future Log
+                  </MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.setTaskToMigrate('monthlyLog')}>
+                    Monthly Log
+                  </MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.setTaskToMigrate('weeklyLog')}>
+                    Weekly Log
+                  </MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.setTaskToMigrate('dailyLog')}>
+                    Daily Log
+                  </MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </MDBBtnGroup>

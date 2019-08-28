@@ -37,6 +37,7 @@ export default class FutureLog extends React.Component {
         return (
           <EditTaskContainer
             key={index}
+            logType={'futureLog'}
             editTask={this.editTask}
             deleteTask={this.deleteTask} />
         );

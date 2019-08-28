@@ -9,6 +9,7 @@ class WeeklyLogContainer extends React.Component {
     return (
       <WeeklyLog
         logsState={this.props.logsState}
+        logType={this.props.logType}
         setWeeklyLogDate={this.props.setWeeklyLogDate}
         setCurrentLogTask={this.props.setCurrentLogTask}
         getWeeklyLog={this.props.getWeeklyLog}

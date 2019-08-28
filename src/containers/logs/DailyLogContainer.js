@@ -9,6 +9,7 @@ class DailyLogContainer extends React.Component {
     return (
       <DailyLog
         logsState={this.props.logsState}
+        logType={this.props.logType}
         setDailyLogDate={this.props.setDailyLogDate}
         setCurrentLogTask={this.props.setCurrentLogTask}
         getDailyLog={this.props.getDailyLog}

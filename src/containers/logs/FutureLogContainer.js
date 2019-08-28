@@ -9,6 +9,7 @@ class FutureLogContainer extends React.Component {
     return (
       <FutureLog
         logsState={this.props.logsState}
+        logType={this.props.logType}
         setCurrentLogTask={this.props.setCurrentLogTask}
         getFutureLog={this.props.getFutureLog}
         addFutureLogTask={this.props.addFutureLogTask}

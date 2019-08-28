@@ -1,5 +1,6 @@
 import React from 'react';
 import Error from './Error';
+import MigrateDatepickerContainer from '../containers/MigrateDatepickerContainer';
 import FutureLogContainer from '../containers/logs/FutureLogContainer';
 import MonthlyLogContainer from '../containers/logs/MonthlyLogContainer';
 import WeeklyLogContainer from '../containers/logs/WeeklyLogContainer';
@@ -15,6 +16,7 @@ export default class Workspace extends React.Component {
     }
     return (
       <div className="table">
+        <MigrateDatepickerContainer />
         {isMyLogsShown &&
           <>
             <FutureLogContainer />

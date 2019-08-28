@@ -9,6 +9,7 @@ class MonthlyLogContainer extends React.Component {
     return (
       <MonthlyLog
         logsState={this.props.logsState}
+        logType={this.props.logType}
         setMonthlyLogDate={this.props.setMonthlyLogDate}
         setCurrentLogTask={this.props.setCurrentLogTask}
         getMonthlyLog={this.props.getMonthlyLog}
