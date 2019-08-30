@@ -237,12 +237,13 @@ export let deleteDailyLogTask = (id, date=null)=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let setTaskToMigrate = (task, newMigrateLogType, date)=>{
-  return ({type: SET_TASK_TO_MIGRATE, payload: {task, newMigrateLogType, date}});
+export let setTaskToMigrate = (task, newMigrateLogType, data)=>{
+  return ({type: SET_TASK_TO_MIGRATE, payload: {task, newMigrateLogType, data}});
 };
-export let migrateTask = (newMigrateLogType, newDate)=>{
+export let migrateTask = newDate=>{
   return (dispatch, getState)=>{
-    let {taskToMigrate: {task, logType}, currentMigrateDate} = getState().logsState.migrateTaskDates;
+    let {taskToMigrate: {task, logType}, newMigrateLogType,
+      currentMigrateDate} = getState().logsState.migrateTaskDates;
     // delete task from log
     switch (logType) {
       case 'futureLog':
@@ -263,13 +264,13 @@ export let migrateTask = (newMigrateLogType, newDate)=>{
         dispatch(addFutureLogTask(task));
         break;
       case 'monthlyLog':
-        dispatch(addMonthlyLogTask(task, newDate));
+        dispatch(addMonthlyLogTask(task, {year: newDate.year, month: newDate.month}));
         break;
       case 'weeklyLog':
-        dispatch(addWeeklyLogTask(task, newDate));
+        dispatch(addWeeklyLogTask(task, {year: newDate.year, week: newDate.week}));
         break;
       case 'dailyLog':
-        dispatch(addDailyLogTask(task, newDate));
+        dispatch(addDailyLogTask(task, newDate.date));
     }
     dispatch ({type: RESET_MIGRATE_DATA});
   };

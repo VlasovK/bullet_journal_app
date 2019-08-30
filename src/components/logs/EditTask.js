@@ -66,7 +66,7 @@ export default class EditTask extends React.Component {
     let data = {year, month, week, date}
     this.props.setTaskToMigrate({logType, task}, newMigrateLogType, data);
     if (newMigrateLogType === 'futureLog')
-      this.props.migrateTask(newMigrateLogType);
+      this.props.migrateTask();
   };
   onCancel = ()=>{
     this.props.setCurrentLogTask({});
