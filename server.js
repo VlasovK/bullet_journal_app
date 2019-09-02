@@ -49,7 +49,8 @@ app.get('/get_monthly_log/:year/:month', (request, response)=>{
   let {year, month} = request.params;
   if (journalData.monthlyLog[year] && journalData.monthlyLog[year][month])
     response.send(journalData.monthlyLog[year][month]);
-  response.send([]);
+  else
+    response.send([]);
 });
 app.post('/add_monthly_log_task', (request, response)=>{
   let {year, month, task} = request.body;
@@ -89,7 +90,8 @@ app.get('/get_weekly_log/:year/:week', (request, response)=>{
   let {year, week} = request.params;
   if (journalData.weeklyLog[year] && journalData.weeklyLog[year][week])
     response.send(journalData.weeklyLog[year][week]);
-  response.send([]);
+  else
+    response.send([]);
 });
 app.post('/add_weekly_log_task', (request, response)=>{
   let {year, week, task} = request.body;
@@ -129,7 +131,8 @@ app.get('/get_daily_log/:date', (request, response)=>{
   let {date} = request.params;
   if (journalData.dailyLog[date])
     response.send(journalData.dailyLog[date]);
-  response.send([]);
+  else
+    response.send([]);
 });
 app.post('/add_daily_log_task', (request, response)=>{
   let {date, task} = request.body;

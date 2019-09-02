@@ -18,12 +18,12 @@ export default class Workspace extends React.Component {
       <div className="table">
         <MigrateDatepickerContainer />
         {isMyLogsShown &&
-          <>
+          <div className="logs-wrapper">
             <FutureLogContainer />
             <MonthlyLogContainer />
             <WeeklyLogContainer />
             <DailyLogContainer />
-          </>}
+          </div>}
       </div>
     );
   }
