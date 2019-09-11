@@ -3,7 +3,7 @@ body, html {
   overflow: hidden;
 }
 .bg-img {
-  background-image: url('../img/background-2.jpg');
+  background-image: url('../img/ballpen-blur-cell-phone-796601.jpg');
   height: 100vh;
   background-position: center;
   background-repeat: no-repeat;
@@ -41,6 +41,7 @@ body, html {
   color: white;
 }
 .server-error {
+  text-align: center;
   color: white;
 }
 .tomato-error {
@@ -64,7 +65,7 @@ body, html {
 }
 .table {
   height: calc(100% - 100px);
-  overflow: auto;
+  /* overflow-y: auto; */
 }
 .logs-wrapper {
   display: flex;
@@ -156,7 +157,7 @@ body, html {
   color: grey;
 }
 .scroll-tasks {
-  height: calc(100% - 81px) !important;
+  height: calc(100vh - 223px) !important;
 }
 .logs {
   width: 100%;

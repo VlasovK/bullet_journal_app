@@ -31,8 +31,7 @@ let defaultState = {
   },
   migrateTaskDates: {
     taskToMigrate: {},
-    newMigrateLogType: null,
-    currentMigrateDate: null
+    newMigrateLogType: null
   },
   error: null
 };
@@ -75,14 +74,12 @@ export let logsReducer = (state=defaultState, action)=>{
       return {...state, migrateTaskDates: {
         ...state.migrateTaskDates,
         taskToMigrate: action.payload.task,
-        newMigrateLogType: action.payload.newMigrateLogType,
-        currentMigrateDate: action.payload.date
+        newMigrateLogType: action.payload.newMigrateLogType
       }};
     case RESET_MIGRATE_DATA:
       return {...state, migrateTaskDates: {
         taskToMigrate: {},
-        newMigrateLogType: null,
-        currentMigrateDate: null
+        newMigrateLogType: null
       }};
   }
   return state;

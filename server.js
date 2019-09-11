@@ -155,11 +155,9 @@ app.post('/edit_daily_log_task', (request, response)=>{
 });
 app.delete('/delete_daily_log_task/:date/:id', (request, response)=>{
   let {date, id} = request.params;
-  tasks = journalData.dailyLog[date].filter(task=> {
-    return task.id !== +id;
- });
+  tasks = journalData.dailyLog[date].filter(task=> task.id !== +id);
   journalData.dailyLog[date] = tasks;
   response.send(tasks);
 });
 
-app.listen(3000, ()=> console.log( 'Listening on port 3000' ));
+app.listen(3000, ()=> console.log('Listening on port 3000'));

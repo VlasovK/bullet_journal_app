@@ -114,10 +114,10 @@ export let editMonthlyLogTask = task=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let deleteMonthlyLogTask = (id, date=null)=>{
+export let deleteMonthlyLogTask = id=>{
   return (dispatch, getState)=>{
-    let year = date ? date.year : getState().logsState.monthlyLog.year;
-    let month = date ? date.month : getState().logsState.monthlyLog.month;
+    let year = getState().logsState.monthlyLog.year;
+    let month = getState().logsState.monthlyLog.month;
     let data = {year, month, id};
     dispatch({type: GET_MONTHLY_LOG});
     logsApi.deleteMonthlyLogTask(data)
@@ -168,10 +168,10 @@ export let editWeeklyLogTask = task=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let deleteWeeklyLogTask = (id, date=null)=>{
+export let deleteWeeklyLogTask = id=>{
   return (dispatch, getState)=>{
-    let year = date ? date.year : getState().logsState.weeklyLog.year;
-    let week = date ? date.week : getState().logsState.weeklyLog.week;
+    let year = getState().logsState.weeklyLog.year;
+    let week = getState().logsState.weeklyLog.week;
     let data = {year, week, id};
     dispatch({type: GET_WEEKLY_LOG});
     logsApi.deleteWeeklyLogTask(data)
@@ -223,10 +223,9 @@ export let editDailyLogTask = task=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let deleteDailyLogTask = (id, date=null)=>{
+export let deleteDailyLogTask = id=>{
   return (dispatch, getState)=>{
-    date = date.date || getState().logsState.dailyLog.date;
-    date = date.format('MM-DD-YYYY');
+    let date = getState().logsState.dailyLog.date.format('MM-DD-YYYY');
     let data = {date, id};
     dispatch({type: GET_DAILY_LOG});
     logsApi.deleteDailyLogTask(data)
@@ -242,21 +241,21 @@ export let setTaskToMigrate = (task, newMigrateLogType, data)=>{
 };
 export let migrateTask = newDate=>{
   return (dispatch, getState)=>{
-    let {taskToMigrate: {task, logType}, newMigrateLogType,
-      currentMigrateDate} = getState().logsState.migrateTaskDates;
+    let {taskToMigrate: {task, logType}, newMigrateLogType}
+      = getState().logsState.migrateTaskDates;
     // delete task from log
     switch (logType) {
       case 'futureLog':
         dispatch(deleteFutureLogTask(task.id));
         break;
       case 'monthlyLog':
-        dispatch(deleteMonthlyLogTask(task.id, currentMigrateDate));
+        dispatch(deleteMonthlyLogTask(task.id));
         break;
       case 'weeklyLog':
-        dispatch(deleteWeeklyLogTask(task.id, currentMigrateDate));
+        dispatch(deleteWeeklyLogTask(task.id));
         break;
       case 'dailyLog':
-        dispatch(deleteDailyLogTask(task.id, currentMigrateDate));
+        dispatch(deleteDailyLogTask(task.id));
     }
     // add task to another log
     switch (newMigrateLogType) {
