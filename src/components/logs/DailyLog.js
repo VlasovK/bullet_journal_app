@@ -55,14 +55,22 @@ export default class DailyLog extends React.Component {
   getCustomInput = ()=>{
     let selectedDate = moment(this.props.logsState.dailyLog.date).format('MMMM Do YYYY dddd');
     return (
-      <MDBCardTitle sub tag="h6">
+      <MDBCardTitle sub tag="h6" selected={null}>
         <span onClick={this.closeNewTask}>{selectedDate}</span>
       </MDBCardTitle>
     );
   };
+  getHighlightWithRanges = ()=>{
+    let datesWithTask = [];
+    this.props.logsState.busyDates.daily.forEach(date=>{
+      datesWithTask.push(new Date(date));
+    });
+    return [{'react-datepicker__day--highlighted-custom-1': datesWithTask}];
+  };
   render() {
     let customInput = this.getCustomInput();
     let tasks = this.getTasks();
+    let highlightWithRanges = this.getHighlightWithRanges();
     let newTask = this.props.logsState.currentLogTask === 'newDailyTask';
     return (
       <div className="table-card animated fadeIn">
@@ -74,6 +82,8 @@ export default class DailyLog extends React.Component {
                 customInput={customInput}
                 locale="en-GB"
                 className="date-picker"
+                disabledKeyboardNavigation
+                highlightDates={highlightWithRanges}
                 onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>

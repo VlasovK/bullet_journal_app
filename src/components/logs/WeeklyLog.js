@@ -63,9 +63,21 @@ export default class WeeklyLog extends React.Component {
       </MDBCardTitle>
     );
   };
+  getHighlightWithRanges = ()=>{
+    let datesWithTask = [];
+    this.props.logsState.busyDates.weekly.forEach(date=>{
+      for (let i=1; i<8; i++) {
+        datesWithTask.push(
+          new Date(moment().week(date.week).year(date.year).day(i).format('MM DD YYYY'))
+        );
+      }
+    });
+    return [{'react-datepicker__day--highlighted-custom-1': datesWithTask}];
+  };
   render() {
     let customInput = this.getCustomInput();
     let tasks = this.getTasks();
+    let highlightWithRanges = this.getHighlightWithRanges();
     let newTask = this.props.logsState.currentLogTask === 'newWeeklyTask';
     return (
       <div className="table-card animated fadeIn">
@@ -78,6 +90,8 @@ export default class WeeklyLog extends React.Component {
                 customInput={customInput}
                 locale="en-GB"
                 className="date-picker"
+                disabledKeyboardNavigation
+                highlightDates={highlightWithRanges}
                 onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>

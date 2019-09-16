@@ -3,7 +3,8 @@ import {SET_CURRENT_LOG_TASK, SET_MONTHLY_LOG_DATE, SET_WEEKLY_LOG_DATE,
   SET_DAILY_LOG_DATE, GET_LOG_DATA_REJECTED, GET_FUTURE_LOG,
   GET_FUTURE_LOG_FULFILLED, GET_MONTHLY_LOG, GET_MONTHLY_LOG_FULFILLED,
   GET_WEEKLY_LOG, GET_WEEKLY_LOG_FULFILLED, GET_DAILY_LOG,
-  GET_DAILY_LOG_FULFILLED, SET_TASK_TO_MIGRATE, RESET_MIGRATE_DATA} from './actions';
+  GET_DAILY_LOG_FULFILLED, SET_TASK_TO_MIGRATE, RESET_MIGRATE_DATA, SET_BUSY_DATES
+} from './actions';
 
 let currentDate = moment();
 let defaultState = {
@@ -33,6 +34,7 @@ let defaultState = {
     taskToMigrate: {},
     newMigrateLogType: null
   },
+  busyDates: {monthly: [], weekly: [], daily: []},
   error: null
 };
 export let logsReducer = (state=defaultState, action)=>{
@@ -81,6 +83,8 @@ export let logsReducer = (state=defaultState, action)=>{
         taskToMigrate: {},
         newMigrateLogType: null
       }};
+    case SET_BUSY_DATES:
+      return {...state, busyDates: action.payload};
   }
   return state;
 };

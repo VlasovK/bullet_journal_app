@@ -18,6 +18,7 @@ export const GET_LOG_DATA_REJECTED = 'GET_LOG_DATA_REJECTED';
 export const SET_TASK_TO_MIGRATE = 'SET_TASK_TO_MIGRATE';
 export const RESET_MIGRATE_DATA = 'RESET_MIGRATE_DATA';
 export const MIGRATE_TASK = 'MIGRATE_TASK';
+export const SET_BUSY_DATES = 'SET_BUSY_DATES';
 // sorting by task status and marking
 let sortTasks = tasks=>{
   return tasks.sort((a, b)=>{
@@ -149,8 +150,9 @@ export let getWeeklyLog = ()=>{
     dispatch({type: GET_WEEKLY_LOG});
     logsApi.getWeeklyLog(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
+        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -163,8 +165,9 @@ export let addWeeklyLogTask = task=>{
     dispatch({type: GET_WEEKLY_LOG});
     logsApi.addWeeklyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
+        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -176,8 +179,9 @@ let migrateToWeeklyLogTask = (task, date)=>{
       .then(response=>{
         if (date.year === getState().logsState.weeklyLog.year
           && date.week === getState().logsState.weeklyLog.week) {
-            let payload = sortTasks(response.data);
-            dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
+            let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+            dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
+            dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
@@ -204,8 +208,9 @@ export let deleteWeeklyLogTask = id=>{
     dispatch({type: GET_WEEKLY_LOG});
     logsApi.deleteWeeklyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
+        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -217,8 +222,9 @@ export let getDailyLog = ()=>{
     dispatch({type: GET_DAILY_LOG});
     logsApi.getDailyLog(date)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
+        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -230,8 +236,9 @@ export let addDailyLogTask = task=>{
     dispatch({type: GET_DAILY_LOG});
     logsApi.addDailyLogTask(data)
       .then(response=>{
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
+        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -243,8 +250,9 @@ let migrateToDailyLogTask = (task, date)=>{
     logsApi.addDailyLogTask(data)
       .then(response=>{
         if (date === getState().logsState.dailyLog.date.format('MM-DD-YYYY')) {
-          let payload = sortTasks(response.data);
-          dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
+          let sortedDailyLog = sortTasks(response.data.dailyLog);
+          dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
+          dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
@@ -271,8 +279,9 @@ export let deleteDailyLogTask = id=>{
     dispatch({type: GET_DAILY_LOG});
     logsApi.deleteDailyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
+        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };

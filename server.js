@@ -9,6 +9,19 @@ setInterval(()=> {
   fs.writeFileSync('journal_data.json', JSON.stringify(journalData));
 }, 1000);
 
+function getBusyDates() {
+  let busyDates = {monthly: [], weekly: [], daily: []};
+  for (let year in journalData.monthlyLog)
+    for (let month in journalData.monthlyLog[year])
+      busyDates.monthly.push({year, month});
+  for (let year in journalData.weeklyLog)
+    for (let week in journalData.weeklyLog[year])
+      busyDates.weekly.push({year, week});
+  for (let day in journalData.dailyLog)
+    busyDates.daily.push(day);
+  return busyDates;
+};
+
 let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -74,24 +87,28 @@ app.post('/edit_monthly_log_task', (request, response)=>{
   tasks.forEach((task, index)=>{
     if (task.id === newTask.id)
       tasks[index] = newTask;
- });
+  });
   response.send(tasks);
 });
 app.delete('/delete_monthly_log_task/:year/:month/:id', (request, response)=>{
   let {year, month, id} = request.params;
   tasks = journalData.monthlyLog[year][month].filter(task=> {
     return task.id !== +id;
- });
-  journalData.monthlyLog[year][month] = tasks;
+  });
+  if (!tasks.length)
+    delete journalData.monthlyLog[year][month];
+  else
+    journalData.monthlyLog[year][month] = tasks;
   response.send(tasks);
 });
 // get Weekly Log data by YEAR and WEEK number
 app.get('/get_weekly_log/:year/:week', (request, response)=>{
   let {year, week} = request.params;
+  let busyDates = getBusyDates();
   if (journalData.weeklyLog[year] && journalData.weeklyLog[year][week])
-    response.send(journalData.weeklyLog[year][week]);
+    response.send({weeklyLog: journalData.weeklyLog[year][week], busyDates});
   else
-    response.send([]);
+    response.send({weeklyLog: [], busyDates});
 });
 app.post('/add_weekly_log_task', (request, response)=>{
   let {year, week, task} = request.body;
@@ -107,7 +124,8 @@ app.post('/add_weekly_log_task', (request, response)=>{
  }
   // add task to weeklyLog
   journalData.weeklyLog[year][week].push(newTask);
-  response.send(journalData.weeklyLog[year][week]);
+  let busyDates = getBusyDates();
+  response.send({weeklyLog: journalData.weeklyLog[year][week], busyDates});
 });
 app.post('/edit_weekly_log_task', (request, response)=>{
   let {year, week, task: newTask} = request.body;
@@ -123,16 +141,21 @@ app.delete('/delete_weekly_log_task/:year/:week/:id', (request, response)=>{
   tasks = journalData.weeklyLog[year][week].filter(task=> {
     return task.id !== +id;
  });
-  journalData.weeklyLog[year][week] = tasks;
-  response.send(tasks);
+   if (!tasks.length)
+     delete journalData.weeklyLog[year][week];
+   else
+    journalData.weeklyLog[year][week] = tasks;
+  let busyDates = getBusyDates();
+  response.send({weeklyLog: tasks, busyDates});
 });
 // get Daily Log data by DATE format('MM-DD-YYYY')
 app.get('/get_daily_log/:date', (request, response)=>{
   let {date} = request.params;
+  let busyDates = getBusyDates();
   if (journalData.dailyLog[date])
-    response.send(journalData.dailyLog[date]);
+    response.send({dailyLog: journalData.dailyLog[date], busyDates});
   else
-    response.send([]);
+    response.send({dailyLog: [], busyDates});
 });
 app.post('/add_daily_log_task', (request, response)=>{
   let {date, task} = request.body;
@@ -142,7 +165,8 @@ app.post('/add_daily_log_task', (request, response)=>{
     journalData.dailyLog[date] = [];
   // add task to dailyLog
   journalData.dailyLog[date].push(newTask);
-  response.send(journalData.dailyLog[date]);
+  let busyDates = getBusyDates();
+  response.send({dailyLog: journalData.dailyLog[date], busyDates});
 });
 app.post('/edit_daily_log_task', (request, response)=>{
   let {date, task: newTask} = request.body;
@@ -156,8 +180,12 @@ app.post('/edit_daily_log_task', (request, response)=>{
 app.delete('/delete_daily_log_task/:date/:id', (request, response)=>{
   let {date, id} = request.params;
   tasks = journalData.dailyLog[date].filter(task=> task.id !== +id);
-  journalData.dailyLog[date] = tasks;
-  response.send(tasks);
+  if (!tasks.length)
+    delete journalData.dailyLog[date];
+  else
+    journalData.dailyLog[date] = tasks;
+  let busyDates = getBusyDates();
+  response.send({dailyLog: tasks, busyDates});
 });
 
 app.listen(3000, ()=> console.log('Listening on port 3000'));
