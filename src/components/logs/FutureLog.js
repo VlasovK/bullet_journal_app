@@ -54,7 +54,7 @@ export default class FutureLog extends React.Component {
             <MDBCardBody className="future-log-title">
               <MDBCardTitle>Future Log</MDBCardTitle>
               <MDBCardTitle tag="h6" sub className="mt-5-px mb-2-px">
-                Sometime
+                Someday
               </MDBCardTitle>
             </MDBCardBody>
           </MDBCard>

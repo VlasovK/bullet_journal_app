@@ -134,9 +134,10 @@ export default class EditTask extends React.Component {
                   migrate to
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic className="dropdown-left-50">
-                  <MDBDropdownItem onClick={this.setTaskToMigrate('futureLog')}>
-                    Future Log
-                  </MDBDropdownItem>
+                  {this.props.logType !== 'futureLog' &&
+                    <MDBDropdownItem onClick={this.setTaskToMigrate('futureLog')}>
+                      Future Log
+                    </MDBDropdownItem>}
                   <MDBDropdownItem onClick={this.setTaskToMigrate('monthlyLog')}>
                     Monthly Log
                   </MDBDropdownItem>
