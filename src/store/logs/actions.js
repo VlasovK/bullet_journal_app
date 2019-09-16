@@ -87,10 +87,10 @@ export let getMonthlyLog = ()=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let addMonthlyLogTask = (task, date=null)=>{
+export let addMonthlyLogTask = task=>{
   return (dispatch, getState)=>{
-    let year = date ? date.year : getState().logsState.monthlyLog.year;
-    let month = date ? date.month : getState().logsState.monthlyLog.month;
+    let year = getState().logsState.monthlyLog.year;
+    let month = getState().logsState.monthlyLog.month;
     let data = {year, month, task};
     dispatch({type: GET_MONTHLY_LOG});
     logsApi.addMonthlyLogTask(data)
