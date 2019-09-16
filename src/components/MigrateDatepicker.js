@@ -9,7 +9,7 @@ export default class MigrateDatepicker extends React.Component {
     event.stopPropagation();
   };
   handleDatePicker = date=>{
-    // this.props.migrateTask();
+    this.props.migrateTask(moment(date));
     this.props.toggleMigrateDatepicker(false);
   };
   closeDatepicker = ()=>{

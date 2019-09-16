@@ -36,7 +36,7 @@ export let getFutureLog = ()=>{
     logsApi.getFutureLog()
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload})
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -47,7 +47,7 @@ export let addFutureLogTask = task=>{
     logsApi.addFutureLogTask({task})
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload})
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -58,7 +58,7 @@ export let editFutureLogTask = task=>{
     logsApi.editFutureLogTask({task})
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload})
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -96,7 +96,21 @@ export let addMonthlyLogTask = (task, date=null)=>{
     logsApi.addMonthlyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload})
+        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
+      })
+      .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
+  };
+};
+let migrateToMonthlyLogTask = (task, date)=>{
+  return (dispatch, getState)=>{
+    let data = {year: date.year, month: date.month, task};
+    logsApi.addMonthlyLogTask(data)
+      .then(response=>{
+        if (date.year === getState().logsState.monthlyLog.year
+          && date.month === getState().logsState.monthlyLog.month) {
+            let payload = sortTasks(response.data);
+            dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
+        }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -109,7 +123,7 @@ export let editMonthlyLogTask = task=>{
     logsApi.editMonthlyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload})
+        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -123,7 +137,7 @@ export let deleteMonthlyLogTask = id=>{
     logsApi.deleteMonthlyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload})
+        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -136,21 +150,35 @@ export let getWeeklyLog = ()=>{
     logsApi.getWeeklyLog(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload})
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let addWeeklyLogTask = (task, date=null)=>{
+export let addWeeklyLogTask = task=>{
   return (dispatch, getState)=>{
-    let year = date ? date.year : getState().logsState.weeklyLog.year;
-    let week = date ? date.week : getState().logsState.weeklyLog.week;
+    let year = getState().logsState.weeklyLog.year;
+    let week = getState().logsState.weeklyLog.week;
     let data = {year, week, task};
     dispatch({type: GET_WEEKLY_LOG});
     logsApi.addWeeklyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload})
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
+      })
+      .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
+  };
+};
+let migrateToWeeklyLogTask = (task, date)=>{
+  return (dispatch, getState)=>{
+    let data = {year: date.year, week: date.week, task};
+    logsApi.addWeeklyLogTask(data)
+      .then(response=>{
+        if (date.year === getState().logsState.weeklyLog.year
+          && date.week === getState().logsState.weeklyLog.week) {
+            let payload = sortTasks(response.data);
+            dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
+        }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -163,7 +191,7 @@ export let editWeeklyLogTask = task=>{
     logsApi.editWeeklyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload})
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -177,7 +205,7 @@ export let deleteWeeklyLogTask = id=>{
     logsApi.deleteWeeklyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload})
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -190,21 +218,34 @@ export let getDailyLog = ()=>{
     logsApi.getDailyLog(date)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload})
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let addDailyLogTask = (task, date=null)=>{
+export let addDailyLogTask = task=>{
   return (dispatch, getState)=>{
-    date = date || getState().logsState.dailyLog.date;
-    date = date.format('MM-DD-YYYY');
+    let date = getState().logsState.dailyLog.date.format('MM-DD-YYYY');
     let data = {date, task};
     dispatch({type: GET_DAILY_LOG});
     logsApi.addDailyLogTask(data)
-      .then(response=> {
+      .then(response=>{
         let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload})
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
+      })
+      .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
+  };
+};
+let migrateToDailyLogTask = (task, date)=>{
+  return (dispatch, getState)=>{
+    date = date.format('MM-DD-YYYY');
+    let data = {date, task};
+    logsApi.addDailyLogTask(data)
+      .then(response=>{
+        if (date === getState().logsState.dailyLog.date.format('MM-DD-YYYY')) {
+          let payload = sortTasks(response.data);
+          dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
+        }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -218,7 +259,7 @@ export let editDailyLogTask = task=>{
     logsApi.editDailyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload})
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -231,13 +272,13 @@ export let deleteDailyLogTask = id=>{
     logsApi.deleteDailyLogTask(data)
       .then(response=> {
         let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload})
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let setTaskToMigrate = (task, newMigrateLogType, data)=>{
-  return ({type: SET_TASK_TO_MIGRATE, payload: {task, newMigrateLogType, data}});
+export let setTaskToMigrate = (task, newMigrateLogType)=>{
+  return ({type: SET_TASK_TO_MIGRATE, payload: {task, newMigrateLogType}});
 };
 export let migrateTask = newDate=>{
   return (dispatch, getState)=>{
@@ -263,13 +304,15 @@ export let migrateTask = newDate=>{
         dispatch(addFutureLogTask(task));
         break;
       case 'monthlyLog':
-        dispatch(addMonthlyLogTask(task, {year: newDate.year, month: newDate.month}));
+        dispatch(migrateToMonthlyLogTask(task,
+          {year: newDate.year(), month: newDate.month()}));
         break;
       case 'weeklyLog':
-        dispatch(addWeeklyLogTask(task, {year: newDate.year, week: newDate.week}));
+        dispatch(migrateToWeeklyLogTask(task,
+          {year: newDate.year(), week: newDate.isoWeek()}));
         break;
       case 'dailyLog':
-        dispatch(addDailyLogTask(task, newDate.date));
+        dispatch(migrateToDailyLogTask(task, newDate));
     }
     dispatch ({type: RESET_MIGRATE_DATA});
   };
