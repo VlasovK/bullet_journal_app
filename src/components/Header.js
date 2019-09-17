@@ -40,7 +40,7 @@ export default class MainView extends React.Component {
           onClick={this.props.toggleLifestyleDisplay}>
           lifestyle
         </MDBBtn>
-        <h3 className="the-time">{currentTime}</h3>
+        <h5 className="the-time">{currentTime}</h5>
       </div>
     );
   }

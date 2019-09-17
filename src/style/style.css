@@ -60,7 +60,8 @@ body, html {
   text-decoration: underline;
 }
 .the-time {
-  margin: 16px 16px 0 0;
+  color: white;
+  margin: 23px 16px 0 0;
   float: right;
 }
 .table {

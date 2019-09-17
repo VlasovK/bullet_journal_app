@@ -18,6 +18,7 @@ export const GET_LOG_DATA_REJECTED = 'GET_LOG_DATA_REJECTED';
 export const SET_TASK_TO_MIGRATE = 'SET_TASK_TO_MIGRATE';
 export const RESET_MIGRATE_DATA = 'RESET_MIGRATE_DATA';
 export const MIGRATE_TASK = 'MIGRATE_TASK';
+export const MIGRATE_TASK_FULFILLED = 'MIGRATE_TASK_FULFILLED';
 export const SET_BUSY_DATES = 'SET_BUSY_DATES';
 // sorting by task status and marking
 let sortTasks = tasks=>{
@@ -111,6 +112,7 @@ let migrateToMonthlyLogTask = (task, date)=>{
           && date.month === getState().logsState.monthlyLog.month) {
             let payload = sortTasks(response.data);
             dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
+            dispatch({type: MIGRATE_TASK_FULFILLED});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
@@ -182,6 +184,7 @@ let migrateToWeeklyLogTask = (task, date)=>{
             let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
             dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
             dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
+            dispatch({type: MIGRATE_TASK_FULFILLED});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
@@ -253,6 +256,7 @@ let migrateToDailyLogTask = (task, date)=>{
           let sortedDailyLog = sortTasks(response.data.dailyLog);
           dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
           dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
+          dispatch({type: MIGRATE_TASK_FULFILLED});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
@@ -291,6 +295,7 @@ export let setTaskToMigrate = (task, newMigrateLogType)=>{
 };
 export let migrateTask = newDate=>{
   return (dispatch, getState)=>{
+    dispatch({type: MIGRATE_TASK});
     let {taskToMigrate: {task, logType}, newMigrateLogType}
       = getState().logsState.migrateTaskDates;
     // delete task from log
@@ -311,6 +316,7 @@ export let migrateTask = newDate=>{
     switch (newMigrateLogType) {
       case 'futureLog':
         dispatch(addFutureLogTask(task));
+        dispatch({type: MIGRATE_TASK_FULFILLED})
         break;
       case 'monthlyLog':
         dispatch(migrateToMonthlyLogTask(task,
@@ -323,6 +329,6 @@ export let migrateTask = newDate=>{
       case 'dailyLog':
         dispatch(migrateToDailyLogTask(task, newDate));
     }
-    dispatch ({type: RESET_MIGRATE_DATA});
+    dispatch({type: RESET_MIGRATE_DATA});
   };
 };
