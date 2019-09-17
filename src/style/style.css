@@ -95,6 +95,7 @@ body, html {
 }
 .task-text {
   color: #5a5d61 !important;
+  white-space: pre-line;
 }
 .status-line {
   border-left: 4px solid;
