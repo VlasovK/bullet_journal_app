@@ -61,11 +61,18 @@ export default class DailyLog extends React.Component {
     );
   };
   getHighlightWithRanges = ()=>{
-    let datesWithTask = [];
-    this.props.logsState.busyDates.daily.forEach(date=>{
-      datesWithTask.push(new Date(date));
+    let actualDates = [];
+    let expiredDates = [];
+    this.props.logsState.busyDates.daily.actual.forEach(date=>{
+      actualDates.push(new Date(date));
     });
-    return [{'react-datepicker__day--highlighted-custom-1': datesWithTask}];
+    this.props.logsState.busyDates.daily.expired.forEach(date=>{
+      expiredDates.push(new Date(date));
+    });
+    return [
+      {'react-datepicker__day--highlighted-custom-2': actualDates},
+      {'react-datepicker__day--highlighted-custom-1': expiredDates}
+    ];
   };
   render() {
     let customInput = this.getCustomInput();

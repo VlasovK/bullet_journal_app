@@ -1,6 +1,7 @@
 let express = require('express');
 let fs = require('fs');
 let bodyParser = require('body-parser');
+let moment = require('moment');
 // create database file if not created
 if (!fs.existsSync('journal_data.json'))
   fs.writeFileSync('journal_data.json', fs.readFileSync('journal_data_init.json'));
@@ -8,19 +9,6 @@ let journalData = JSON.parse(fs.readFileSync('journal_data.json'));
 setInterval(()=> {
   fs.writeFileSync('journal_data.json', JSON.stringify(journalData));
 }, 1000);
-
-function getBusyDates() {
-  let busyDates = {monthly: [], weekly: [], daily: []};
-  for (let year in journalData.monthlyLog)
-    for (let month in journalData.monthlyLog[year])
-      busyDates.monthly.push({year, month});
-  for (let year in journalData.weeklyLog)
-    for (let week in journalData.weeklyLog[year])
-      busyDates.weekly.push({year, week});
-  for (let day in journalData.dailyLog)
-    busyDates.daily.push(day);
-  return busyDates;
-};
 
 let app = express();
 app.use(bodyParser.json());
@@ -32,38 +20,93 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Credentials", true);
   next();
 });
+
+function getBusyDates() {
+  let today = moment();
+  let currentDate = {
+    year: today.year(),
+    month: today.month(),
+    week: today.isoWeek(),
+    day: today.format('L')
+  };
+  let busyDates = {
+    monthly: {expired: [], actual: []},
+    weekly: {expired: [], actual: []},
+    daily: {expired: [], actual: []}
+  };
+  for (let year in journalData.monthlyLog)
+    for (let month in journalData.monthlyLog[year])
+      if (year >= currentDate.year && month >= currentDate.month)
+        journalData.monthlyLog[year][month].some(task=>{
+          if (task.status === 1)
+            return busyDates.monthly.actual.push({year, month});
+        });
+      else
+      journalData.monthlyLog[year][month].some(task=>{
+        if (task.status === 1)
+          return busyDates.monthly.expired.push({year, month});
+      });
+  for (let year in journalData.weeklyLog)
+    for (let week in journalData.weeklyLog[year])
+      if (year >= currentDate.year && week >= currentDate.week)
+        journalData.weeklyLog[year][week].some(task=>{
+          if (task.status === 1)
+            return busyDates.weekly.actual.push({year, week});
+        });
+      else
+      journalData.weeklyLog[year][week].some(task=>{
+        if (task.status === 1)
+          return busyDates.weekly.expired.push({year, week});
+      });
+  for (let day in journalData.dailyLog) {
+    if (moment(day).format('L') >= currentDate.day)
+      journalData.dailyLog[day].some(task=>{
+        if (task.status === 1)
+          return busyDates.daily.actual.push(day);
+      });
+    else
+      journalData.dailyLog[day].some(task=>{
+        if (task.status === 1)
+          return busyDates.daily.expired.push(day);
+      });
+  }
+  return busyDates;
+};
 // get Future Log data
 app.get('/get_future_log', (request, response)=>{
-  response.send(journalData.futureLog);
+  let busyDates = getBusyDates();
+  response.send({futureLog: journalData.futureLog, busyDates});
 });
 // add task to futureLog
 app.post('/add_future_log_task', (request, response)=>{
   let newTask = {...request.body.task, id: journalData.nextId++};
   journalData.futureLog.push(newTask);
-  response.send(journalData.futureLog);
+  response.send({futureLog: journalData.futureLog});
 });
 app.post('/edit_future_log_task', (request, response)=>{
   let tasks = journalData.futureLog;
   tasks.forEach((task, index)=>{
     if (task.id === request.body.task.id)
       tasks[index] = request.body.task;
- });
-  response.send(tasks);
+  });
+  response.send({futureLog: tasks});
 });
 app.delete('/delete_future_log_task/:id', (request, response)=>{
   tasks = journalData.futureLog.filter(task=> {
     return task.id !== +request.params.id;
- });
+  });
   journalData.futureLog = tasks;
-  response.send(tasks);
+  let busyDates = getBusyDates();
+  response.send({futureLog: tasks, busyDates});
 });
 // get Monthly Log data by YEAR and MONTH number
 app.get('/get_monthly_log/:year/:month', (request, response)=>{
   let {year, month} = request.params;
+  let busyDates = getBusyDates();
   if (journalData.monthlyLog[year] && journalData.monthlyLog[year][month])
-    response.send(journalData.monthlyLog[year][month]);
+    response.send({monthlyLog: journalData.monthlyLog[year][month], busyDates});
   else
-    response.send([]);
+    response.send({monthlyLog: [], busyDates});
 });
 app.post('/add_monthly_log_task', (request, response)=>{
   let {year, month, task} = request.body;
@@ -79,7 +122,8 @@ app.post('/add_monthly_log_task', (request, response)=>{
  }
   // add task to monthlyLog
   journalData.monthlyLog[year][month].push(newTask);
-  response.send(journalData.monthlyLog[year][month]);
+  let busyDates = getBusyDates();
+  response.send({monthlyLog: journalData.monthlyLog[year][month], busyDates});
 });
 app.post('/edit_monthly_log_task', (request, response)=>{
   let {year, month, task: newTask} = request.body;
@@ -88,7 +132,8 @@ app.post('/edit_monthly_log_task', (request, response)=>{
     if (task.id === newTask.id)
       tasks[index] = newTask;
   });
-  response.send(tasks);
+  let busyDates = getBusyDates();
+  response.send({monthlyLog: tasks, busyDates});
 });
 app.delete('/delete_monthly_log_task/:year/:month/:id', (request, response)=>{
   let {year, month, id} = request.params;
@@ -99,7 +144,8 @@ app.delete('/delete_monthly_log_task/:year/:month/:id', (request, response)=>{
     delete journalData.monthlyLog[year][month];
   else
     journalData.monthlyLog[year][month] = tasks;
-  response.send(tasks);
+  let busyDates = getBusyDates();
+  response.send({monthlyLog: tasks, busyDates});
 });
 // get Weekly Log data by YEAR and WEEK number
 app.get('/get_weekly_log/:year/:week', (request, response)=>{
@@ -133,8 +179,9 @@ app.post('/edit_weekly_log_task', (request, response)=>{
   tasks.forEach((task, index)=>{
     if (task.id === newTask.id)
       tasks[index] = newTask;
- });
-  response.send(tasks);
+  });
+  let busyDates = getBusyDates();
+  response.send({weeklyLog: tasks, busyDates});
 });
 app.delete('/delete_weekly_log_task/:year/:week/:id', (request, response)=>{
   let {year, week, id} = request.params;
@@ -174,8 +221,9 @@ app.post('/edit_daily_log_task', (request, response)=>{
   tasks.forEach((task, index)=>{
     if (task.id === newTask.id)
       tasks[index] = newTask;
- });
-  response.send(tasks);
+  });
+  let busyDates = getBusyDates();
+  response.send({dailyLog: tasks, busyDates});
 });
 app.delete('/delete_daily_log_task/:date/:id', (request, response)=>{
   let {date, id} = request.params;

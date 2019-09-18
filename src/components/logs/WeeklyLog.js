@@ -64,15 +64,26 @@ export default class WeeklyLog extends React.Component {
     );
   };
   getHighlightWithRanges = ()=>{
-    let datesWithTask = [];
-    this.props.logsState.busyDates.weekly.forEach(date=>{
+    let actualDates = [];
+    let expiredDates = [];
+    this.props.logsState.busyDates.weekly.actual.forEach(date=>{
       for (let i=1; i<8; i++) {
-        datesWithTask.push(
+        actualDates.push(
           new Date(moment().week(date.week).year(date.year).day(i).format('MM DD YYYY'))
         );
       }
     });
-    return [{'react-datepicker__day--highlighted-custom-1': datesWithTask}];
+    this.props.logsState.busyDates.weekly.expired.forEach(date=>{
+      for (let i=1; i<8; i++) {
+        expiredDates.push(
+          new Date(moment().week(date.week).year(date.year).day(i).format('MM DD YYYY'))
+        );
+      }
+    });
+    return [
+      {'react-datepicker__day--highlighted-custom-2': actualDates},
+      {'react-datepicker__day--highlighted-custom-1': expiredDates}
+    ];
   };
   render() {
     let customInput = this.getCustomInput();

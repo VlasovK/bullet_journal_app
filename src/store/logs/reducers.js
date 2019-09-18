@@ -35,7 +35,11 @@ let defaultState = {
     newMigrateLogType: null
   },
   migrateTaskInPending: false,
-  busyDates: {monthly: [], weekly: [], daily: []},
+  busyDates: {
+    monthly: {expired: [], actual: []},
+    weekly: {expired: [], actual: []},
+    daily: {expired: [], actual: []}
+  },
   error: null
 };
 export let logsReducer = (state=defaultState, action)=>{

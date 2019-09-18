@@ -37,8 +37,9 @@ export let getFutureLog = ()=>{
     dispatch({type: GET_FUTURE_LOG});
     logsApi.getFutureLog()
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload});
+        let sortedFutureLog = sortTasks(response.data.futureLog);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -48,8 +49,8 @@ export let addFutureLogTask = task=>{
     dispatch({type: GET_FUTURE_LOG});
     logsApi.addFutureLogTask({task})
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload});
+        let sortedFutureLog = sortTasks(response.data.futureLog);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -59,8 +60,8 @@ export let editFutureLogTask = task=>{
     dispatch({type: GET_FUTURE_LOG});
     logsApi.editFutureLogTask({task})
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload});
+        let sortedFutureLog = sortTasks(response.data.futureLog);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -70,8 +71,9 @@ export let deleteFutureLogTask = id=>{
     dispatch({type: GET_FUTURE_LOG});
     logsApi.deleteFutureLogTask(id)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload})
+        let sortedFutureLog = sortTasks(response.data.futureLog);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -83,8 +85,9 @@ export let getMonthlyLog = ()=>{
     dispatch({type: GET_MONTHLY_LOG});
     logsApi.getMonthlyLog(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload})
+        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -97,8 +100,9 @@ export let addMonthlyLogTask = task=>{
     dispatch({type: GET_MONTHLY_LOG});
     logsApi.addMonthlyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
+        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -110,12 +114,13 @@ let migrateToMonthlyLogTask = (task, date)=>{
       .then(response=>{
         if (date.year === getState().logsState.monthlyLog.year
           && date.month === getState().logsState.monthlyLog.month) {
-            let payload = sortTasks(response.data);
-            dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
-            dispatch({type: MIGRATE_TASK_FULFILLED});
+            let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+            dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
+            dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
+    dispatch({type: MIGRATE_TASK_FULFILLED});
   };
 };
 export let editMonthlyLogTask = task=>{
@@ -125,8 +130,9 @@ export let editMonthlyLogTask = task=>{
     dispatch({type: GET_MONTHLY_LOG});
     logsApi.editMonthlyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
+        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -139,8 +145,9 @@ export let deleteMonthlyLogTask = id=>{
     dispatch({type: GET_MONTHLY_LOG});
     logsApi.deleteMonthlyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload});
+        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -184,10 +191,10 @@ let migrateToWeeklyLogTask = (task, date)=>{
             let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
             dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
             dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
-            dispatch({type: MIGRATE_TASK_FULFILLED});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
+    dispatch({type: MIGRATE_TASK_FULFILLED});
   };
 };
 export let editWeeklyLogTask = task=>{
@@ -197,8 +204,9 @@ export let editWeeklyLogTask = task=>{
     dispatch({type: GET_WEEKLY_LOG});
     logsApi.editWeeklyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload});
+        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -256,10 +264,10 @@ let migrateToDailyLogTask = (task, date)=>{
           let sortedDailyLog = sortTasks(response.data.dailyLog);
           dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
           dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
-          dispatch({type: MIGRATE_TASK_FULFILLED});
         }
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
+    dispatch({type: MIGRATE_TASK_FULFILLED});
   };
 };
 export let editDailyLogTask = task=>{
@@ -270,8 +278,9 @@ export let editDailyLogTask = task=>{
     dispatch({type: GET_DAILY_LOG});
     logsApi.editDailyLogTask(data)
       .then(response=> {
-        let payload = sortTasks(response.data);
-        dispatch({type: GET_DAILY_LOG_FULFILLED, payload});
+        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
