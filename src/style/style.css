@@ -221,11 +221,15 @@ body, html {
 .date-picker:hover {
   color: rgba(255, 255, 255, .75);
 }
-.react-datepicker__day--highlighted-custom-1 {
+.react-datepicker__day--highlighted-custom-1,
+.react-datepicker__month-text--highlighted-custom-1 {
   color: #000 !important;
+  border-radius: 0.3rem;
   background: rgba(200, 10, 10, 0.1);
 }
-.react-datepicker__day--highlighted-custom-2 {
+.react-datepicker__day--highlighted-custom-2,
+.react-datepicker__month-text--highlighted-custom-2 {
   color: #000 !important;
+  border-radius: 0.3rem;
   background: rgba(10, 200, 10, 0.15);
 }

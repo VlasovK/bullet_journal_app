@@ -15,7 +15,13 @@ export default class WeeklyLog extends React.Component {
     this.props.getWeeklyLog();
   }
   handleDatePicker = date=>{
-    let data = {week: moment(date).isoWeek(), year: moment(date).year()};
+    let week = moment(date).isoWeek();
+    let year = moment(date).year();
+    if (moment(date).month() === 11 && week === 1)
+      year = moment(date).year() + 1;
+    if (moment(date).month() === 0 && week > 5)
+      year = moment(date).year() - 1;
+    let data = {week, year};
     this.props.setWeeklyLogDate(data);
     this.props.getWeeklyLog();
   };

@@ -59,7 +59,7 @@ function getBusyDates() {
           return busyDates.weekly.expired.push({year, week});
       });
   for (let day in journalData.dailyLog) {
-    if (moment(day).format('L') >= currentDate.day)
+    if (moment(new Date(day)).format('L') >= currentDate.day)
       journalData.dailyLog[day].some(task=>{
         if (task.status === 1)
           return busyDates.daily.actual.push(day);

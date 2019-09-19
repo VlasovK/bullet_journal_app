@@ -61,9 +61,24 @@ export default class MonthlyLog extends React.Component {
       </MDBCardTitle>
     );
   };
+  // getHighlightWithRanges = ()=>{
+  //   let actualDates = [new Date('09/01/2019')];
+  //   let expiredDates = [];
+  //   this.props.logsState.busyDates.monthly.actual.forEach(date=>{
+  //     // actualDates.push(date.month);
+  //   });
+  //   this.props.logsState.busyDates.monthly.expired.forEach(date=>{
+  //     // expiredDates.push(date.month);
+  //   });
+  //   return [
+  //     {'react-datepicker__month-text--highlighted-custom-2': actualDates},
+  //     {'react-datepicker__month-text--highlighted-custom-1': expiredDates}
+  //   ];
+  // };
   render() {
     let customInput = this.getCustomInput();
     let tasks = this.getTasks();
+    // let highlightWithRanges = this.getHighlightWithRanges();
     let newTask = this.props.logsState.currentLogTask === 'newMonthlyTask';
     return (
       <div className="table-card animated fadeIn">
@@ -76,6 +91,9 @@ export default class MonthlyLog extends React.Component {
                 customInput={customInput}
                 locale="en-GB"
                 className="date-picker"
+                disabledKeyboardNavigation
+                highlightDates={[new Date('03-01-2019').getMonth()]}
+                // highlightDates={highlightWithRanges}
                 onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>
