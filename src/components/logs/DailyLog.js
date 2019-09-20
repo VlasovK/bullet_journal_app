@@ -84,7 +84,13 @@ export default class DailyLog extends React.Component {
         <MDBContainer>
           <MDBCard>
             <MDBCardBody className="daily-log-title">
-              <MDBCardTitle>Daily Log</MDBCardTitle>
+              <MDBCardTitle>
+                Daily Log
+                {!!this.props.logsState.busyDates.daily.expired.length &&
+                  <MDBIcon
+                    icon="exclamation-triangle"
+                    className="icon-exclamation ml-2" />}
+              </MDBCardTitle>
               <DatePicker
                 customInput={customInput}
                 locale="en-GB"

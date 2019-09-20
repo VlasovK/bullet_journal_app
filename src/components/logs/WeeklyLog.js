@@ -105,7 +105,13 @@ export default class WeeklyLog extends React.Component {
         <MDBContainer>
           <MDBCard>
             <MDBCardBody className="weekly-log-title">
-              <MDBCardTitle>Weekly Log</MDBCardTitle>
+              <MDBCardTitle>
+                Weekly Log
+                {!!this.props.logsState.busyDates.weekly.expired.length &&
+                  <MDBIcon
+                    icon="exclamation-triangle"
+                    className="icon-exclamation ml-2" />}
+              </MDBCardTitle>
               <DatePicker
                 showWeekNumbers
                 customInput={customInput}

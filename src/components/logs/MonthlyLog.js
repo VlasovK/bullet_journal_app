@@ -86,7 +86,13 @@ export default class MonthlyLog extends React.Component {
         <MDBContainer>
           <MDBCard>
             <MDBCardBody className="monthly-log-title">
-              <MDBCardTitle>Monthly Log</MDBCardTitle>
+              <MDBCardTitle>
+                Monthly Log
+                {!!this.props.logsState.busyDates.monthly.expired.length &&
+                  <MDBIcon
+                    icon="exclamation-triangle"
+                    className="icon-exclamation ml-2" />}
+              </MDBCardTitle>
               <DatePicker
                 showMonthYearPicker
                 customInput={customInput}
