@@ -76,6 +76,7 @@ export default class MonthlyLog extends React.Component {
   //   ];
   // };
   render() {
+    let {year, month} = this.props.logsState.monthlyLog;
     let customInput = this.getCustomInput();
     let tasks = this.getTasks();
     // let highlightWithRanges = this.getHighlightWithRanges();
@@ -91,9 +92,9 @@ export default class MonthlyLog extends React.Component {
                 customInput={customInput}
                 locale="en-GB"
                 className="date-picker"
-                disabledKeyboardNavigation
-                highlightDates={[new Date('03-01-2019').getMonth()]}
+                selected={new Date(moment().month(month).year(year))}
                 // highlightDates={highlightWithRanges}
+                todayButton="This month"
                 onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>

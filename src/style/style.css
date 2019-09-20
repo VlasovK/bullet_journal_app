@@ -65,8 +65,10 @@ body, html {
   float: right;
 }
 .table {
-  height: calc(100% - 100px);
-  /* overflow-y: auto; */
+  height: calc(100% - 84px);
+  margin-bottom: 0 !important;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 .logs-wrapper {
   display: flex;
@@ -221,15 +223,23 @@ body, html {
 .date-picker:hover {
   color: rgba(255, 255, 255, .75);
 }
+.react-datepicker__day--selected {
+  background-color: rgba(33,107,165, .75) !important;
+}
+.react-datepicker__month--selected {
+  background-color: rgba(33,107,165, .75) !important;
+}
 .react-datepicker__day--highlighted-custom-1,
 .react-datepicker__month-text--highlighted-custom-1 {
-  color: #000 !important;
   border-radius: 0.3rem;
   background: rgba(200, 10, 10, 0.1);
 }
+.react-datepicker__day--highlighted {
+  color: #fff !important;
+  background-color: rgba(33,107,165, .75) !important;
+}
 .react-datepicker__day--highlighted-custom-2,
 .react-datepicker__month-text--highlighted-custom-2 {
-  color: #000 !important;
   border-radius: 0.3rem;
   background: rgba(10, 200, 10, 0.15);
 }

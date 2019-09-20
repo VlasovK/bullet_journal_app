@@ -17,10 +17,11 @@ export default class WeeklyLog extends React.Component {
   handleDatePicker = date=>{
     let week = moment(date).isoWeek();
     let year = moment(date).year();
+    //set correct date at the border week of the year
     if (moment(date).month() === 11 && week === 1)
-      year = moment(date).year() + 1;
+      year += 1;
     if (moment(date).month() === 0 && week > 5)
-      year = moment(date).year() - 1;
+      year -= 1;
     let data = {week, year};
     this.props.setWeeklyLogDate(data);
     this.props.getWeeklyLog();
@@ -70,23 +71,26 @@ export default class WeeklyLog extends React.Component {
     );
   };
   getHighlightWithRanges = ()=>{
+    let {week, year} = this.props.logsState.weeklyLog;
+    let selectedDates =[];
     let actualDates = [];
     let expiredDates = [];
+    for (let i=1; i<8; i++)
+    selectedDates.push(new Date( moment().week(week).year(year).day(i)));
     this.props.logsState.busyDates.weekly.actual.forEach(date=>{
-      for (let i=1; i<8; i++) {
+      for (let i=1; i<8; i++)
         actualDates.push(
           new Date(moment().week(date.week).year(date.year).day(i).format('MM DD YYYY'))
         );
-      }
     });
     this.props.logsState.busyDates.weekly.expired.forEach(date=>{
-      for (let i=1; i<8; i++) {
+      for (let i=1; i<8; i++)
         expiredDates.push(
           new Date(moment().week(date.week).year(date.year).day(i).format('MM DD YYYY'))
         );
-      }
     });
     return [
+      {'react-datepicker__day--highlighted': selectedDates},
       {'react-datepicker__day--highlighted-custom-2': actualDates},
       {'react-datepicker__day--highlighted-custom-1': expiredDates}
     ];
@@ -109,6 +113,7 @@ export default class WeeklyLog extends React.Component {
                 className="date-picker"
                 disabledKeyboardNavigation
                 highlightDates={highlightWithRanges}
+                todayButton="This week"
                 onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>

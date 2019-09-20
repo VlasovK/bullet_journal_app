@@ -73,7 +73,6 @@ export let deleteFutureLogTask = id=>{
       .then(response=> {
         let sortedFutureLog = sortTasks(response.data.futureLog);
         dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
-        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
@@ -116,8 +115,8 @@ let migrateToMonthlyLogTask = (task, date)=>{
           && date.month === getState().logsState.monthlyLog.month) {
             let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
             dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
-            dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
         }
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
     dispatch({type: MIGRATE_TASK_FULFILLED});
@@ -190,8 +189,8 @@ let migrateToWeeklyLogTask = (task, date)=>{
           && date.week === getState().logsState.weeklyLog.week) {
             let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
             dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
-            dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
         }
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
     dispatch({type: MIGRATE_TASK_FULFILLED});
@@ -263,8 +262,8 @@ let migrateToDailyLogTask = (task, date)=>{
         if (date === getState().logsState.dailyLog.date.format('MM-DD-YYYY')) {
           let sortedDailyLog = sortTasks(response.data.dailyLog);
           dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
-          dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
         }
+        dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
     dispatch({type: MIGRATE_TASK_FULFILLED});

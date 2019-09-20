@@ -89,8 +89,9 @@ export default class DailyLog extends React.Component {
                 customInput={customInput}
                 locale="en-GB"
                 className="date-picker"
-                disabledKeyboardNavigation
+                selected={new Date(this.props.logsState.dailyLog.date)}
                 highlightDates={highlightWithRanges}
+                todayButton="Today"
                 onChange={this.handleDatePicker} />
             </MDBCardBody>
           </MDBCard>

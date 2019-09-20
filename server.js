@@ -9,7 +9,6 @@ let journalData = JSON.parse(fs.readFileSync('journal_data.json'));
 setInterval(()=> {
   fs.writeFileSync('journal_data.json', JSON.stringify(journalData));
 }, 1000);
-
 let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -20,7 +19,8 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Credentials", true);
   next();
 });
-
+// ============================================================================
+// ================================ LOGS API ==================================
 function getBusyDates() {
   let today = moment();
   let currentDate = {
@@ -34,6 +34,7 @@ function getBusyDates() {
     weekly: {expired: [], actual: []},
     daily: {expired: [], actual: []}
   };
+  // define dates for monthlyLog
   for (let year in journalData.monthlyLog)
     for (let month in journalData.monthlyLog[year])
       if (year >= currentDate.year && month >= currentDate.month)
@@ -46,6 +47,7 @@ function getBusyDates() {
         if (task.status === 1)
           return busyDates.monthly.expired.push({year, month});
       });
+  // define dates for weeklyLog
   for (let year in journalData.weeklyLog)
     for (let week in journalData.weeklyLog[year])
       if (year >= currentDate.year && week >= currentDate.week)
@@ -58,6 +60,7 @@ function getBusyDates() {
         if (task.status === 1)
           return busyDates.weekly.expired.push({year, week});
       });
+  // define dates for dailyLog
   for (let day in journalData.dailyLog) {
     if (moment(new Date(day)).format('L') >= currentDate.day)
       journalData.dailyLog[day].some(task=>{
@@ -235,5 +238,7 @@ app.delete('/delete_daily_log_task/:date/:id', (request, response)=>{
   let busyDates = getBusyDates();
   response.send({dailyLog: tasks, busyDates});
 });
+// ============================================================================
+// ================================ NOTES API =================================
 
 app.listen(3000, ()=> console.log('Listening on port 3000'));
