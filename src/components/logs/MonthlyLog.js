@@ -78,8 +78,8 @@ export default class MonthlyLog extends React.Component {
   //     // expiredDates.push(date.month);
   //   });
   //   return [
-  //     {'react-datepicker__month-text--highlighted-custom-2': actualDates},
-  //     {'react-datepicker__month-text--highlighted-custom-1': expiredDates}
+  //     {'month-text--highlighted-custom-2': actualDates},
+  //     {'month-text--highlighted-custom-1': expiredDates}
   //   ];
   // };
   render() {

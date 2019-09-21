@@ -243,21 +243,22 @@ body, html {
   background-color: rgba(33,107,165, .75) !important;
 }
 .react-datepicker__month--selected {
+  color: #fff !important;
   background-color: rgba(33,107,165, .75) !important;
 }
 .react-datepicker__day--highlighted {
   color: #fff !important;
   background-color: rgba(33,107,165, .75) !important;
 }
-.react-datepicker__day--highlighted-custom-1,
-.react-datepicker__month-text--highlighted-custom-1 {
-  color: #000 !important;
+.day--highlighted-custom-1,
+.month-text--highlighted-custom-1 {
+  color: #000;
   border-radius: 0.3rem;
   background: rgba(200, 10, 10, 0.15);
 }
-.react-datepicker__day--highlighted-custom-2,
-.react-datepicker__month-text--highlighted-custom-2 {
-  color: #000 !important;
+.day--highlighted-custom-2,
+.month-text--highlighted-custom-2 {
+  color: #000;
   border-radius: 0.3rem;
   background: rgba(10, 200, 10, 0.15);
 }

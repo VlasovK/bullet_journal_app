@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {MDBContainer, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon} from 'mdbreact';
+import {MDBContainer, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon}
+  from 'mdbreact';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
@@ -73,8 +74,8 @@ export default class DailyLog extends React.Component {
       expiredDates.push(new Date(date));
     });
     return [
-      {'react-datepicker__day--highlighted-custom-2': actualDates},
-      {'react-datepicker__day--highlighted-custom-1': expiredDates}
+      {'day--highlighted-custom-2': actualDates},
+      {'day--highlighted-custom-1': expiredDates}
     ];
   };
   render() {
