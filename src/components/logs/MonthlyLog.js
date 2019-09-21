@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {MDBContainer, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon} from 'mdbreact';
+import {MDBContainer, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon}
+  from 'mdbreact';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
@@ -52,6 +53,12 @@ export default class MonthlyLog extends React.Component {
       }
     });
   };
+  showExpiredTask = ()=>{
+    let {year, month} = this.props.logsState.busyDates.monthly.expired[0];
+    let data = {year, month};
+    this.props.setMonthlyLogDate(data);
+    this.props.getMonthlyLog();
+  };
   getCustomInput = ()=>{
     let {year, month} = this.props.logsState.monthlyLog;
     let selectedDate =  moment().set({month, year}).format('MMMM YYYY');
@@ -89,9 +96,12 @@ export default class MonthlyLog extends React.Component {
               <MDBCardTitle>
                 Monthly Log
                 {!!this.props.logsState.busyDates.monthly.expired.length &&
-                  <MDBIcon
-                    icon="exclamation-triangle"
-                    className="icon-exclamation ml-2" />}
+                  <div className="expired-tasks" onClick={this.showExpiredTask}>
+                    <MDBIcon
+                      icon="exclamation-triangle"
+                      className="icon-exclamation ml-2 mr-1" />
+                    <span className="">expired tasks</span>
+                  </div>}
               </MDBCardTitle>
               <DatePicker
                 showMonthYearPicker

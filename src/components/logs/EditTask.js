@@ -109,6 +109,10 @@ export default class EditTask extends React.Component {
                     <MDBIcon far size="xs" icon="circle" className="mr-2 icon-grey" />
                     Low priority
                   </MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.markTask(4)}>
+                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-transparent" />
+                    No mark
+                  </MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
               <MDBBtn

@@ -52,6 +52,9 @@ export default class DailyLog extends React.Component {
       }
     });
   };
+  showExpiredTask = ()=>{
+    this.handleDatePicker(new Date(this.props.logsState.busyDates.daily.expired[0]));
+  };
   getCustomInput = ()=>{
     let selectedDate = moment(this.props.logsState.dailyLog.date).format('MMMM Do YYYY dddd');
     return (
@@ -87,9 +90,12 @@ export default class DailyLog extends React.Component {
               <MDBCardTitle>
                 Daily Log
                 {!!this.props.logsState.busyDates.daily.expired.length &&
-                  <MDBIcon
-                    icon="exclamation-triangle"
-                    className="icon-exclamation ml-2" />}
+                  <div className="expired-tasks" onClick={this.showExpiredTask}>
+                    <MDBIcon
+                      icon="exclamation-triangle"
+                      className="icon-exclamation ml-2 mr-1" />
+                    <span className="">expired tasks</span>
+                  </div>}
               </MDBCardTitle>
               <DatePicker
                 customInput={customInput}

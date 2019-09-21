@@ -120,6 +120,9 @@ body, html {
 .mark-3 {
   border-color: #bbb;
 }
+.mark-4 {
+  border-color: transparent;
+}
 .task-buttons-group {
   display: flex;
   justify-content: space-between;
@@ -160,6 +163,9 @@ body, html {
 .icon-grey {
   color: grey;
 }
+.icon-transparent {
+  color: transparent;
+}
 .scroll-tasks {
   height: calc(100vh - 223px) !important;
 }
@@ -185,8 +191,14 @@ body, html {
   color: white;
 }
 .icon-exclamation {
-  font-size: 1rem;
+  font-size: .75rem;
   color: #ffbb33;
+}
+.expired-tasks {
+  font-size: .7rem;
+  color: #ffbb33;
+  display: contents;
+  cursor: pointer;
 }
 .task-card:hover {
   cursor: pointer;
@@ -233,17 +245,19 @@ body, html {
 .react-datepicker__month--selected {
   background-color: rgba(33,107,165, .75) !important;
 }
-.react-datepicker__day--highlighted-custom-1,
-.react-datepicker__month-text--highlighted-custom-1 {
-  border-radius: 0.3rem;
-  background: rgba(200, 10, 10, 0.1);
-}
 .react-datepicker__day--highlighted {
   color: #fff !important;
   background-color: rgba(33,107,165, .75) !important;
 }
+.react-datepicker__day--highlighted-custom-1,
+.react-datepicker__month-text--highlighted-custom-1 {
+  color: #000 !important;
+  border-radius: 0.3rem;
+  background: rgba(200, 10, 10, 0.15);
+}
 .react-datepicker__day--highlighted-custom-2,
 .react-datepicker__month-text--highlighted-custom-2 {
+  color: #000 !important;
   border-radius: 0.3rem;
   background: rgba(10, 200, 10, 0.15);
 }

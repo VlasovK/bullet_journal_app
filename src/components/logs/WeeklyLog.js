@@ -59,6 +59,12 @@ export default class WeeklyLog extends React.Component {
       }
     });
   };
+  showExpiredTask = ()=>{
+    let {year, week} = this.props.logsState.busyDates.weekly.expired[0];
+    let data = {year, week};
+    this.props.setWeeklyLogDate(data);
+    this.props.getWeeklyLog();
+  };
   getCustomInput = ()=>{
     let {week, year} = this.props.logsState.weeklyLog;
     let firstDayOfWeek = moment().week(week).year(year).day(1).format('MMM Do YYYY');
@@ -108,9 +114,12 @@ export default class WeeklyLog extends React.Component {
               <MDBCardTitle>
                 Weekly Log
                 {!!this.props.logsState.busyDates.weekly.expired.length &&
-                  <MDBIcon
-                    icon="exclamation-triangle"
-                    className="icon-exclamation ml-2" />}
+                  <div className="expired-tasks" onClick={this.showExpiredTask}>
+                    <MDBIcon
+                      icon="exclamation-triangle"
+                      className="icon-exclamation ml-2 mr-1" />
+                    <span className="">expired tasks</span>
+                  </div>}
               </MDBCardTitle>
               <DatePicker
                 showWeekNumbers

@@ -10,7 +10,7 @@ export default class Task extends React.Component {
     this.state = {
       task: {
         text: '',
-        mark: 3, // priority: 1=high, 2=middle, 3=low
+        mark: 4, // priority: 1=high, 2=middle, 3=low, 4=none
         status: 1 // 1=active, 3=done
       },
       isTaskChanged: false
@@ -76,6 +76,10 @@ export default class Task extends React.Component {
                   <MDBDropdownItem onClick={this.markTask(3)}>
                     <MDBIcon far size="xs" icon="circle" className="mr-2 icon-grey" />
                     Low priority
+                  </MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.markTask(4)}>
+                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-transparent" />
+                    No mark
                   </MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
