@@ -76,6 +76,11 @@ body, html {
   width: 1520px;
   padding: 12px 24px 0 24px;
 }
+.notes-wrapper {
+  display: flex;
+  margin: 0 auto;
+  padding: 12px 24px 0 24px;
+}
 .card {
   /* width: 322px; */
 }
@@ -129,6 +134,7 @@ body, html {
   margin-bottom: 6px;
 }
 .btn-group-width-100 {
+  height: 31.125px;
   width: 100%;
 }
 .edit-task-btn {
@@ -148,11 +154,14 @@ body, html {
   border: none !important;
   background-color: rgba(255, 255, 255, .9) !important;
 }
-.dropdown-left-50 {
-  left: -50px !important;
+.dropdown-left-30 {
+  left: -30px !important;
 }
 .dropdown-left-100 {
   left: -98px !important;
+}
+.width-141 {
+  min-width: 141px;
 }
 .icon-red {
   color: red;
@@ -261,4 +270,13 @@ body, html {
   color: #000;
   border-radius: 0.3rem;
   background: rgba(10, 200, 10, 0.15);
+}
+.new-notes-list {
+  max-width: 60px;
+  margin: 0 8px;
+  padding: 16px 0;
+  height: 100%;
+  flex-grow: 1;
+  float: left;
+  background-color: rgba(0, 0, 0, .25);
 }

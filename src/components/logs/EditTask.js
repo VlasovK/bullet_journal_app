@@ -33,14 +33,22 @@ export default class EditTask extends React.Component {
     this.props.setCurrentLogTask({});
   };
   onDone = ()=>{
-    let task = {...this.state.task, status: 3};
+    let task = {...this.state.task, status: 3, inProgress: false};
     this.props.editTask(task);
     this.props.setCurrentLogTask({});
   };
   onNotDone = ()=>{
-    let task = {...this.state.task, status: 1};
+    let task = {...this.state.task, status: 1, inProgress: false};
     this.props.editTask(task);
     this.props.setCurrentLogTask({});
+  };
+  onInProgress = ()=>{
+    let task = {...this.state.task, status: 1, inProgress: true};
+    this.props.editTask(task);
+    this.props.setCurrentLogTask({});
+  };
+  onNotInProgress = ()=>{
+    this.onNotDone();
   };
   onDelete = id=>()=>{
     this.props.deleteTask(id);
@@ -92,8 +100,34 @@ export default class EditTask extends React.Component {
                   onClick={this.onNotDone}>
                   not done
                 </MDBBtn>}
+              {!this.state.task.inProgress &&
+                <MDBBtn
+                  outline color="blue-grey" size="sm"
+                  className="edit-task-btn"
+                  onClick={this.onInProgress}>
+                in progress
+                </MDBBtn>}
+              {this.state.task.inProgress &&
+                <MDBBtn
+                  outline color="blue-grey" size="sm"
+                  className="edit-task-btn"
+                  onClick={this.onNotInProgress}>
+                  not in progress
+                </MDBBtn>}
+              <MDBBtn
+                outline color="blue-grey" size="sm"
+                className="edit-task-btn"
+                onClick={this.onDelete(this.state.task.id)}>
+                <span className="red-text">delete</span>
+              </MDBBtn>
+            </MDBBtnGroup>
+            <MDBBtnGroup className="btn-group-width-100">
               <MDBDropdown dropup>
-                <MDBDropdownToggle caret outline color="blue-grey" size="sm">
+                <MDBDropdownToggle
+                  caret
+                  outline color="blue-grey"
+                  size="sm"
+                  className="width-141">
                   mark
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic>
@@ -115,29 +149,15 @@ export default class EditTask extends React.Component {
                   </MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
-              <MDBBtn
-                outline color="blue-grey" size="sm"
-                className="edit-task-btn"
-                onClick={this.onDelete(this.state.task.id)}>
-                <span className="red-text">delete</span>
-              </MDBBtn>
-            </MDBBtnGroup>
-            <MDBBtnGroup className="btn-group-width-100">
-              <MDBBtn
-                outline color="blue-grey" size="sm"
-                disabled={!this.state.isTaskChanged || !this.state.task.text.trim()}
-                className="edit-task-btn"
-                onClick={this.onSave}>
-                save
-              </MDBBtn>
               <MDBDropdown dropup>
                 <MDBDropdownToggle
                   caret outline
                   color="blue-grey"
-                  size="sm">
+                  size="sm"
+                  className="width-141">
                   migrate to
                 </MDBDropdownToggle>
-                <MDBDropdownMenu basic className="dropdown-left-50">
+                <MDBDropdownMenu basic className="dropdown-left-30">
                   {this.props.logType !== 'futureLog' &&
                     <MDBDropdownItem onClick={this.setTaskToMigrate('futureLog')}>
                       Future Log
@@ -153,6 +173,15 @@ export default class EditTask extends React.Component {
                   </MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
+            </MDBBtnGroup>
+            <MDBBtnGroup className="btn-group-width-100">
+              <MDBBtn
+                outline color="blue-grey" size="sm"
+                disabled={!this.state.isTaskChanged || !this.state.task.text.trim()}
+                className="edit-task-btn"
+                onClick={this.onSave}>
+                save
+              </MDBBtn>
             </MDBBtnGroup>
           </MDBCardBody>
         </MDBCard>

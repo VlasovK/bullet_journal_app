@@ -11,7 +11,7 @@ export default class Task extends React.Component {
       task: {
         text: '',
         mark: 4, // priority: 1=high, 2=middle, 3=low, 4=none
-        status: 1 // 1=active, 3=done
+        status: 1, // 1=active, 3=done
       },
       isTaskChanged: false
     };

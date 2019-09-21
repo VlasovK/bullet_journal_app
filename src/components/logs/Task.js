@@ -17,6 +17,8 @@ export default class Task extends React.Component {
               className={`task-text${isDone ? ' line-through' : ''}`}>
               {isDone &&
                 <MDBIcon size="lg" icon="check-circle mr-1" />}
+              {this.props.task.inProgress &&
+                <MDBIcon size="lg" icon="hourglass-half mr-1" />}
               {this.props.task.text}
             </MDBCardText>
           </MDBCardBody>
