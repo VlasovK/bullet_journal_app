@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default class Notes extends React.Component {
+export default class Projects extends React.Component {
   render() {
     return (
       <div className="notes-wrapper animated fadeIn">
-        <h2>Notes in progress</h2>
+        <h2>Projects in progress</h2>
       </div>
     );
   }

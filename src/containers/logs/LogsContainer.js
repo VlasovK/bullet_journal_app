@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Workspace from '../components/Workspace';
+import Logs from '../../components/logs/Logs';
 
-class WorkspaceContainer extends React.Component {
+class LogsContainer extends React.Component {
   render() {
     return (
-      <Workspace
+      <Logs
         workspaceState={this.props.workspaceState}
         logsState={this.props.logsState} />
     );
@@ -19,4 +19,4 @@ let mapStateToProps = state=>{
   };
 };
 let mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(WorkspaceContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LogsContainer);
