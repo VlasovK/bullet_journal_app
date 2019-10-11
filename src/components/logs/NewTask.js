@@ -1,8 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {MDBIcon, MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBCardTitle,
-  MDBCardText, MDBBtnGroup, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu,
-  MDBDropdownItem} from 'mdbreact';
+import {
+  MDBIcon,
+  MDBBtn,
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBBtnGroup,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
+  MDBDropdownItem
+} from 'mdbreact';
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -17,25 +25,33 @@ export default class Task extends React.Component {
     };
   }
   componentDidMount() {
-    document.getElementById('new-task').scrollIntoView({block: "nearest"});
+    document.getElementById('new-task').scrollIntoView({block: 'nearest'});
+    this.setState({task: {...this.state.task, logType: this.props.logType}});
   }
-  handleTextArea = event=>{
+  handleTextArea = (event) => {
     this.setState({
       task: {...this.state.task, text: event.target.value},
       isTaskChanged: true
     });
   };
-  markTask = mark=>()=>{
+  markTask = (mark) => () => {
     this.setState({task: {...this.state.task, mark}});
   };
-  onSave = ()=>{
+  onSave = () => {
     this.props.saveNewTask(this.state.task);
     this.props.closeNewTask();
   };
-  onCancel = ()=>{
+  onCancel = () => {
     this.props.closeNewTask();
   };
   render() {
+    let {
+      isTaskChanged,
+      task: {
+        mark,
+        text
+      }
+    } = this.state;
     return (
       <MDBContainer id="new-task">
         <MDBCard>
@@ -43,21 +59,27 @@ export default class Task extends React.Component {
             <MDBIcon
               icon="times"
               className="edit-task-close-icon"
-              onClick={this.onCancel} />
-            <div className={`status-line status-line-top mark-${this.state.task.mark}`} />
+              onClick={this.onCancel}
+            />
+            <div className={`status-line status-line-top mark-${mark}`} />
             <div className="form-group mb-12">
               <textarea
                 className="form-control"
-                autoFocus rows="5"
-                value={this.state.task.text}
-                onChange={this.handleTextArea} />
+                autoFocus
+                rows="5"
+                value={text}
+                onChange={this.handleTextArea}
+              />
             </div>
             <MDBBtnGroup className="btn-group-width-100">
               <MDBBtn
-                outline color="blue-grey" size="sm"
-                disabled={!this.state.isTaskChanged || !this.state.task.text.trim()}
+                outline
+                color="blue-grey"
+                size="sm"
+                disabled={!isTaskChanged || !text.trim()}
                 className="edit-task-btn"
-                onClick={this.onSave}>
+                onClick={this.onSave}
+              >
                 save
               </MDBBtn>
               <MDBDropdown dropup>
@@ -66,19 +88,39 @@ export default class Task extends React.Component {
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic className="dropdown-left-100">
                   <MDBDropdownItem onClick={this.markTask(1)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-red" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-red"
+                    />
                     High priority
                   </MDBDropdownItem>
                   <MDBDropdownItem onClick={this.markTask(2)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-orange" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-orange"
+                    />
                     Medium priority
                   </MDBDropdownItem>
                   <MDBDropdownItem onClick={this.markTask(3)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-grey" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-grey"
+                    />
                     Low priority
                   </MDBDropdownItem>
                   <MDBDropdownItem onClick={this.markTask(4)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-transparent" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-transparent"
+                    />
                     No mark
                   </MDBDropdownItem>
                 </MDBDropdownMenu>

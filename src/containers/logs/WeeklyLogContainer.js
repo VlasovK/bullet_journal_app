@@ -1,7 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {setWeeklyLogDate, setCurrentLogTask, getWeeklyLog, addWeeklyLogTask,
-  editWeeklyLogTask, deleteWeeklyLogTask} from '../../store/logs/actions';
+import {
+  setLogDate,
+  setCurrentTask,
+  addTask,
+  editTask,
+  removeTask
+} from '../../store/logs/actions';
 import WeeklyLog from '../../components/logs/WeeklyLog';
 
 class WeeklyLogContainer extends React.Component {
@@ -10,21 +15,21 @@ class WeeklyLogContainer extends React.Component {
       <WeeklyLog
         logsState={this.props.logsState}
         logType={this.props.logType}
-        setWeeklyLogDate={this.props.setWeeklyLogDate}
-        setCurrentLogTask={this.props.setCurrentLogTask}
-        getWeeklyLog={this.props.getWeeklyLog}
-        addWeeklyLogTask={this.props.addWeeklyLogTask}
-        editWeeklyLogTask={this.props.editWeeklyLogTask}
-        deleteWeeklyLogTask={this.props.deleteWeeklyLogTask} />
+        setLogDate={this.props.setLogDate}
+        setCurrentTask={this.props.setCurrentTask}
+        addTask={this.props.addTask}
+        editTask={this.props.editTask}
+        removeTask={this.props.removeTask} />
     );
   }
 }
 
-let mapStateToProps = state=>{
-  return {
-    logsState: state.logsState
-  };
+let mapStateToProps = (state) => ({logsState: state.logsState});
+let mapDispatchToProps = {
+  setLogDate,
+  setCurrentTask,
+  addTask,
+  editTask,
+  removeTask
 };
-let mapDispatchToProps = {setWeeklyLogDate, setCurrentLogTask, getWeeklyLog,
-  addWeeklyLogTask, editWeeklyLogTask, deleteWeeklyLogTask};
 export default connect(mapStateToProps, mapDispatchToProps)(WeeklyLogContainer);

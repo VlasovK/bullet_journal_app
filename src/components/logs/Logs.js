@@ -7,12 +7,12 @@ import WeeklyLogContainer from '../../containers/logs/WeeklyLogContainer';
 import DailyLogContainer from '../../containers/logs/DailyLogContainer';
 
 export default class Logs extends React.Component {
+  componentDidMount() {
+    this.props.getTasks();
+  }
   render() {
-    let {isMyLogsShown, isNotesShown} = this.props.workspaceState;
     if (this.props.logsState.error) {
-      return (
-        <Error error={this.props.logsState.error} />
-      );
+      return <Error error={this.props.logsState.error} />;
     }
     return (
       <div className="table">

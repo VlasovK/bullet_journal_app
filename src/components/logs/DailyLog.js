@@ -1,54 +1,65 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {MDBContainer, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon}
-  from 'mdbreact';
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBIcon
+} from 'mdbreact';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
 import EditTaskContainer from '../../containers/logs/EditTaskContainer';
-import * as moment from 'moment';
+import moment from 'moment';
 import DatePicker, {registerLocale} from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
 registerLocale('en-GB', enGB);
 
 
 export default class DailyLog extends React.Component {
-  componentDidMount() {
-    this.props.getDailyLog();
-  }
-  handleDatePicker = date=>{
-    this.props.setDailyLogDate(moment(date));
-    this.props.getDailyLog();
+  handleDatePicker = (date) => {
+    let data = {logType: 'daily', date};
+    this.props.setLogDate(data);
   };
   addAnotherTask = ()=>{
-    this.props.setCurrentLogTask('newDailyTask');
+    this.props.setCurrentTask('newDailyTask');
   };
-  saveNewTask = task=>{
-    this.props.addDailyLogTask(task);
+  saveNewTask = (task) => {
+    this.props.addTask(task);
   };
-  editTask = task=>{
-    this.props.editDailyLogTask(task);
+  editTask = (task) => {
+    this.props.editTask(task);
   };
-  deleteTask = id=>{
-    this.props.deleteDailyLogTask(id);
+  deleteTask = (id) => {
+    this.props.removeTask(id);
   };
-  closeNewTask = ()=>{
-    this.props.setCurrentLogTask({});
+  closeNewTask = () => {
+    this.props.setCurrentTask({});
   };
-  getTasks = ()=>{
-    let { dailyLog, currentLogTask } = this.props.logsState;
-    return dailyLog.data.map((task, index)=>{
-      if (typeof currentLogTask === 'string' || currentLogTask.id !== task.id) {
-        return (
-          <TaskContainer key={index} task={task} />
-        );
+  sortTasks = (tasks) => {
+    return tasks.sort((a, b) => {
+      if (a.status === b.status) {
+        return (a.mark - b.mark);
+      }
+      return (a.status - b.status);
+    });
+  };
+  renderTasks = () => {
+    let { tasks, currentTask } = this.props.logsState;
+    tasks = tasks.filter((task) => task.logType === 'daily'); // && date === date
+    tasks = this.sortTasks(tasks);
+    return tasks.map((task, index) => {
+      if (typeof currentTask === 'string' || currentTask.id !== task.id) {
+        return <TaskContainer key={index} task={task} />;
       } else {
         return (
           <EditTaskContainer
             key={index}
-            logType={'dailyLog'}
+            logType={'daily'}
             editTask={this.editTask}
-            deleteTask={this.deleteTask} />
+            deleteTask={this.deleteTask}
+          />
         );
       }
     });
@@ -57,7 +68,7 @@ export default class DailyLog extends React.Component {
     this.handleDatePicker(new Date(this.props.logsState.busyDates.daily.expired[0]));
   };
   getCustomInput = ()=>{
-    let selectedDate = moment(this.props.logsState.dailyLog.date).format('MMMM Do YYYY dddd');
+    let selectedDate = moment(this.props.logsState.dates.daily).format('MMMM Do YYYY dddd');
     return (
       <MDBCardTitle sub tag="h6" selected={null}>
         <span onClick={this.closeNewTask}>{selectedDate}</span>
@@ -80,9 +91,9 @@ export default class DailyLog extends React.Component {
   };
   render() {
     let customInput = this.getCustomInput();
-    let tasks = this.getTasks();
-    let highlightWithRanges = this.getHighlightWithRanges();
-    let newTask = this.props.logsState.currentLogTask === 'newDailyTask';
+    let tasks = this.renderTasks();
+    // let highlightWithRanges = this.getHighlightWithRanges();
+    let newTask = this.props.logsState.currentTask === 'newDailyTask';
     return (
       <div className="table-card animated fadeIn">
         <MDBContainer>
@@ -90,28 +101,31 @@ export default class DailyLog extends React.Component {
             <MDBCardBody className="daily-log-title">
               <MDBCardTitle>
                 Daily Log
-                {!!this.props.logsState.busyDates.daily.expired.length &&
+                {!!this.props.logsState.busyDates.daily.expired.length && (
                   <div className="expired-tasks" onClick={this.showExpiredTask}>
                     <MDBIcon
                       icon="exclamation-triangle"
-                      className="icon-exclamation ml-2 mr-1" />
+                      className="icon-exclamation ml-2 mr-1"
+                    />
                     <span className="">expired tasks</span>
-                  </div>}
+                  </div>
+                )}
               </MDBCardTitle>
               <DatePicker
                 customInput={customInput}
                 locale="en-GB"
                 className="date-picker"
-                selected={new Date(this.props.logsState.dailyLog.date)}
-                highlightDates={highlightWithRanges}
+                selected={new Date(this.props.logsState.dates.daily)}
+                // highlightDates={highlightWithRanges}
                 todayButton="Today"
-                onChange={this.handleDatePicker} />
+                onChange={this.handleDatePicker}
+              />
             </MDBCardBody>
           </MDBCard>
         </MDBContainer>
         <PerfectScrollbar className="scroll-tasks mt-2">
           {tasks}
-          {!newTask &&
+          {!newTask && (
             <MDBContainer onClick={this.addAnotherTask}>
               <MDBCard className="add-task-card">
                 <MDBCardBody>
@@ -121,11 +135,15 @@ export default class DailyLog extends React.Component {
                   </MDBCardText>
                 </MDBCardBody>
               </MDBCard>
-            </MDBContainer>}
-          {newTask &&
+            </MDBContainer>
+          )}
+          {newTask && (
             <NewTaskContainer
               closeNewTask={this.closeNewTask}
-              saveNewTask={this.saveNewTask} />}
+              saveNewTask={this.saveNewTask}
+              logType='daily'
+            />
+          )}
         </PerfectScrollbar>
       </div>
     );

@@ -1,52 +1,62 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {MDBContainer, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon} from 'mdbreact';
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBIcon
+} from 'mdbreact';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
 import EditTaskContainer from '../../containers/logs/EditTaskContainer';
-import * as moment from 'moment';
 
 export default class FutureLog extends React.Component {
-  componentDidMount() {
-    this.props.getFutureLog();
-  }
-  addAnotherTask = ()=>{
-    this.props.setCurrentLogTask('newFutureTask');
+  addAnotherTask = () => {
+    this.props.setCurrentTask('newFutureTask');
   };
-  saveNewTask = task=>{
-    this.props.addFutureLogTask(task);
+  saveNewTask = (task) => {
+    this.props.addTask(task);
   };
-  editTask = task=>{
-    this.props.editFutureLogTask(task);
+  editTask = (task) => {
+    this.props.editTask(task);
   };
-  deleteTask = id=>{
-    this.props.deleteFutureLogTask(id);
+  deleteTask = (id) => {
+    this.props.removeTask(id);
   };
-  closeNewTask = ()=>{
-    this.props.setCurrentLogTask({});
+  closeNewTask = () => {
+    this.props.setCurrentTask({});
   };
-  getTasks = ()=>{
-    let { futureLog, currentLogTask } = this.props.logsState;
-    return futureLog.data.map((task, index)=>{
-      if (typeof currentLogTask === 'string' || currentLogTask.id !== task.id) {
-        return (
-          <TaskContainer key={index} task={task} />
-        );
-      } else {
-        return (
-          <EditTaskContainer
-            key={index}
-            logType={'futureLog'}
-            editTask={this.editTask}
-            deleteTask={this.deleteTask} />
-        );
+  sortTasks = (tasks) => {
+    return tasks.sort((a, b) => {
+      if (a.status === b.status) {
+        return (a.mark - b.mark);
       }
+      return (a.status - b.status);
+    });
+  };
+  renderTasks = () => {
+    let {tasks, currentTask} = this.props.logsState;
+    tasks = tasks.filter((task) => task.logType === 'future');
+    tasks = this.sortTasks(tasks);
+    return tasks.map((task)=>{
+      if (typeof currentTask === 'string' || currentTask.id !== task.id) {
+        return <TaskContainer key={task.id} task={task} />;
+      }
+      return (
+        <EditTaskContainer
+          key={task.id}
+          logType={'future'}
+          editTask={this.editTask}
+          deleteTask={this.deleteTask}
+        />
+      );
     });
   };
   render() {
-    let tasks = this.getTasks();
-    let newTask = this.props.logsState.currentLogTask === 'newFutureTask';
+    let tasks = this.renderTasks();
+    let newTask = this.props.logsState.currentTask === 'newFutureTask';
     return (
       <div className="table-card animated fadeIn">
         <MDBContainer>
@@ -61,7 +71,7 @@ export default class FutureLog extends React.Component {
         </MDBContainer>
         <PerfectScrollbar className="scroll-tasks mt-2">
           {tasks}
-          {!newTask &&
+          {!newTask && (
             <MDBContainer onClick={this.addAnotherTask}>
               <MDBCard className="add-task-card">
                 <MDBCardBody>
@@ -71,11 +81,15 @@ export default class FutureLog extends React.Component {
                   </MDBCardText>
                 </MDBCardBody>
               </MDBCard>
-            </MDBContainer>}
-          {newTask &&
+            </MDBContainer>
+          )}
+          {newTask && (
             <NewTaskContainer
               closeNewTask={this.closeNewTask}
-              saveNewTask={this.saveNewTask} />}
+              saveNewTask={this.saveNewTask}
+              logType='future'
+            />
+          )}
         </PerfectScrollbar>
       </div>
     );

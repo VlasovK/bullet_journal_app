@@ -1,7 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {setDailyLogDate, setCurrentLogTask, getDailyLog, addDailyLogTask,
-  editDailyLogTask, deleteDailyLogTask} from '../../store/logs/actions';
+import {
+  setLogDate,
+  setCurrentTask,
+  addTask,
+  editTask,
+  removeTask
+} from '../../store/logs/actions';
 import DailyLog from '../../components/logs/DailyLog';
 
 class DailyLogContainer extends React.Component {
@@ -10,21 +15,22 @@ class DailyLogContainer extends React.Component {
       <DailyLog
         logsState={this.props.logsState}
         logType={this.props.logType}
-        setDailyLogDate={this.props.setDailyLogDate}
-        setCurrentLogTask={this.props.setCurrentLogTask}
-        getDailyLog={this.props.getDailyLog}
-        addDailyLogTask={this.props.addDailyLogTask}
-        editDailyLogTask={this.props.editDailyLogTask}
-        deleteDailyLogTask={this.props.deleteDailyLogTask} />
+        setLogDate={this.props.setLogDate}
+        setCurrentTask={this.props.setCurrentTask}
+        addTask={this.props.addTask}
+        editTask={this.props.editTask}
+        removeTask={this.props.removeTask}
+      />
     );
   }
 }
 
-let mapStateToProps = state=>{
-  return {
-    logsState: state.logsState
-  };
+let mapStateToProps = (state) => ({logsState: state.logsState});
+let mapDispatchToProps = {
+  setLogDate,
+  setCurrentTask,
+  addTask,
+  editTask,
+  removeTask
 };
-let mapDispatchToProps = {setDailyLogDate, setCurrentLogTask, getDailyLog,
-  addDailyLogTask, editDailyLogTask, deleteDailyLogTask};
 export default connect(mapStateToProps, mapDispatchToProps)(DailyLogContainer);

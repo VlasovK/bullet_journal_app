@@ -1,67 +1,79 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {MDBContainer, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon}
-  from 'mdbreact';
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBIcon
+} from 'mdbreact';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import TaskContainer from '../../containers/logs/TaskContainer';
 import NewTaskContainer from '../../containers/logs/NewTaskContainer';
 import EditTaskContainer from '../../containers/logs/EditTaskContainer';
-import * as moment from 'moment';
+import moment from 'moment';
 import DatePicker, {registerLocale} from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
 registerLocale('en-GB', enGB);
 
 export default class MonthlyLog extends React.Component {
-  componentDidMount() {
-    this.props.getMonthlyLog();
-  }
-  handleDatePicker = date=>{
-    let data = {month: moment(date).month(), year: moment(date).year()};
-    this.props.setMonthlyLogDate(data);
-    this.props.getMonthlyLog();
+  handleDatePicker = (date) => {
+    let data = {logType: 'monthly', date};
+    this.props.setLogDate(data);
   };
-  addAnotherTask = ()=>{
-    this.props.setCurrentLogTask('newMonthlyTask');
+  addAnotherTask = () => {
+    this.props.setCurrentTask('newMonthlyTask');
   };
-  saveNewTask = task=>{
-    this.props.addMonthlyLogTask(task);
+  saveNewTask = (task) => {
+    this.props.addTask(task);
   };
   editTask = task=>{
-    this.props.editMonthlyLogTask(task);
+    this.props.editTask(task);
   };
   deleteTask = id=>{
-    this.props.deleteMonthlyLogTask(id);
+    this.props.removeTask(id);
   };
   closeNewTask = ()=>{
-    this.props.setCurrentLogTask({});
+    this.props.setCurrentTask({});
   };
-  getTasks = ()=>{
-    let { monthlyLog, currentLogTask } = this.props.logsState;
-    return monthlyLog.data.map((task, index)=>{
-      if (typeof currentLogTask === 'string' || currentLogTask.id !== task.id) {
-        return (
-          <TaskContainer key={index} task={task} />
-        );
+  sortTasks = (tasks) => {
+    return tasks.sort((a, b) => {
+      if (a.status === b.status) {
+        return (a.mark - b.mark);
+      }
+      return (a.status - b.status);
+    });
+  };
+  renderTasks = ()=>{
+    let {tasks, currentTask} = this.props.logsState;
+    tasks = tasks.filter((task) => {
+      return task.logType === 'monthly'; // && date === date
+    });
+    tasks = this.sortTasks(tasks);
+    return tasks.map((task, index) => {
+      if (typeof currentTask === 'string' || currentTask.id !== task.id) {
+        return <TaskContainer key={index} task={task} />;
       } else {
         return (
           <EditTaskContainer
             key={index}
-            logType={'monthlyLog'}
+            logType={'monthly'}
             editTask={this.editTask}
-            deleteTask={this.deleteTask} />
+            deleteTask={this.deleteTask}
+          />
         );
       }
     });
   };
-  showExpiredTask = ()=>{
+  showExpiredTask = () => {
     let {year, month} = this.props.logsState.busyDates.monthly.expired[0];
     let data = {year, month};
-    this.props.setMonthlyLogDate(data);
-    this.props.getMonthlyLog();
+    this.props.setLogDate(data);
+    this.props.getTasks();
   };
-  getCustomInput = ()=>{
-    let {year, month} = this.props.logsState.monthlyLog;
-    let selectedDate =  moment().set({month, year}).format('MMMM YYYY');
+  getCustomInput = () => {
+    let currentLogDate = this.props.logsState.dates.monthly;
+    let selectedDate =  moment(currentLogDate).format('MMMM YYYY');
     return (
       <MDBCardTitle sub tag="h6">
         <span onClick={this.closeNewTask}>{selectedDate}</span>
@@ -83,11 +95,11 @@ export default class MonthlyLog extends React.Component {
   //   ];
   // };
   render() {
-    let {year, month} = this.props.logsState.monthlyLog;
+    let currentLogDate = this.props.logsState.dates.monthly;
     let customInput = this.getCustomInput();
-    let tasks = this.getTasks();
+    let tasks = this.renderTasks();
     // let highlightWithRanges = this.getHighlightWithRanges();
-    let newTask = this.props.logsState.currentLogTask === 'newMonthlyTask';
+    let newTask = this.props.logsState.currentTask === 'newMonthlyTask';
     return (
       <div className="table-card animated fadeIn">
         <MDBContainer>
@@ -95,20 +107,22 @@ export default class MonthlyLog extends React.Component {
             <MDBCardBody className="monthly-log-title">
               <MDBCardTitle>
                 Monthly Log
-                {!!this.props.logsState.busyDates.monthly.expired.length &&
+                {!!this.props.logsState.busyDates.monthly.expired.length && (
                   <div className="expired-tasks" onClick={this.showExpiredTask}>
                     <MDBIcon
                       icon="exclamation-triangle"
-                      className="icon-exclamation ml-2 mr-1" />
+                      className="icon-exclamation ml-2 mr-1"
+                    />
                     <span className="">expired tasks</span>
-                  </div>}
+                  </div>
+                )}
               </MDBCardTitle>
               <DatePicker
                 showMonthYearPicker
                 customInput={customInput}
                 locale="en-GB"
                 className="date-picker"
-                selected={new Date(moment().month(month).year(year))}
+                selected={new Date(moment(currentLogDate))}
                 // highlightDates={highlightWithRanges}
                 todayButton="This month"
                 onChange={this.handleDatePicker} />
@@ -117,7 +131,7 @@ export default class MonthlyLog extends React.Component {
         </MDBContainer>
         <PerfectScrollbar className="scroll-tasks mt-2">
           {tasks}
-          {!newTask &&
+          {!newTask && (
             <MDBContainer onClick={this.addAnotherTask}>
               <MDBCard className="add-task-card">
                 <MDBCardBody>
@@ -127,11 +141,15 @@ export default class MonthlyLog extends React.Component {
                   </MDBCardText>
                 </MDBCardBody>
               </MDBCard>
-            </MDBContainer>}
-          {newTask &&
+            </MDBContainer>
+          )}
+          {newTask && (
             <NewTaskContainer
               closeNewTask={this.closeNewTask}
-              saveNewTask={this.saveNewTask} />}
+              saveNewTask={this.saveNewTask}
+              logType='monthly'
+            />
+          )}
         </PerfectScrollbar>
       </div>
     );

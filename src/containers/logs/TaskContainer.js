@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {setCurrentLogTask} from '../../store/logs/actions';
+import {setCurrentTask} from '../../store/logs/actions';
 import Task from '../../components/logs/Task';
 
 class TaskContainer extends React.Component {
@@ -8,7 +8,7 @@ class TaskContainer extends React.Component {
     return (
       <Task
         task={this.props.task}
-        setCurrentLogTask={this.props.setCurrentLogTask} />
+        setCurrentTask={this.props.setCurrentTask} />
     );
   }
 }
@@ -16,5 +16,5 @@ class TaskContainer extends React.Component {
 let mapStateToProps = state=>{
   return {};
 };
-let mapDispatchToProps = {setCurrentLogTask};
+let mapDispatchToProps = {setCurrentTask};
 export default connect(mapStateToProps, mapDispatchToProps)(TaskContainer);

@@ -23,11 +23,11 @@ export default class MigrateDatepicker extends React.Component {
       <div className="fullscreen-mask migrate-datepicker-mask" onClick={this.closeDatepicker}>
         <div
           onClick={this.stopPropagation}
-          className={`datepicker-container${newMigrateLogType === 'monthlyLog' ? '-small' : ''}`}>
+          className={`datepicker-container${newMigrateLogType === 'monthly' ? '-small' : ''}`}>
           <DatePicker
             inline
-            showMonthYearPicker={newMigrateLogType === 'monthlyLog'}
-            showWeekNumbers={newMigrateLogType === 'weeklyLog'}
+            showMonthYearPicker={newMigrateLogType === 'monthly'}
+            showWeekNumbers={newMigrateLogType === 'weekly'}
             locale="en-GB"
             className="date-picker"
             onChange={this.handleDatePicker} />

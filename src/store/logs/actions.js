@@ -1,7 +1,75 @@
-import axios from 'axios';
 import logsApi from '../../api/logsApi';
-import * as moment from 'moment';
 
+export const SET_CURRENT_TASK = 'SET_CURRENT_TASK';
+export const SET_LOG_DATE = 'SET_LOG_DATE';
+export const INCREASE_PENDING_REQUESTS = 'INCREASE_PENDING_REQUESTS';
+export const DECREASE_PENDING_REQUESTS = 'DECREASE_PENDING_REQUESTS';
+export const SET_TASKS = 'SET_TASKS';
+// export const SET_TASK_TO_MIGRATE = 'SET_TASK_TO_MIGRATE';
+// export const RESET_MIGRATE_DATA = 'RESET_MIGRATE_DATA';
+// export const MIGRATE_TASK = 'MIGRATE_TASK';
+export const THROW_SERVER_ERROR = 'THROW_SERVER_ERROR';
+
+export let setCurrentTask = (task) => ({type: SET_CURRENT_TASK, payload: task});
+export let setLogDate = (data) => ({type: SET_LOG_DATE, payload: data});
+export let getTasks = () => {
+  return (dispatch) => {
+    dispatch({type: INCREASE_PENDING_REQUESTS});
+    logsApi.getTasks()
+      .then((response) => {
+        dispatch({type: SET_TASKS, payload: response.data.tasks});
+      })
+      .catch(() => dispatch({type: THROW_SERVER_ERROR}))
+      .finally(() => dispatch({type: DECREASE_PENDING_REQUESTS}));
+  };
+};
+export let addTask = (task) => {
+  return (dispatch, getState) => {
+    dispatch({type: INCREASE_PENDING_REQUESTS});
+    logsApi.addTask(task)
+      .then((response) => {
+        let tasks = getState().logsState.tasks;
+        tasks.push(response.data.task);
+        dispatch({type: SET_TASKS, payload: tasks});
+      })
+      .catch(() => dispatch({type: THROW_SERVER_ERROR}))
+      .finally(() => dispatch({type: DECREASE_PENDING_REQUESTS}));
+  };
+};
+export let editTask = (task) => {
+  return (dispatch, getState) => {
+    dispatch({type: INCREASE_PENDING_REQUESTS});
+    logsApi.editTask(task)
+      .then(() => {
+        let tasks = getState().logsState.tasks;
+        let i = tasks.findIndex((item) => item.id === task.id);
+        tasks[i] = task;
+        dispatch({type: SET_TASKS, payload: tasks});
+      })
+      .catch(() => dispatch({type: THROW_SERVER_ERROR}))
+      .finally(() => dispatch({type: DECREASE_PENDING_REQUESTS}));
+  };
+};
+export let removeTask = (id) => {
+  return (dispatch, getState) => {
+    dispatch({type: INCREASE_PENDING_REQUESTS});
+    logsApi.removeTask(id)
+      .then(() => {
+        let tasks = getState().logsState.tasks;
+        tasks = tasks.filter((item) => item.id !== id);
+        dispatch({type: SET_TASKS, payload: tasks});
+      })
+      .catch(() => dispatch({type: THROW_SERVER_ERROR}))
+      .finally(() => dispatch({type: DECREASE_PENDING_REQUESTS}));
+  };
+};
+
+
+// =============================================================================
+// =============================================================================
+// =============================================================================
+
+/**
 export const SET_CURRENT_LOG_TASK = 'SET_CURRENT_LOG_TASK';
 export const SET_MONTHLY_LOG_DATE = 'SET_MONTHLY_LOG_DATE';
 export const SET_WEEKLY_LOG_DATE = 'SET_WEEKLY_LOG_DATE';
@@ -28,78 +96,78 @@ let sortTasks = tasks=>{
     return (a.status - b.status);
   });
 };
-export let setCurrentLogTask = id=>({type: SET_CURRENT_LOG_TASK, payload: id});
-export let setMonthlyLogDate = data=>({type: SET_MONTHLY_LOG_DATE, payload: data});
-export let setWeeklyLogDate = data=>({type: SET_WEEKLY_LOG_DATE, payload: data});
-export let setDailyLogDate = date=>({type: SET_DAILY_LOG_DATE, payload: date});
-export let getFutureLog = ()=>{
+export let setCurrentTask = id=>({type: SET_CURRENT_LOG_TASK, payload: id});
+export let setLogDate = data=>({type: SET_MONTHLY_LOG_DATE, payload: data});
+export let setLogDate = data=>({type: SET_WEEKLY_LOG_DATE, payload: data});
+export let setLogDate = date=>({type: SET_DAILY_LOG_DATE, payload: date});
+export let getTasks = ()=>{
   return (dispatch, getState)=>{
     dispatch({type: GET_FUTURE_LOG});
-    logsApi.getFutureLog()
+    logsApi.getTasks()
       .then(response=> {
-        let sortedFutureLog = sortTasks(response.data.futureLog);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
+        let sortedfuture = sortTasks(response.data.future);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedfuture});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let addFutureLogTask = task=>{
+export let addTask = task=>{
   return (dispatch, getState)=>{
     dispatch({type: GET_FUTURE_LOG});
-    logsApi.addFutureLogTask({task})
+    logsApi.addTask({task})
       .then(response=> {
-        let sortedFutureLog = sortTasks(response.data.futureLog);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
+        let sortedfuture = sortTasks(response.data.future);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedfuture});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let editFutureLogTask = task=>{
+export let editTask = task=>{
   return (dispatch, getState)=>{
     dispatch({type: GET_FUTURE_LOG});
-    logsApi.editFutureLogTask({task})
+    logsApi.editTask({task})
       .then(response=> {
-        let sortedFutureLog = sortTasks(response.data.futureLog);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
+        let sortedfuture = sortTasks(response.data.future);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedfuture});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let deleteFutureLogTask = id=>{
+export let removeTask = id=>{
   return (dispatch, getState)=>{
     dispatch({type: GET_FUTURE_LOG});
-    logsApi.deleteFutureLogTask(id)
+    logsApi.removeTask(id)
       .then(response=> {
-        let sortedFutureLog = sortTasks(response.data.futureLog);
-        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedFutureLog});
+        let sortedfuture = sortTasks(response.data.future);
+        dispatch({type: GET_FUTURE_LOG_FULFILLED, payload: sortedfuture});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let getMonthlyLog = ()=>{
+export let getTasks = ()=>{
   return (dispatch, getState)=>{
-    let {year, month} = getState().logsState.monthlyLog;
+    let {year, month} = getState().logsState.monthly;
     let data = {year, month};
     dispatch({type: GET_MONTHLY_LOG});
-    logsApi.getMonthlyLog(data)
+    logsApi.getTasks(data)
       .then(response=> {
-        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        let sortedMonthlyLog = sortTasks(response.data.monthly);
         dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let addMonthlyLogTask = task=>{
+export let addTask = task=>{
   return (dispatch, getState)=>{
-    let year = getState().logsState.monthlyLog.year;
-    let month = getState().logsState.monthlyLog.month;
+    let year = getState().logsState.monthly.year;
+    let month = getState().logsState.monthly.month;
     let data = {year, month, task};
     dispatch({type: GET_MONTHLY_LOG});
-    logsApi.addMonthlyLogTask(data)
+    logsApi.addTask(data)
       .then(response=> {
-        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        let sortedMonthlyLog = sortTasks(response.data.monthly);
         dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
@@ -109,11 +177,11 @@ export let addMonthlyLogTask = task=>{
 let migrateToMonthlyLogTask = (task, date)=>{
   return (dispatch, getState)=>{
     let data = {year: date.year, month: date.month, task};
-    logsApi.addMonthlyLogTask(data)
+    logsApi.addTask(data)
       .then(response=>{
-        if (date.year === getState().logsState.monthlyLog.year
-          && date.month === getState().logsState.monthlyLog.month) {
-            let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        if (date.year === getState().logsState.monthly.year
+          && date.month === getState().logsState.monthly.month) {
+            let sortedMonthlyLog = sortTasks(response.data.monthly);
             dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
         }
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
@@ -122,58 +190,58 @@ let migrateToMonthlyLogTask = (task, date)=>{
     dispatch({type: MIGRATE_TASK_FULFILLED});
   };
 };
-export let editMonthlyLogTask = task=>{
+export let editTask = task=>{
   return (dispatch, getState)=>{
-    let {year, month} = getState().logsState.monthlyLog;
+    let {year, month} = getState().logsState.monthly;
     let data = {year, month, task};
     dispatch({type: GET_MONTHLY_LOG});
-    logsApi.editMonthlyLogTask(data)
+    logsApi.editTask(data)
       .then(response=> {
-        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        let sortedMonthlyLog = sortTasks(response.data.monthly);
         dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let deleteMonthlyLogTask = id=>{
+export let removeTask = id=>{
   return (dispatch, getState)=>{
-    let year = getState().logsState.monthlyLog.year;
-    let month = getState().logsState.monthlyLog.month;
+    let year = getState().logsState.monthly.year;
+    let month = getState().logsState.monthly.month;
     let data = {year, month, id};
     dispatch({type: GET_MONTHLY_LOG});
-    logsApi.deleteMonthlyLogTask(data)
+    logsApi.removeTask(data)
       .then(response=> {
-        let sortedMonthlyLog = sortTasks(response.data.monthlyLog);
+        let sortedMonthlyLog = sortTasks(response.data.monthly);
         dispatch({type: GET_MONTHLY_LOG_FULFILLED, payload: sortedMonthlyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let getWeeklyLog = ()=>{
+export let getTasks = ()=>{
   return (dispatch, getState)=>{
-    let {year, week} = getState().logsState.weeklyLog;
+    let {year, week} = getState().logsState.weekly;
     let data = {year, week};
     dispatch({type: GET_WEEKLY_LOG});
-    logsApi.getWeeklyLog(data)
+    logsApi.getTasks(data)
       .then(response=> {
-        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        let sortedWeeklyLog = sortTasks(response.data.weekly);
         dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let addWeeklyLogTask = task=>{
+export let addTask = task=>{
   return (dispatch, getState)=>{
-    let year = getState().logsState.weeklyLog.year;
-    let week = getState().logsState.weeklyLog.week;
+    let year = getState().logsState.weekly.year;
+    let week = getState().logsState.weekly.week;
     let data = {year, week, task};
     dispatch({type: GET_WEEKLY_LOG});
-    logsApi.addWeeklyLogTask(data)
+    logsApi.addTask(data)
       .then(response=> {
-        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        let sortedWeeklyLog = sortTasks(response.data.weekly);
         dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
@@ -183,11 +251,11 @@ export let addWeeklyLogTask = task=>{
 let migrateToWeeklyLogTask = (task, date)=>{
   return (dispatch, getState)=>{
     let data = {year: date.year, week: date.week, task};
-    logsApi.addWeeklyLogTask(data)
+    logsApi.addTask(data)
       .then(response=>{
-        if (date.year === getState().logsState.weeklyLog.year
-          && date.week === getState().logsState.weeklyLog.week) {
-            let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        if (date.year === getState().logsState.weekly.year
+          && date.week === getState().logsState.weekly.week) {
+            let sortedWeeklyLog = sortTasks(response.data.weekly);
             dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
         }
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
@@ -196,57 +264,57 @@ let migrateToWeeklyLogTask = (task, date)=>{
     dispatch({type: MIGRATE_TASK_FULFILLED});
   };
 };
-export let editWeeklyLogTask = task=>{
+export let editTask = task=>{
   return (dispatch, getState)=>{
-    let {year, week} = getState().logsState.weeklyLog;
+    let {year, week} = getState().logsState.weekly;
     let data = {year, week, task};
     dispatch({type: GET_WEEKLY_LOG});
-    logsApi.editWeeklyLogTask(data)
+    logsApi.editTask(data)
       .then(response=> {
-        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        let sortedWeeklyLog = sortTasks(response.data.weekly);
         dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let deleteWeeklyLogTask = id=>{
+export let removeTask = id=>{
   return (dispatch, getState)=>{
-    let year = getState().logsState.weeklyLog.year;
-    let week = getState().logsState.weeklyLog.week;
+    let year = getState().logsState.weekly.year;
+    let week = getState().logsState.weekly.week;
     let data = {year, week, id};
     dispatch({type: GET_WEEKLY_LOG});
-    logsApi.deleteWeeklyLogTask(data)
+    logsApi.removeTask(data)
       .then(response=> {
-        let sortedWeeklyLog = sortTasks(response.data.weeklyLog);
+        let sortedWeeklyLog = sortTasks(response.data.weekly);
         dispatch({type: GET_WEEKLY_LOG_FULFILLED, payload: sortedWeeklyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let getDailyLog = ()=>{
+export let getTasks = ()=>{
   return (dispatch, getState)=>{
-    let {date} = getState().logsState.dailyLog;
+    let {date} = getState().logsState.daily;
     date = date.format('MM-DD-YYYY');
     dispatch({type: GET_DAILY_LOG});
-    logsApi.getDailyLog(date)
+    logsApi.getTasks(date)
       .then(response=> {
-        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        let sortedDailyLog = sortTasks(response.data.daily);
         dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let addDailyLogTask = task=>{
+export let addTask = task=>{
   return (dispatch, getState)=>{
-    let date = getState().logsState.dailyLog.date.format('MM-DD-YYYY');
+    let date = getState().logsState.daily.date.format('MM-DD-YYYY');
     let data = {date, task};
     dispatch({type: GET_DAILY_LOG});
-    logsApi.addDailyLogTask(data)
+    logsApi.addTask(data)
       .then(response=>{
-        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        let sortedDailyLog = sortTasks(response.data.daily);
         dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
@@ -257,10 +325,10 @@ let migrateToDailyLogTask = (task, date)=>{
   return (dispatch, getState)=>{
     date = date.format('MM-DD-YYYY');
     let data = {date, task};
-    logsApi.addDailyLogTask(data)
+    logsApi.addTask(data)
       .then(response=>{
-        if (date === getState().logsState.dailyLog.date.format('MM-DD-YYYY')) {
-          let sortedDailyLog = sortTasks(response.data.dailyLog);
+        if (date === getState().logsState.daily.date.format('MM-DD-YYYY')) {
+          let sortedDailyLog = sortTasks(response.data.daily);
           dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
         }
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
@@ -269,29 +337,29 @@ let migrateToDailyLogTask = (task, date)=>{
     dispatch({type: MIGRATE_TASK_FULFILLED});
   };
 };
-export let editDailyLogTask = task=>{
+export let editTask = task=>{
   return (dispatch, getState)=>{
-    let {date} = getState().logsState.dailyLog;
+    let {date} = getState().logsState.daily;
     date = date.format('MM-DD-YYYY');
     let data = {date, task};
     dispatch({type: GET_DAILY_LOG});
-    logsApi.editDailyLogTask(data)
+    logsApi.editTask(data)
       .then(response=> {
-        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        let sortedDailyLog = sortTasks(response.data.daily);
         dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let deleteDailyLogTask = id=>{
+export let removeTask = id=>{
   return (dispatch, getState)=>{
-    let date = getState().logsState.dailyLog.date.format('MM-DD-YYYY');
+    let date = getState().logsState.daily.date.format('MM-DD-YYYY');
     let data = {date, id};
     dispatch({type: GET_DAILY_LOG});
-    logsApi.deleteDailyLogTask(data)
+    logsApi.removeTask(data)
       .then(response=> {
-        let sortedDailyLog = sortTasks(response.data.dailyLog);
+        let sortedDailyLog = sortTasks(response.data.daily);
         dispatch({type: GET_DAILY_LOG_FULFILLED, payload: sortedDailyLog});
         dispatch({type: SET_BUSY_DATES, payload: response.data.busyDates});
       })
@@ -308,35 +376,37 @@ export let migrateTask = newDate=>{
       = getState().logsState.migrateTaskDates;
     // delete task from log
     switch (logType) {
-      case 'futureLog':
-        dispatch(deleteFutureLogTask(task.id));
+      case 'future':
+        dispatch(removeTask(task.id));
         break;
-      case 'monthlyLog':
-        dispatch(deleteMonthlyLogTask(task.id));
+      case 'monthly':
+        dispatch(removeTask(task.id));
         break;
-      case 'weeklyLog':
-        dispatch(deleteWeeklyLogTask(task.id));
+      case 'weekly':
+        dispatch(removeTask(task.id));
         break;
-      case 'dailyLog':
-        dispatch(deleteDailyLogTask(task.id));
+      case 'daily':
+        dispatch(removeTask(task.id));
     }
     // add task to another log
     switch (newMigrateLogType) {
-      case 'futureLog':
-        dispatch(addFutureLogTask(task));
+      case 'future':
+        dispatch(addTask(task));
         dispatch({type: MIGRATE_TASK_FULFILLED})
         break;
-      case 'monthlyLog':
+      case 'monthly':
         dispatch(migrateToMonthlyLogTask(task,
           {year: newDate.year(), month: newDate.month()}));
         break;
-      case 'weeklyLog':
+      case 'weekly':
         dispatch(migrateToWeeklyLogTask(task,
           {year: newDate.year(), week: newDate.isoWeek()}));
         break;
-      case 'dailyLog':
+      case 'daily':
         dispatch(migrateToDailyLogTask(task, newDate));
     }
     dispatch({type: RESET_MIGRATE_DATA});
   };
 };
+
+*/

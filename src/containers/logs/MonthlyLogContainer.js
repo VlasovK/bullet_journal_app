@@ -1,7 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {setMonthlyLogDate, setCurrentLogTask, getMonthlyLog, addMonthlyLogTask,
-  editMonthlyLogTask, deleteMonthlyLogTask} from '../../store/logs/actions';
+import {
+  setLogDate,
+  setCurrentTask,
+  addTask,
+  editTask,
+  removeTask
+} from '../../store/logs/actions';
 import MonthlyLog from '../../components/logs/MonthlyLog';
 
 class MonthlyLogContainer extends React.Component {
@@ -10,21 +15,25 @@ class MonthlyLogContainer extends React.Component {
       <MonthlyLog
         logsState={this.props.logsState}
         logType={this.props.logType}
-        setMonthlyLogDate={this.props.setMonthlyLogDate}
-        setCurrentLogTask={this.props.setCurrentLogTask}
-        getMonthlyLog={this.props.getMonthlyLog}
-        addMonthlyLogTask={this.props.addMonthlyLogTask}
-        editMonthlyLogTask={this.props.editMonthlyLogTask}
-        deleteMonthlyLogTask={this.props.deleteMonthlyLogTask} />
+        setLogDate={this.props.setLogDate}
+        setCurrentTask={this.props.setCurrentTask}
+        addTask={this.props.addTask}
+        editTask={this.props.editTask}
+        removeTask={this.props.removeTask}
+      />
     );
   }
 }
 
-let mapStateToProps = state=>{
-  return {
-    logsState: state.logsState
-  };
+let mapStateToProps = (state) => ({logsState: state.logsState});
+let mapDispatchToProps = {
+  setLogDate,
+  setCurrentTask,
+  addTask,
+  editTask,
+  removeTask
 };
-let mapDispatchToProps = {setMonthlyLogDate, setCurrentLogTask, getMonthlyLog,
-  addMonthlyLogTask, editMonthlyLogTask, deleteMonthlyLogTask};
-export default connect(mapStateToProps, mapDispatchToProps)(MonthlyLogContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MonthlyLogContainer);

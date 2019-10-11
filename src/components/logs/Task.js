@@ -4,7 +4,7 @@ import {MDBContainer, MDBCard, MDBCardBody, MDBCardText, MDBIcon} from 'mdbreact
 
 export default class Task extends React.Component {
   selectTask = task=>()=>{
-    this.props.setCurrentLogTask(task);
+    this.props.setCurrentTask(task);
   };
   render() {
     let isDone = this.props.task.status === 3;

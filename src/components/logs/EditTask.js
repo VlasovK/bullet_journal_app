@@ -1,7 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {MDBContainer, MDBCard, MDBCardBody, MDBIcon, MDBBtnGroup, MDBBtn,
-  MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem} from 'mdbreact';
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBIcon,
+  MDBBtnGroup,
+  MDBBtn,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
+  MDBDropdownItem
+} from 'mdbreact';
 
 export default class EditTask extends React.Component {
   constructor(props) {
@@ -13,62 +22,84 @@ export default class EditTask extends React.Component {
     };
   }
   componentDidMount() {
-    this.setState({task: this.props.logsState.currentLogTask});
-    document.getElementById('edit-task').scrollIntoView({block: "nearest"});
+    this.setState({task: this.props.logsState.currentTask});
+    document.getElementById('edit-task').scrollIntoView({block: 'nearest'});
   }
-  handleTextArea = event=>{
+  handleTextArea = (event) => {
     this.setState({
       task: {...this.state.task, text: event.target.value},
       isTaskChanged: true
     });
   };
-  markTask = mark=>()=>{
+  markTask = (mark) => () => {
     this.setState({
       task: {...this.state.task, mark},
       isTaskChanged: true
     });
   };
-  onSave = ()=>{
+  onSave = () => {
     this.props.editTask(this.state.task);
-    this.props.setCurrentLogTask({});
+    this.props.setCurrentTask({});
   };
-  onDone = ()=>{
-    let task = {...this.state.task, status: 3, inProgress: false};
+  onDone = () => {
+    let task = {
+      ...this.state.task,
+      status: 3,
+      inProgress: false
+    };
     this.props.editTask(task);
-    this.props.setCurrentLogTask({});
+    this.props.setCurrentTask({});
   };
-  onNotDone = ()=>{
-    let task = {...this.state.task, status: 1, inProgress: false};
+  onNotDone = () => {
+    let task = {
+      ...this.state.task,
+      status: 1,
+      inProgress: false
+    };
     this.props.editTask(task);
-    this.props.setCurrentLogTask({});
+    this.props.setCurrentTask({});
   };
-  onInProgress = ()=>{
-    let task = {...this.state.task, status: 1, inProgress: true};
+  onInProgress = () => {
+    let task = {
+      ...this.state.task,
+      status: 1,
+      inProgress: true
+    };
     this.props.editTask(task);
-    this.props.setCurrentLogTask({});
+    this.props.setCurrentTask({});
   };
-  onNotInProgress = ()=>{
+  onNotInProgress = () => {
     this.onNotDone();
   };
-  onDelete = id=>()=>{
+  onDelete = (id) => () => {
     this.props.deleteTask(id);
-    this.props.setCurrentLogTask({});
+    this.props.setCurrentTask({});
   };
-  // set task, current migrateDate and current logType for migrate
-  setTaskToMigrate = newMigrateLogType=>()=>{
+  setTaskToMigrate = (newMigrateLogType) => () => {
     let {logType} = this.props;
     let {task} = this.state;
     this.props.setTaskToMigrate({logType, task}, newMigrateLogType);
-    if (newMigrateLogType === 'futureLog')
+    if (newMigrateLogType === 'future') {
       this.props.migrateTask();
-    else
+    } else {
       this.props.toggleMigrateDatepicker(newMigrateLogType);
+    }
   };
-  onCancel = ()=>{
-    this.props.setCurrentLogTask({});
+  onCancel = () => {
+    this.props.setCurrentTask({});
   };
   render() {
-    let isDone = this.state.task.status === 3;
+    let {
+      isTaskChanged,
+      task: {
+        mark,
+        status,
+        text,
+        inProgress,
+        id
+      }
+    } = this.state;
+    let isDone = status === 3;
     return (
       <MDBContainer id="edit-task">
         <MDBCard className="mb-2">
@@ -76,48 +107,65 @@ export default class EditTask extends React.Component {
             <MDBIcon
               icon="times"
               className="edit-task-close-icon"
-              onClick={this.onCancel} />
-            <div className={`status-line status-line-top mark-${this.state.task.mark}`} />
+              onClick={this.onCancel}
+            />
+            <div className={`status-line status-line-top mark-${mark}`} />
             <div className="form-group mb-12">
               <textarea
                 className="form-control"
-                autoFocus rows="5"
-                value={this.state.task.text}
-                onChange={this.handleTextArea} />
+                autoFocus
+                rows="5"
+                value={text}
+                onChange={this.handleTextArea}
+              />
             </div>
             <MDBBtnGroup className="btn-group-width-100">
-              {!isDone &&
+              {!isDone && (
                 <MDBBtn
-                  outline color="blue-grey" size="sm"
+                  outline color="blue-grey"
+                  size="sm"
                   className="edit-task-btn"
-                  onClick={this.onDone}>
+                  onClick={this.onDone}
+                >
                   done
-                </MDBBtn>}
-              {isDone &&
+                </MDBBtn>
+              )}
+              {isDone && (
                 <MDBBtn
-                  outline color="blue-grey" size="sm"
+                  outline color="blue-grey"
+                  size="sm"
                   className="edit-task-btn"
-                  onClick={this.onNotDone}>
+                  onClick={this.onNotDone}
+                >
                   not done
-                </MDBBtn>}
-              {!this.state.task.inProgress &&
+                </MDBBtn>
+              )}
+              {!inProgress && (
                 <MDBBtn
-                  outline color="blue-grey" size="sm"
+                  outline color="blue-grey"
+                  size="sm"
                   className="edit-task-btn"
-                  onClick={this.onInProgress}>
+                  onClick={this.onInProgress}
+                >
                 in progress
-                </MDBBtn>}
-              {this.state.task.inProgress &&
+                </MDBBtn>
+              )}
+              {inProgress && (
                 <MDBBtn
-                  outline color="blue-grey" size="sm"
+                  outline color="blue-grey"
+                  size="sm"
                   className="edit-task-btn"
-                  onClick={this.onNotInProgress}>
+                  onClick={this.onNotInProgress}
+                >
                   not in progress
-                </MDBBtn>}
+                </MDBBtn>
+              )}
               <MDBBtn
-                outline color="blue-grey" size="sm"
+                outline color="blue-grey"
+                size="sm"
                 className="edit-task-btn"
-                onClick={this.onDelete(this.state.task.id)}>
+                onClick={this.onDelete(id)}
+              >
                 <span className="red-text">delete</span>
               </MDBBtn>
             </MDBBtnGroup>
@@ -127,48 +175,72 @@ export default class EditTask extends React.Component {
                   caret
                   outline color="blue-grey"
                   size="sm"
-                  className="width-141">
+                  className="width-141"
+                >
                   mark
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic>
                   <MDBDropdownItem onClick={this.markTask(1)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-red" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-red"
+                     />
                     High priority
                   </MDBDropdownItem>
                   <MDBDropdownItem onClick={this.markTask(2)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-orange" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-orange"
+                    />
                     Medium priority
                   </MDBDropdownItem>
                   <MDBDropdownItem onClick={this.markTask(3)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-grey" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-grey"
+                    />
                     Low priority
                   </MDBDropdownItem>
                   <MDBDropdownItem onClick={this.markTask(4)}>
-                    <MDBIcon far size="xs" icon="circle" className="mr-2 icon-transparent" />
+                    <MDBIcon
+                      far
+                      size="xs"
+                      icon="circle"
+                      className="mr-2 icon-transparent"
+                    />
                     No mark
                   </MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
               <MDBDropdown dropup>
                 <MDBDropdownToggle
-                  caret outline
+                  caret
+                  outline
                   color="blue-grey"
                   size="sm"
-                  className="width-141">
+                  className="width-141"
+                >
                   migrate to
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic className="dropdown-left-30">
-                  {this.props.logType !== 'futureLog' &&
-                    <MDBDropdownItem onClick={this.setTaskToMigrate('futureLog')}>
+                  {this.props.logType !== 'future' && (
+                    <MDBDropdownItem onClick={this.setTaskToMigrate('future')}>
                       Future Log
-                    </MDBDropdownItem>}
-                  <MDBDropdownItem onClick={this.setTaskToMigrate('monthlyLog')}>
+                    </MDBDropdownItem>
+                  )}
+                  <MDBDropdownItem onClick={this.setTaskToMigrate('monthly')}>
                     Monthly Log
                   </MDBDropdownItem>
-                  <MDBDropdownItem onClick={this.setTaskToMigrate('weeklyLog')}>
+                  <MDBDropdownItem onClick={this.setTaskToMigrate('weekly')}>
                     Weekly Log
                   </MDBDropdownItem>
-                  <MDBDropdownItem onClick={this.setTaskToMigrate('dailyLog')}>
+                  <MDBDropdownItem onClick={this.setTaskToMigrate('daily')}>
                     Daily Log
                   </MDBDropdownItem>
                 </MDBDropdownMenu>
@@ -176,10 +248,12 @@ export default class EditTask extends React.Component {
             </MDBBtnGroup>
             <MDBBtnGroup className="btn-group-width-100">
               <MDBBtn
-                outline color="blue-grey" size="sm"
-                disabled={!this.state.isTaskChanged || !this.state.task.text.trim()}
+                outline color="blue-grey"
+                size="sm"
+                disabled={!isTaskChanged || !text.trim()}
                 className="edit-task-btn"
-                onClick={this.onSave}>
+                onClick={this.onSave}
+              >
                 save
               </MDBBtn>
             </MDBBtnGroup>

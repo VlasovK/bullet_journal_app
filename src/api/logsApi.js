@@ -1,54 +1,78 @@
-import {queryGet, queryPost, queryDelete} from './apiConfig';
+import {
+  queryGet,
+  queryPost,
+  queryDelete
+} from './apiConfig';
 
 export default {
-  getFutureLog() {
+  getTasks() {
+    return queryGet('/get_tasks');
+  },
+  addTask(task) {
+    return queryPost('/add_task', {task});
+  },
+  editTask(task) {
+    return queryPost('/edit_task', {task});
+  },
+  removeTask(id) {
+    return queryDelete(`/remove_task/${id}`);
+  }
+};
+
+// =========================================================================
+
+/**
+
+export default {
+  getTasks() {
     return queryGet('/get_future_log');
   },
-  addFutureLogTask(data) {
+  addTask(data) {
     return queryPost('/add_future_log_task', data);
   },
-  editFutureLogTask(data) {
+  editTask(data) {
     return queryPost('/edit_future_log_task', data);
   },
-  deleteFutureLogTask(id) {
+  removeTask(id) {
     return queryDelete(`/delete_future_log_task/${id}`);
   },
-  getMonthlyLog(data) {
+  getTasks(data) {
     return queryGet(`/get_monthly_log/${data.year}/${data.month}`);
   },
-  addMonthlyLogTask(data) {
+  addTask(data) {
     return queryPost('/add_monthly_log_task', data);
   },
-  editMonthlyLogTask(data) {
+  editTask(data) {
     return queryPost('/edit_monthly_log_task', data);
   },
-  deleteMonthlyLogTask(data) {
+  removeTask(data) {
     let {year, month, id} = data;
     return queryDelete(`/delete_monthly_log_task/${year}/${month}/${id}`);
   },
-  getWeeklyLog(data) {
+  getTasks(data) {
     return queryGet(`/get_weekly_log/${data.year}/${data.week}`);
   },
-  addWeeklyLogTask(data) {
+  addTask(data) {
     return queryPost('/add_weekly_log_task', data);
   },
-  editWeeklyLogTask(data) {
+  editTask(data) {
     return queryPost('/edit_weekly_log_task', data);
   },
-  deleteWeeklyLogTask(data) {
+  removeTask(data) {
     let {year, week, id} = data;
     return queryDelete(`/delete_weekly_log_task/${year}/${week}/${id}`);
   },
-  getDailyLog(date) {
+  getTasks(date) {
     return queryGet(`/get_daily_log/${date}`);
   },
-  addDailyLogTask(data) {
+  addTask(data) {
     return queryPost('/add_daily_log_task', data);
   },
-  editDailyLogTask(data) {
+  editTask(data) {
     return queryPost('/edit_daily_log_task', data);
   },
-  deleteDailyLogTask(data) {
+  removeTask(data) {
     return queryDelete(`/delete_daily_log_task/${data.date}/${data.id}`);
   }
 };
+ */

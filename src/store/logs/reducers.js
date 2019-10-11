@@ -1,3 +1,66 @@
+import moment from 'moment';
+import {
+  SET_CURRENT_TASK,
+  SET_LOG_DATE,
+  INCREASE_PENDING_REQUESTS,
+  DECREASE_PENDING_REQUESTS,
+  SET_TASKS,
+  THROW_SERVER_ERROR
+} from './actions';
+
+let defaultState = {
+  currentTask: {},
+  tasks: [],
+  dates: {
+    feature: null,
+    monthly: moment().startOf('month'),
+    weekly: moment().startOf('isoWeek'),
+    daily: moment()
+  },
+  pendingRequests: 0,
+  serverError: false,
+
+  // ======================
+  migrateTaskDates: {
+    taskToMigrate: {},
+    newMigrateLogType: null
+  },
+  busyDates: {
+    monthly: {expired: [], actual: []},
+    weekly: {expired: [], actual: []},
+    daily: {expired: [], actual: []}
+  },
+};
+
+export let logsReducer = (state = defaultState, action) => {
+  let {type, payload} = action;
+  switch (type) {
+    case SET_CURRENT_TASK:
+      return {...state, currentTask: payload};
+    case SET_LOG_DATE:
+      return {
+        ...state,
+        dates: {...state.dates, [payload.logType]: payload.date}
+      };
+    case INCREASE_PENDING_REQUESTS:
+      return {...state, pendingRequests: state.pendingRequests + 1};
+    case DECREASE_PENDING_REQUESTS:
+        return {...state, pendingRequests: state.pendingRequests - 1};
+    case SET_TASKS:
+      return {...state, tasks: payload};
+    case THROW_SERVER_ERROR:
+      return {...state, serverError: true};
+  }
+  return state;
+};
+
+
+// =============================================================================
+// =============================================================================
+// =============================================================================
+
+/**
+
 import * as moment from 'moment';
 import {SET_CURRENT_LOG_TASK, SET_MONTHLY_LOG_DATE, SET_WEEKLY_LOG_DATE,
   SET_DAILY_LOG_DATE, GET_LOG_DATA_REJECTED, GET_FUTURE_LOG,
@@ -8,24 +71,24 @@ import {SET_CURRENT_LOG_TASK, SET_MONTHLY_LOG_DATE, SET_WEEKLY_LOG_DATE,
 
 let currentDate = moment();
 let defaultState = {
-  currentLogTask: {},
-  futureLog: {
+  currentTask: {},
+  future: {
     isPending: false,
     data: []
   },
-  monthlyLog: {
+  monthly: {
     year: currentDate.year(),
     month: currentDate.month(),
     isPending: false,
     data: []
   },
-  weeklyLog: {
+  weekly: {
     year: currentDate.year(),
     week: currentDate.isoWeek(),
     isPending: false,
     data: []
   },
-  dailyLog: {
+  daily: {
     date: currentDate,
     isPending: false,
     data: []
@@ -45,38 +108,38 @@ let defaultState = {
 export let logsReducer = (state=defaultState, action)=>{
   switch (action.type) {
     case SET_CURRENT_LOG_TASK:
-      return {...state, currentLogTask: action.payload};
+      return {...state, currentTask: action.payload};
     case SET_MONTHLY_LOG_DATE:
-      return {...state, monthlyLog: {
-        ...state.monthlyLog, year: action.payload.year, month: action.payload.month}};
+      return {...state, monthly: {
+        ...state.monthly, year: action.payload.year, month: action.payload.month}};
     case SET_WEEKLY_LOG_DATE:
-      return {...state, weeklyLog: {
-        ...state.weeklyLog, year: action.payload.year, week: action.payload.week}};
+      return {...state, weekly: {
+        ...state.weekly, year: action.payload.year, week: action.payload.week}};
     case SET_DAILY_LOG_DATE:
-      return {...state, dailyLog: {...state.dailyLog, date: action.payload}};
+      return {...state, daily: {...state.daily, date: action.payload}};
     case GET_FUTURE_LOG:
-      return {...state, futureLog: {...state.futureLog, isPending: true}};
+      return {...state, future: {...state.future, isPending: true}};
     case GET_FUTURE_LOG_FULFILLED:
       return {...state, error: null,
-        futureLog: {...state.futureLog, data: action.payload, isPending: false}};
+        future: {...state.future, data: action.payload, isPending: false}};
     case GET_MONTHLY_LOG:
-      return {...state, monthlyLog: {...state.monthlyLog, isPending: true}};
+      return {...state, monthly: {...state.monthly, isPending: true}};
     case GET_MONTHLY_LOG_FULFILLED:
       return {...state, error: null,
-        monthlyLog: {...state.monthlyLog, data: action.payload, isPending: false}};
+        monthly: {...state.monthly, data: action.payload, isPending: false}};
     case GET_WEEKLY_LOG:
-      return {...state, weeklyLog: {...state.weeklyLog, isPending: true}};
+      return {...state, weekly: {...state.weekly, isPending: true}};
     case GET_WEEKLY_LOG_FULFILLED:
       return {...state, error: null,
-        weeklyLog: {...state.weeklyLog, data: action.payload, isPending: false}};
+        weekly: {...state.weekly, data: action.payload, isPending: false}};
     case GET_DAILY_LOG:
-      return {...state, dailyLog: {...state.dailyLog, isPending: true}};
+      return {...state, daily: {...state.daily, isPending: true}};
     case GET_DAILY_LOG_FULFILLED:
       return {...state, error: null,
-        dailyLog: {...state.dailyLog, data: action.payload, isPending: false}};
+        daily: {...state.daily, data: action.payload, isPending: false}};
     case GET_LOG_DATA_REJECTED:
       return {...state, error: 'something went wrong!',
-        weeklyLog: {...state.weeklyLog, isPending: false}};
+        weekly: {...state.weekly, isPending: false}};
     case SET_TASK_TO_MIGRATE:
       return {...state, migrateTaskDates: {
         ...state.migrateTaskDates,
@@ -97,3 +160,5 @@ export let logsReducer = (state=defaultState, action)=>{
   }
   return state;
 };
+
+*/
