@@ -25,8 +25,16 @@ export default class Task extends React.Component {
     };
   }
   componentDidMount() {
+    let {logType, logsState: {dates}} = this.props;
+    let currentLogDate = dates[logType].format('L');
     document.getElementById('new-task').scrollIntoView({block: 'nearest'});
-    this.setState({task: {...this.state.task, logType: this.props.logType}});
+    this.setState({
+      task: {
+        ...this.state.task,
+        date: currentLogDate,
+        logType,
+      }
+    });
   }
   handleTextArea = (event) => {
     this.setState({
@@ -47,10 +55,7 @@ export default class Task extends React.Component {
   render() {
     let {
       isTaskChanged,
-      task: {
-        mark,
-        text
-      }
+      task: {mark, text}
     } = this.state;
     return (
       <MDBContainer id="new-task">

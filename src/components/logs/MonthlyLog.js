@@ -18,7 +18,7 @@ registerLocale('en-GB', enGB);
 
 export default class MonthlyLog extends React.Component {
   handleDatePicker = (date) => {
-    let data = {logType: 'monthly', date};
+    let data = {logType: 'monthly', date: moment(date)};
     this.props.setLogDate(data);
   };
   addAnotherTask = () => {
@@ -27,13 +27,13 @@ export default class MonthlyLog extends React.Component {
   saveNewTask = (task) => {
     this.props.addTask(task);
   };
-  editTask = task=>{
+  editTask = (task) => {
     this.props.editTask(task);
   };
-  deleteTask = id=>{
+  deleteTask = (id) => {
     this.props.removeTask(id);
   };
-  closeNewTask = ()=>{
+  closeNewTask = () => {
     this.props.setCurrentTask({});
   };
   sortTasks = (tasks) => {
@@ -45,10 +45,15 @@ export default class MonthlyLog extends React.Component {
     });
   };
   renderTasks = ()=>{
-    let {tasks, currentTask} = this.props.logsState;
-    tasks = tasks.filter((task) => {
-      return task.logType === 'monthly'; // && date === date
-    });
+    let {
+      tasks,
+      currentTask,
+      dates: {monthly: currentLogDate}
+    } = this.props.logsState;
+    tasks = tasks.filter((task) => (
+      task.logType === 'monthly' &&
+      task.date === currentLogDate.format('L')
+    ));
     tasks = this.sortTasks(tasks);
     return tasks.map((task, index) => {
       if (typeof currentTask === 'string' || currentTask.id !== task.id) {

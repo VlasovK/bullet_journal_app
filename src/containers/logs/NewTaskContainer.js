@@ -6,6 +6,7 @@ class NewTaskContainer extends React.Component {
   render() {
     return (
       <NewTask
+        logsState={this.props.logsState}
         closeNewTask={this.props.closeNewTask}
         saveNewTask={this.props.saveNewTask}
         logType={this.props.logType}
@@ -14,6 +15,6 @@ class NewTaskContainer extends React.Component {
   }
 }
 
-let mapStateToProps = (state) => ({});
+let mapStateToProps = (state) => ({logsState: state.logsState});
 let mapDispatchToProps = {};
 export default connect(mapStateToProps, mapDispatchToProps)(NewTaskContainer);

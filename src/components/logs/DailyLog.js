@@ -19,7 +19,7 @@ registerLocale('en-GB', enGB);
 
 export default class DailyLog extends React.Component {
   handleDatePicker = (date) => {
-    let data = {logType: 'daily', date};
+    let data = {logType: 'daily', date: moment(date)};
     this.props.setLogDate(data);
   };
   addAnotherTask = ()=>{
@@ -46,8 +46,15 @@ export default class DailyLog extends React.Component {
     });
   };
   renderTasks = () => {
-    let { tasks, currentTask } = this.props.logsState;
-    tasks = tasks.filter((task) => task.logType === 'daily'); // && date === date
+    let {
+      tasks,
+      currentTask,
+      dates: {daily: currentLogDate}
+    } = this.props.logsState;
+    tasks = tasks.filter((task) => (
+      task.logType === 'daily' &&
+      task.date === currentLogDate.format('L')
+    ))
     tasks = this.sortTasks(tasks);
     return tasks.map((task, index) => {
       if (typeof currentTask === 'string' || currentTask.id !== task.id) {
@@ -67,8 +74,9 @@ export default class DailyLog extends React.Component {
   showExpiredTask = ()=>{
     this.handleDatePicker(new Date(this.props.logsState.busyDates.daily.expired[0]));
   };
-  getCustomInput = ()=>{
-    let selectedDate = moment(this.props.logsState.dates.daily).format('MMMM Do YYYY dddd');
+  getCustomInput = () => {
+    let selectedDate = moment(this.props.logsState.dates.daily)
+      .format('MMMM Do YYYY dddd');
     return (
       <MDBCardTitle sub tag="h6" selected={null}>
         <span onClick={this.closeNewTask}>{selectedDate}</span>

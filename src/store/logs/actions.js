@@ -28,6 +28,8 @@ export let addTask = (task) => {
     dispatch({type: INCREASE_PENDING_REQUESTS});
     logsApi.addTask(task)
       .then((response) => {
+        console.log('TASK', task);
+        console.log('DATA', response.data.task);
         let tasks = getState().logsState.tasks;
         tasks.push(response.data.task);
         dispatch({type: SET_TASKS, payload: tasks});

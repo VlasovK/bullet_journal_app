@@ -45,10 +45,15 @@ export default class WeeklyLog extends React.Component {
     });
   };
   renderTasks = () => {
-    let {tasks, currentTask} = this.props.logsState;
-    tasks = tasks.filter((task) => {
-      return task.logType === 'weekly'; // && date === date
-    });
+    let {
+      tasks,
+      currentTask,
+      dates: {weekly: currentLogDate}
+    } = this.props.logsState;
+    tasks = tasks.filter((task) => (
+      task.logType === 'weekly' &&
+      task.date === currentLogDate.format('L')
+    ));
     tasks = this.sortTasks(tasks);
     return tasks.map((task, index) => {
       if (typeof currentTask === 'string' || currentTask.id !== task.id) {
