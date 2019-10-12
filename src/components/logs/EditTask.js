@@ -75,15 +75,16 @@ export default class EditTask extends React.Component {
     this.props.deleteTask(id);
     this.props.setCurrentTask({});
   };
-  setTaskToMigrate = (newMigrateLogType) => () => {
-    let {logType} = this.props;
+  migrateToFutureLog = () => {
     let {task} = this.state;
-    this.props.setTaskToMigrate({logType, task}, newMigrateLogType);
-    if (newMigrateLogType === 'future') {
-      this.props.migrateTask();
-    } else {
-      this.props.toggleMigrateDatepicker(newMigrateLogType);
-    }
+    task.logType = 'future';
+    task.date = null;
+    this.props.editTask(task);
+    this.props.setCurrentTask({});
+  };
+  setMigrateData = (newLogType) => () => {
+    this.props.setMigrateData(this.state.task, newLogType);
+    this.props.toggleMigrateDatepicker(newLogType);
   };
   onCancel = () => {
     this.props.setCurrentTask({});
@@ -230,17 +231,17 @@ export default class EditTask extends React.Component {
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic className="dropdown-left-30">
                   {this.props.logType !== 'future' && (
-                    <MDBDropdownItem onClick={this.setTaskToMigrate('future')}>
+                    <MDBDropdownItem onClick={this.migrateToFutureLog}>
                       Future Log
                     </MDBDropdownItem>
                   )}
-                  <MDBDropdownItem onClick={this.setTaskToMigrate('monthly')}>
+                  <MDBDropdownItem onClick={this.setMigrateData('monthly')}>
                     Monthly Log
                   </MDBDropdownItem>
-                  <MDBDropdownItem onClick={this.setTaskToMigrate('weekly')}>
+                  <MDBDropdownItem onClick={this.setMigrateData('weekly')}>
                     Weekly Log
                   </MDBDropdownItem>
-                  <MDBDropdownItem onClick={this.setTaskToMigrate('daily')}>
+                  <MDBDropdownItem onClick={this.setMigrateData('daily')}>
                     Daily Log
                   </MDBDropdownItem>
                 </MDBDropdownMenu>

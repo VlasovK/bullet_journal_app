@@ -26,7 +26,9 @@ export default class Task extends React.Component {
   }
   componentDidMount() {
     let {logType, logsState: {dates}} = this.props;
-    let currentLogDate = dates[logType].format('L');
+    let currentLogDate = dates[logType]
+      ? dates[logType].format('L')
+      : null;
     document.getElementById('new-task').scrollIntoView({block: 'nearest'});
     this.setState({
       task: {

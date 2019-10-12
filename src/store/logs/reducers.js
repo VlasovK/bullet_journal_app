@@ -5,6 +5,7 @@ import {
   INCREASE_PENDING_REQUESTS,
   DECREASE_PENDING_REQUESTS,
   SET_TASKS,
+  SET_MIGRATE_DATA,
   THROW_SERVER_ERROR
 } from './actions';
 
@@ -21,9 +22,9 @@ let defaultState = {
   serverError: false,
 
   // ======================
-  migrateTaskDates: {
+  migrateData: {
     taskToMigrate: {},
-    newMigrateLogType: null
+    newLogType: null
   },
   busyDates: {
     monthly: {expired: [], actual: []},
@@ -48,6 +49,8 @@ export let logsReducer = (state = defaultState, action) => {
         return {...state, pendingRequests: state.pendingRequests - 1};
     case SET_TASKS:
       return {...state, tasks: payload};
+    case SET_MIGRATE_DATA:
+      return {...state, migrateData: payload};
     case THROW_SERVER_ERROR:
       return {...state, serverError: true};
   }
@@ -90,12 +93,12 @@ let defaultState = {
   },
   daily: {
     date: currentDate,
-    isPending: false,
+  migrateDatase,
     data: []
   },
-  migrateTaskDates: {
+  migrateData: {
     taskToMigrate: {},
-    newMigrateLogType: null
+    newLogType: null
   },
   migrateTaskInPending: false,
   busyDates: {
@@ -138,18 +141,18 @@ export let logsReducer = (state=defaultState, action)=>{
       return {...state, error: null,
         daily: {...state.daily, data: action.payload, isPending: false}};
     case GET_LOG_DATA_REJECTED:
-      return {...state, error: 'something went wrong!',
-        weekly: {...state.weekly, isPending: false}};
+      return {...state, migrateDatag went wrong!',
+        weekly: {migrateData isPending: false}};
     case SET_TASK_TO_MIGRATE:
-      return {...state, migrateTaskDates: {
-        ...state.migrateTaskDates,
+      return {...state, migrateData: {
+        ...state.migrateData,
         taskToMigrate: action.payload.task,
-        newMigrateLogType: action.payload.newMigrateLogType
+        newMigrateLogTypmigrateDatad.newLogType
       }};
     case RESET_MIGRATE_DATA:
-      return {...state, migrateTaskDates: {
+      return {...state, migrateData: {
         taskToMigrate: {},
-        newMigrateLogType: null
+        newLogType: null
       }};
     case MIGRATE_TASK:
       return {...state, migrateTaskInPending: true};

@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import MigrateDatepicker from '../components/MigrateDatepicker';
 import {toggleMigrateDatepicker} from '../store/workspace/actions';
-import {migrateTask} from '../store/logs/actions';
+import {editTask, setCurrentTask} from '../store/logs/actions';
 
 class MigrateDatepickerContainer extends React.Component {
   render() {
@@ -11,16 +11,19 @@ class MigrateDatepickerContainer extends React.Component {
         workspaceState={this.props.workspaceState}
         logsState={this.props.logsState}
         toggleMigrateDatepicker={this.props.toggleMigrateDatepicker}
-        migrateTask={this.props.migrateTask} />
+        setCurrentTask={this.props.setCurrentTask}
+        editTask={this.props.editTask}
+      />
     );
   }
 }
 
-let mapStateToProps = state=>{
-  return {
-    workspaceState: state.workspaceState,
-    logsState: state.logsState
-  };
-};
-let mapDispatchToProps = {toggleMigrateDatepicker, migrateTask};
-export default connect(mapStateToProps, mapDispatchToProps)(MigrateDatepickerContainer);
+let mapStateToProps = (state) => ({
+  workspaceState: state.workspaceState,
+  logsState: state.logsState
+});
+let mapDispatchToProps = {toggleMigrateDatepicker, editTask, setCurrentTask};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MigrateDatepickerContainer);

@@ -5,7 +5,7 @@ export const SET_LOG_DATE = 'SET_LOG_DATE';
 export const INCREASE_PENDING_REQUESTS = 'INCREASE_PENDING_REQUESTS';
 export const DECREASE_PENDING_REQUESTS = 'DECREASE_PENDING_REQUESTS';
 export const SET_TASKS = 'SET_TASKS';
-// export const SET_TASK_TO_MIGRATE = 'SET_TASK_TO_MIGRATE';
+export const SET_MIGRATE_DATA = 'SET_MIGRATE_DATA';
 // export const RESET_MIGRATE_DATA = 'RESET_MIGRATE_DATA';
 // export const MIGRATE_TASK = 'MIGRATE_TASK';
 export const THROW_SERVER_ERROR = 'THROW_SERVER_ERROR';
@@ -28,8 +28,6 @@ export let addTask = (task) => {
     dispatch({type: INCREASE_PENDING_REQUESTS});
     logsApi.addTask(task)
       .then((response) => {
-        console.log('TASK', task);
-        console.log('DATA', response.data.task);
         let tasks = getState().logsState.tasks;
         tasks.push(response.data.task);
         dispatch({type: SET_TASKS, payload: tasks});
@@ -65,6 +63,9 @@ export let removeTask = (id) => {
       .finally(() => dispatch({type: DECREASE_PENDING_REQUESTS}));
   };
 };
+export let setMigrateData = (taskToMigrate, newLogType) => (
+  {type: SET_MIGRATE_DATA, payload: {taskToMigrate, newLogType}}
+);
 
 
 // =============================================================================
@@ -368,14 +369,14 @@ export let removeTask = id=>{
       .catch(error=> dispatch({type: GET_LOG_DATA_REJECTED}));
   };
 };
-export let setTaskToMigrate = (task, newMigrateLogType)=>{
-  return ({type: SET_TASK_TO_MIGRATE, payload: {task, newMigrateLogType}});
+export let setMigrateData = (task, newLogType)=>{
+  return ({type: SET_TASK_TO_MIGRATE, payload: {task, newLogType}});
 };
 export let migrateTask = newDate=>{
   return (dispatch, getState)=>{
     dispatch({type: MIGRATE_TASK});
-    let {taskToMigrate: {task, logType}, newMigrateLogType}
-      = getState().logsState.migrateTaskDates;
+    let {taskToMigrate: {task, logType}, newLogType}
+      = getState().logsState.migrateData;
     // delete task from log
     switch (logType) {
       case 'future':
@@ -391,7 +392,7 @@ export let migrateTask = newDate=>{
         dispatch(removeTask(task.id));
     }
     // add task to another log
-    switch (newMigrateLogType) {
+    switch (newLogType) {
       case 'future':
         dispatch(addTask(task));
         dispatch({type: MIGRATE_TASK_FULFILLED})
