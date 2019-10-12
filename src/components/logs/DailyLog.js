@@ -83,14 +83,21 @@ export default class DailyLog extends React.Component {
       </MDBCardTitle>
     );
   };
-  getHighlightWithRanges = ()=>{
+  getHighlightWithRanges = () => {
     let actualDates = [];
     let expiredDates = [];
-    this.props.logsState.busyDates.daily.actual.forEach(date=>{
-      actualDates.push(new Date(date));
-    });
-    this.props.logsState.busyDates.daily.expired.forEach(date=>{
-      expiredDates.push(new Date(date));
+    this.props.logsState.tasks.map((task) => {
+      if (
+        task. logType === 'daily' &&
+        moment(task.date).format('L') >= moment().format('L')
+      ) {
+        actualDates.push(new Date(task.date));
+      } else if (
+        task. logType === 'daily' &&
+        moment(task.date).format('L') < moment().format('L')
+      ) {
+        expiredDates.push(new Date(task.date));
+      }
     });
     return [
       {'day--highlighted-custom-2': actualDates},
@@ -100,7 +107,7 @@ export default class DailyLog extends React.Component {
   render() {
     let customInput = this.getCustomInput();
     let tasks = this.renderTasks();
-    // let highlightWithRanges = this.getHighlightWithRanges();
+    let highlightWithRanges = this.getHighlightWithRanges();
     let newTask = this.props.logsState.currentTask === 'newDailyTask';
     return (
       <div className="table-card animated fadeIn">
@@ -124,7 +131,7 @@ export default class DailyLog extends React.Component {
                 locale="en-GB"
                 className="date-picker"
                 selected={new Date(this.props.logsState.dates.daily)}
-                // highlightDates={highlightWithRanges}
+                highlightDates={highlightWithRanges}
                 todayButton="Today"
                 onChange={this.handleDatePicker}
               />

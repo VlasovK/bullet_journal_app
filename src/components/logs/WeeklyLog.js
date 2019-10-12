@@ -90,36 +90,41 @@ export default class WeeklyLog extends React.Component {
       </MDBCardTitle>
     );
   };
-  getHighlightWithRanges = ()=>{
-    return [];
-    // let {week, year} = this.props.logsState.weekly;
-    // let selectedDates =[];
-    // let actualDates = [];
-    // let expiredDates = [];
-    // for (let i=1; i<8; i++)
-    // selectedDates.push(new Date( moment().week(week).year(year).day(i)));
-    // this.props.logsState.busyDates.weekly.actual.forEach(date=>{
-    //   for (let i=1; i<8; i++)
-    //     actualDates.push(
-    //       new Date(moment().week(date.week).year(date.year).day(i).format('MM DD YYYY'))
-    //     );
-    // });
-    // this.props.logsState.busyDates.weekly.expired.forEach(date=>{
-    //   for (let i=1; i<8; i++)
-    //     expiredDates.push(
-    //       new Date(moment().week(date.week).year(date.year).day(i).format('MM DD YYYY'))
-    //     );
-    // });
-    // return [
-    //   {'react-datepicker__day--highlighted': selectedDates},
-    //   {'day--highlighted-custom-2': actualDates},
-    //   {'day--highlighted-custom-1': expiredDates}
-    // ];
+  getHighlightWithRanges = () => {
+    let {tasks, dates: {weekly: currentLogDate}} = this.props.logsState;
+    let selectedDates =[];
+    let actualDates = [];
+    let expiredDates = [];
+    for (let i = 1; i < 8; i++) {
+      selectedDates.push(new Date(moment(currentLogDate).day(i)));
+    }
+    tasks.map((task) => {
+      if (
+        task. logType === 'weekly' &&
+        moment(task.date).format('L') >= moment().startOf('isoWeek').format('L')
+      ) {
+        for (let i = 1; i < 8; i++) {
+          actualDates.push(new Date(moment(task.date).day(i)));
+        }
+      } else if (
+        task. logType === 'weekly' &&
+        moment(task.date).format('L') < moment().startOf('isoWeek').format('L')
+      ) {
+        for (let i = 1; i < 8; i++) {
+          expiredDates.push(new Date(moment(task.date).day(i)));
+        }
+      }
+    });
+    return [
+      {'react-datepicker__day--highlighted': selectedDates},
+      {'day--highlighted-custom-2': actualDates},
+      {'day--highlighted-custom-1': expiredDates}
+    ];
   };
   render() {
     let customInput = this.getCustomInput();
     let tasks = this.renderTasks();
-    // let highlightWithRanges = this.getHighlightWithRanges();
+    let highlightWithRanges = this.getHighlightWithRanges();
     let newTask = this.props.logsState.currentTask === 'newWeeklyTask';
     return (
       <div className="table-card animated fadeIn">
@@ -144,7 +149,7 @@ export default class WeeklyLog extends React.Component {
                 locale="en-GB"
                 className="date-picker"
                 disabledKeyboardNavigation
-                // highlightDates={highlightWithRanges}
+                highlightDates={highlightWithRanges}
                 todayButton="This week"
                 onChange={this.handleDatePicker}
               />
