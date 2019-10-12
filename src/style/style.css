@@ -20,6 +20,16 @@ body, html {
   text-align: center;
   background-color: rgba(0, 0, 0, .0);
 }
+.server-error-wrapper {
+  position: absolute;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, .95);
+}
+.server-error {
+  margin-top: 50px;
+  text-align: center;
+  color: white;
+}
 .migrate-datepicker-mask {
   padding-top: 30vh;
   background-color: rgba(0, 0, 0, .3);
@@ -38,10 +48,6 @@ body, html {
   background-color: rgba(255, 99, 71, 1);
 }
 .header>h3 {
-  color: white;
-}
-.server-error {
-  text-align: center;
   color: white;
 }
 .tomato-error {

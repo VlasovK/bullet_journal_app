@@ -22,7 +22,11 @@ let mapStateToProps = (state) => ({
   workspaceState: state.workspaceState,
   logsState: state.logsState
 });
-let mapDispatchToProps = {toggleMigrateDatepicker, editTask, setCurrentTask};
+let mapDispatchToProps = {
+  toggleMigrateDatepicker,
+  editTask,
+  setCurrentTask
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps

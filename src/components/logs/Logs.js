@@ -1,5 +1,4 @@
 import React from 'react';
-import Error from '../Error';
 import MigrateDatepickerContainer from '../../containers/MigrateDatepickerContainer';
 import FutureLogContainer from '../../containers/logs/FutureLogContainer';
 import MonthlyLogContainer from '../../containers/logs/MonthlyLogContainer';
@@ -11,9 +10,6 @@ export default class Logs extends React.Component {
     this.props.getTasks();
   }
   render() {
-    if (this.props.logsState.error) {
-      return <Error error={this.props.logsState.error} />;
-    }
     return (
       <div className="table">
         <MigrateDatepickerContainer />

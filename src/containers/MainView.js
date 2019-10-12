@@ -1,7 +1,8 @@
 import React from 'react';
 import {BrowserRouter, Switch, Redirect, Route} from 'react-router-dom';
-import SpinnerContainer from './SpinnerContainer';
 import HeaderContainer from './HeaderContainer';
+import SpinnerContainer from './SpinnerContainer';
+import ServerErrorContainer from './ServerErrorContainer';
 import ProjectsContainer from './projects/ProjectsContainer';
 import LogsContainer from './logs/LogsContainer';
 import NotesContainer from './notes/NotesContainer';
@@ -12,8 +13,9 @@ export default class MainView extends React.Component {
     return (
       <BrowserRouter>
         <div className="bg-img">
-          <SpinnerContainer />
           <HeaderContainer />
+          <SpinnerContainer />
+          <ServerErrorContainer />
           <Switch>
             <Redirect exact path="/" to="/logs" />
             <Route path="/projects" component={ProjectsContainer} />
