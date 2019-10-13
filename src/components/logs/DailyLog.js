@@ -16,13 +16,37 @@ import DatePicker, {registerLocale} from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
 registerLocale('en-GB', enGB);
 
-
 export default class DailyLog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      actualDates: [],
+      expiredDates: []
+    };
+  }
+  static getDerivedStateFromProps(props, state) {
+    let actualDates = [];
+    let expiredDates = [];
+    props.logsState.tasks.map((task) => {
+      if (
+        task. logType === 'daily' &&
+        moment(task.date).format('L') >= moment().format('L')
+      ) {
+        actualDates.push(new Date(task.date));
+      } else if (
+        task. logType === 'daily' &&
+        moment(task.date).format('L') < moment().format('L')
+      ) {
+        expiredDates.push(new Date(task.date));
+      }
+    });
+    return {...state, actualDates, expiredDates};
+  }
   handleDatePicker = (date) => {
     let data = {logType: 'daily', date: moment(date)};
     this.props.setLogDate(data);
   };
-  addAnotherTask = ()=>{
+  addAnotherTask = () => {
     this.props.setCurrentTask('newDailyTask');
   };
   saveNewTask = (task) => {
@@ -71,8 +95,14 @@ export default class DailyLog extends React.Component {
       }
     });
   };
-  showExpiredTask = ()=>{
-    this.handleDatePicker(new Date(this.props.logsState.busyDates.daily.expired[0]));
+  showExpiredTask = () => {
+    let sortedByDateTasks = this.state.expiredDates.sort((a, b) => {
+      if (a > b) {
+        return 1
+      }
+      return -1;
+    });
+    this.handleDatePicker(new Date(sortedByDateTasks[0]));
   };
   getCustomInput = () => {
     let selectedDate = moment(this.props.logsState.dates.daily)
@@ -84,24 +114,9 @@ export default class DailyLog extends React.Component {
     );
   };
   getHighlightWithRanges = () => {
-    let actualDates = [];
-    let expiredDates = [];
-    this.props.logsState.tasks.map((task) => {
-      if (
-        task. logType === 'daily' &&
-        moment(task.date).format('L') >= moment().format('L')
-      ) {
-        actualDates.push(new Date(task.date));
-      } else if (
-        task. logType === 'daily' &&
-        moment(task.date).format('L') < moment().format('L')
-      ) {
-        expiredDates.push(new Date(task.date));
-      }
-    });
     return [
-      {'day--highlighted-custom-2': actualDates},
-      {'day--highlighted-custom-1': expiredDates}
+      {'day--highlighted-custom-2': this.state.actualDates},
+      {'day--highlighted-custom-1': this.state.expiredDates}
     ];
   };
   render() {
@@ -116,13 +131,13 @@ export default class DailyLog extends React.Component {
             <MDBCardBody className="daily-log-title">
               <MDBCardTitle>
                 Daily Log
-                {!!this.props.logsState.busyDates.daily.expired.length && (
+                {!!this.state.expiredDates.length && (
                   <div className="expired-tasks" onClick={this.showExpiredTask}>
                     <MDBIcon
                       icon="exclamation-triangle"
                       className="icon-exclamation ml-2 mr-1"
                     />
-                    <span className="">expired tasks</span>
+                    <span>expired tasks</span>
                   </div>
                 )}
               </MDBCardTitle>

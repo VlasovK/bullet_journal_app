@@ -17,6 +17,41 @@ import enGB from 'date-fns/locale/en-GB';
 registerLocale('en-GB', enGB);
 
 export default class WeeklyLog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedDates: [],
+      actualDates: [],
+      expiredDates: []
+    };
+  }
+  static getDerivedStateFromProps(props, state) {
+    let {tasks, dates: {weekly: currentLogDate}} = props.logsState;
+    let selectedDates =[];
+    let actualDates = [];
+    let expiredDates = [];
+    for (let i = 1; i < 8; i++) {
+      selectedDates.push(new Date(moment(currentLogDate).day(i)));
+    }
+    tasks.map((task) => {
+      if (
+        task. logType === 'weekly' &&
+        moment(task.date).format('L') >= moment().startOf('isoWeek').format('L')
+      ) {
+        for (let i = 1; i < 8; i++) {
+          actualDates.push(new Date(moment(task.date).day(i)));
+        }
+      } else if (
+        task. logType === 'weekly' &&
+        moment(task.date).format('L') < moment().startOf('isoWeek').format('L')
+      ) {
+        for (let i = 1; i < 8; i++) {
+          expiredDates.push(new Date(moment(task.date).day(i)));
+        }
+      }
+    });
+    return {...state, selectedDates, actualDates, expiredDates};
+  }
   handleDatePicker = (date) => {
     let data = {logType: 'weekly', date: moment(date).startOf('isoWeek')};
     this.props.setLogDate(data);
@@ -69,11 +104,14 @@ export default class WeeklyLog extends React.Component {
       );
     });
   };
-  showExpiredTask = ()=>{
-    let {year, week} = this.props.logsState.busyDates.weekly.expired[0];
-    let data = {year, week};
-    this.props.setLogDate(data);
-    this.props.getTasks();
+  showExpiredTask = () => {
+    let sortedByDateTasks = this.state.expiredDates.sort((a, b) => {
+      if (a > b) {
+        return 1
+      }
+      return -1;
+    });
+    this.handleDatePicker(new Date(sortedByDateTasks[0]));
   };
   getCustomInput = () => {
     let currentLogDate = this.props.logsState.dates.weekly;
@@ -91,30 +129,7 @@ export default class WeeklyLog extends React.Component {
     );
   };
   getHighlightWithRanges = () => {
-    let {tasks, dates: {weekly: currentLogDate}} = this.props.logsState;
-    let selectedDates =[];
-    let actualDates = [];
-    let expiredDates = [];
-    for (let i = 1; i < 8; i++) {
-      selectedDates.push(new Date(moment(currentLogDate).day(i)));
-    }
-    tasks.map((task) => {
-      if (
-        task. logType === 'weekly' &&
-        moment(task.date).format('L') >= moment().startOf('isoWeek').format('L')
-      ) {
-        for (let i = 1; i < 8; i++) {
-          actualDates.push(new Date(moment(task.date).day(i)));
-        }
-      } else if (
-        task. logType === 'weekly' &&
-        moment(task.date).format('L') < moment().startOf('isoWeek').format('L')
-      ) {
-        for (let i = 1; i < 8; i++) {
-          expiredDates.push(new Date(moment(task.date).day(i)));
-        }
-      }
-    });
+    let {selectedDates, actualDates, expiredDates} = this.state;
     return [
       {'react-datepicker__day--highlighted': selectedDates},
       {'day--highlighted-custom-2': actualDates},
@@ -133,13 +148,13 @@ export default class WeeklyLog extends React.Component {
             <MDBCardBody className="weekly-log-title">
               <MDBCardTitle>
                 Weekly Log
-                {!!this.props.logsState.busyDates.weekly.expired.length && (
+                {!!this.state.expiredDates.length && (
                   <div className="expired-tasks" onClick={this.showExpiredTask}>
                     <MDBIcon
                       icon="exclamation-triangle"
                       className="icon-exclamation ml-2 mr-1"
                     />
-                    <span className="">expired tasks</span>
+                    <span>expired tasks</span>
                   </div>
                 )}
               </MDBCardTitle>
