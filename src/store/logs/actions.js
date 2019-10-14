@@ -61,6 +61,6 @@ export let removeTask = id=>{
       .finally(()=>dispatch({type: DECREASE_PENDING_REQUESTS}));
   };
 };
-export let setMigrateData = (taskToMigrate, newLogType)=>(
-  {type: SET_MIGRATE_DATA, payload: {taskToMigrate, newLogType}}
-);
+export let setMigrateData = (taskToMigrate, newLogType)=>({
+  type: SET_MIGRATE_DATA, payload: {taskToMigrate, newLogType}
+});
