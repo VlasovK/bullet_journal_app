@@ -21,7 +21,7 @@ function FutureLogContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({logsState: state.logsState});
+let mapStateToProps = state=>({logsState: state.logsState});
 let mapDispatchToProps = {
   setCurrentTask,
   addTask,

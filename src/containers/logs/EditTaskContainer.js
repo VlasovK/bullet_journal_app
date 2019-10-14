@@ -18,7 +18,7 @@ function EditTaskContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({logsState: state.logsState});
+let mapStateToProps = state=>({logsState: state.logsState});
 let mapDispatchToProps = {
   toggleMigrateDatepicker,
   setCurrentTask,

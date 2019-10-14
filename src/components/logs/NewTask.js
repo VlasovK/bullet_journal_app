@@ -26,27 +26,25 @@ export default class Task extends React.Component {
   }
   componentDidMount() {
     let {logType, logsState: {dates}} = this.props;
-    let currentLogDate = dates[logType]
-      ? dates[logType].format('L')
-      : null;
+    let currentLogDate = dates[logType] ? dates[logType].format('L') : null;
     document.getElementById('new-task').scrollIntoView({block: 'nearest'});
     this.setState({
       task: {...this.state.task, date: currentLogDate, logType}
     });
   }
-  handleTextArea = (event) => {
+  handleTextArea = event=>{
     this.setState({
       task: {...this.state.task, text: event.target.value}, isTaskChanged: true
     });
   };
-  markTask = (mark) => () => {
+  markTask = mark=>()=>{
     this.setState({task: {...this.state.task, mark}});
   };
-  onSave = () => {
+  onSave = ()=>{
     this.props.saveNewTask(this.state.task);
     this.props.closeNewTask();
   };
-  onCancel = () => {
+  onCancel = ()=>{
     this.props.closeNewTask();
   };
   render() {

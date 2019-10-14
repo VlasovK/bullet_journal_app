@@ -25,56 +25,56 @@ export default class EditTask extends React.Component {
     this.setState({task: this.props.logsState.currentTask});
     document.getElementById('edit-task').scrollIntoView({block: 'nearest'});
   }
-  handleTextArea = (event) => {
+  handleTextArea = event=>{
     this.setState({
       task: {...this.state.task, text: event.target.value},
       isTaskChanged: true
     });
   };
-  markTask = (mark) => () => {
+  markTask = mark=>()=>{
     this.setState({
       task: {...this.state.task, mark},
       isTaskChanged: true
     });
   };
-  onSave = () => {
+  onSave = ()=>{
     this.props.editTask(this.state.task);
     this.props.setCurrentTask({});
   };
-  onDone = () => {
+  onDone = ()=>{
     let task = {...this.state.task, status: 3, inProgress: false};
     this.props.editTask(task);
     this.props.setCurrentTask({});
   };
-  onNotDone = () => {
+  onNotDone = ()=>{
     let task = {...this.state.task, status: 1, inProgress: false};
     this.props.editTask(task);
     this.props.setCurrentTask({});
   };
-  onInProgress = () => {
+  onInProgress = ()=>{
     let task = {...this.state.task, status: 1, inProgress: true};
     this.props.editTask(task);
     this.props.setCurrentTask({});
   };
-  onNotInProgress = () => {
+  onNotInProgress = ()=>{
     this.onNotDone();
   };
-  onDelete = (id) => () => {
+  onDelete = id=>()=>{
     this.props.deleteTask(id);
     this.props.setCurrentTask({});
   };
-  migrateToFutureLog = () => {
+  migrateToFutureLog = ()=>{
     let {task} = this.state;
     task.logType = 'future';
     task.date = null;
     this.props.editTask(task);
     this.props.setCurrentTask({});
   };
-  setMigrateData = (newLogType) => () => {
+  setMigrateData = newLogType=>()=>{
     this.props.setMigrateData(this.state.task, newLogType);
     this.props.toggleMigrateDatepicker(newLogType);
   };
-  onCancel = () => {
+  onCancel = ()=>{
     this.props.setCurrentTask({});
   };
   render() {

@@ -6,6 +6,6 @@ function NotesContainer(props) {
   return <Notes />;
 }
 
-let mapStateToProps = (state) => ({});
+let mapStateToProps = state=>({});
 let mapDispatchToProps = {};
 export default connect(mapStateToProps, mapDispatchToProps)(NotesContainer);

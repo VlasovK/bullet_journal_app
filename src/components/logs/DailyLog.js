@@ -14,7 +14,7 @@ export default class DailyLog extends BaseLog {
   static getDerivedStateFromProps(props, state) {
     let actualDates = [];
     let expiredDates = [];
-    props.logsState.tasks.map((task) => {
+    props.logsState.tasks.map(task=>{
       if (
         task. logType === 'daily' &&
         moment(task.date).format('L') >= moment().format('L')
@@ -30,7 +30,7 @@ export default class DailyLog extends BaseLog {
     });
     return {...state, actualDates, expiredDates};
   }
-  getCustomInput = () => {
+  getCustomInput = ()=>{
     let selectedDate = moment(this.props.logsState.dates.daily)
       .format('MMMM Do YYYY dddd');
     return (
@@ -39,7 +39,7 @@ export default class DailyLog extends BaseLog {
       </MDBCardTitle>
     );
   };
-  getHighlightWithRanges = () => {
+  getHighlightWithRanges = ()=>{
     return [
       {'day--highlighted-custom-2': this.state.actualDates},
       {'day--highlighted-custom-1': this.state.expiredDates}

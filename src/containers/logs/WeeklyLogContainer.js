@@ -23,7 +23,7 @@ function WeeklyLogContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({logsState: state.logsState});
+let mapStateToProps = state=>({logsState: state.logsState});
 let mapDispatchToProps = {
   setLogDate,
   setCurrentTask,

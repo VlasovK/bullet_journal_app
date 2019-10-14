@@ -13,7 +13,7 @@ function LogsContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({
+let mapStateToProps = state=>({
   workspaceState: state.workspaceState,
   logsState: state.logsState
 });

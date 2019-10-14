@@ -23,7 +23,7 @@ function MonthlyLogContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({logsState: state.logsState});
+let mapStateToProps = state=>({logsState: state.logsState});
 let mapDispatchToProps = {
   setLogDate,
   setCurrentTask,
@@ -32,6 +32,5 @@ let mapDispatchToProps = {
   removeTask
 };
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps, mapDispatchToProps
 )(MonthlyLogContainer);

@@ -4,7 +4,7 @@ import BaseLog from './BaseLog';
 import moment from 'moment';
 
 export default class MonthlyLog extends BaseLog {
-  getCustomInput = () => {
+  getCustomInput = ()=>{
     let currentLogDate = this.props.logsState.dates.monthly;
     let selectedDate =  moment(currentLogDate).format('MMMM YYYY');
     return (

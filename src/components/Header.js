@@ -10,7 +10,7 @@ class Header extends React.Component {
     {text: 'lifestyle', path: '/lifestyle'}
   ];
   componentDidMount() {
-    setInterval(() => this.props.setCurrentTime(moment()), 1000);
+    setInterval(()=>this.props.setCurrentTime(moment()), 1000);
   }
   render() {
     let currentTime = moment(this.props.commonState.currentTime)
@@ -18,9 +18,9 @@ class Header extends React.Component {
     return (
       <div className="header animated fadeInDown">
         <h3 className="app-name"><b>J</b>b</h3>
-        {this.buttons.map((button, i)=>(
+        {this.buttons.map(button=>(
           <Link
-            key={i}
+            key={button.text}
             to={button.path}
             className={`btn btn-outline-${
               this.props.location.pathname == button.path ? 'white' : 'grey'

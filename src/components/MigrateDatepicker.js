@@ -5,11 +5,11 @@ import enGB from 'date-fns/locale/en-GB';
 registerLocale('en-GB', enGB);
 
 export default function MigrateDatepicker(props) {
-  let stopPropagation = (event) => {
+  let {taskToMigrate: task, newLogType} = props.logsState.migrateData;
+  let stopPropagation = event=>{
     event.stopPropagation();
   };
-  let migrateTask = (date) => {
-    let {taskToMigrate: task, newLogType} = props.logsState.migrateData;
+  let migrateTask = date=>{
     task.logType = newLogType;
     if (newLogType === 'weekly') {
       task.date = moment(date).startOf('isoWeek').format('L');
@@ -20,10 +20,9 @@ export default function MigrateDatepicker(props) {
     props.setCurrentTask({});
     props.toggleMigrateDatepicker(false);
   };
-  let closeDatepicker = () => {
+  let closeDatepicker = ()=>{
     props.toggleMigrateDatepicker(false);
   };
-  let {newLogType} = props.logsState.migrateData;
   return (
     <div
       className="fullscreen-mask migrate-datepicker-mask"

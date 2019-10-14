@@ -8,7 +8,7 @@ import {
 } from 'mdbreact';
 
 export default function Task(props) {
-  let selectTask = (task) => () => {
+  let selectTask = task=>()=>{
     props.setCurrentTask(task);
   };
   let isDone = props.task.status === 3;

@@ -26,7 +26,7 @@ let defaultState = {
   serverError: false
 };
 
-export let logsReducer = (state = defaultState, action) => {
+export let logsReducer = (state = defaultState, action)=>{
   let {type, payload} = action;
   switch (type) {
     case SET_CURRENT_TASK:

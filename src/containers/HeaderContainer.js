@@ -13,7 +13,7 @@ function HeaderContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({
+let mapStateToProps = state=>({
     commonState: state.commonState,
     workspaceState: state.workspaceState
 });

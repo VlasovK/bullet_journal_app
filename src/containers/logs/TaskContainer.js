@@ -12,6 +12,6 @@ function TaskContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({});
+let mapStateToProps = state=>({});
 let mapDispatchToProps = {setCurrentTask};
 export default connect(mapStateToProps, mapDispatchToProps)(TaskContainer);

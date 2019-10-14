@@ -16,7 +16,7 @@ function MigrateDatepickerContainer(props) {
   );
 }
 
-let mapStateToProps = (state) => ({
+let mapStateToProps = state=>({
   workspaceState: state.workspaceState,
   logsState: state.logsState
 });

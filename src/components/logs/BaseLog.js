@@ -17,35 +17,35 @@ import enGB from 'date-fns/locale/en-GB';
 registerLocale('en-GB', enGB);
 
 export default class BaseLog extends React.Component {
-  handleDatePicker = (date) => {
+  handleDatePicker = date=>{
     let data = {logType: this.props.logType, date: moment(date)};
     this.props.setLogDate(data);
   };
-  addAnotherTask = () => {
+  addAnotherTask = ()=>{
     this.props.setCurrentTask(this.props.logType);
   };
-  saveNewTask = (task) => {
+  saveNewTask = task=>{
     this.props.addTask(task);
   };
-  editTask = (task) => {
+  editTask = task=>{
     this.props.editTask(task);
   };
-  deleteTask = (id) => {
+  deleteTask = id=>{
     this.props.removeTask(id);
   };
-  closeNewTask = () => {
+  closeNewTask = ()=>{
     this.props.setCurrentTask({});
   };
-  sortTasks = (tasks) => {
-    return tasks.sort((a, b) => {
+  sortTasks = tasks=>{
+    return tasks.sort((a, b)=>{
       if (a.status === b.status) {
         return (a.mark - b.mark);
       }
       return (a.status - b.status);
     });
   };
-  showExpiredTask = () => {
-    let sortedByDateTasks = this.state.expiredDates.sort((a, b) => {
+  showExpiredTask = ()=>{
+    let sortedByDateTasks = this.state.expiredDates.sort((a, b)=>{
       if (a > b) {
         return 1
       }
@@ -53,28 +53,28 @@ export default class BaseLog extends React.Component {
     });
     this.handleDatePicker(new Date(sortedByDateTasks[0]));
   };
-  capitalizeFirstLetter = (text) => {
+  capitalizeFirstLetter = text=>{
     return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
   };
-  renderTasks = () => {
+  renderTasks = ()=>{
     let {logType} = this.props;
     let {
       tasks,
       currentTask,
       dates: {[logType]: currentLogDate}
     } = this.props.logsState;
-    tasks = tasks.filter((task) => (
+    tasks = tasks.filter(task=>(
       task.logType === logType &&
       task.date === currentLogDate.format('L')
     ));
     tasks = this.sortTasks(tasks);
-    return tasks.map((task, index) => {
+    return tasks.map(task=>{
       if (typeof currentTask === 'string' || currentTask.id !== task.id) {
-        return <TaskContainer key={index} task={task} />;
+        return <TaskContainer key={task.id} task={task} />;
       }
       return (
         <EditTaskContainer
-          key={index}
+          key={task.id}
           logType={logType}
           editTask={this.editTask}
           deleteTask={this.deleteTask}
