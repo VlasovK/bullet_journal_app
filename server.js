@@ -2,11 +2,9 @@ let bodyParser = require('body-parser');
 let express = require('express');
 let fs = require('fs');
 
-// create database file if not created
 if (!fs.existsSync('app_db.json')) {
   fs.writeFileSync('app_db.json', fs.readFileSync('app_db_init.json'));
 }
-
 let appDb = JSON.parse(fs.readFileSync('app_db.json'));
 setInterval(() => {
   fs.writeFileSync('app_db.json', JSON.stringify(appDb));
