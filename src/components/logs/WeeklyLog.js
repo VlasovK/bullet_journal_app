@@ -43,7 +43,9 @@ export default class WeeklyLog extends React.Component {
         }
       } else if (
         task. logType === 'weekly' &&
-        moment(task.date).format('L') < moment().startOf('isoWeek').format('L')
+        moment(task.date).format('L') <
+          moment().startOf('isoWeek').format('L') &&
+        task.status !== 3
       ) {
         for (let i = 1; i < 8; i++) {
           expiredDates.push(new Date(moment(task.date).day(i)));

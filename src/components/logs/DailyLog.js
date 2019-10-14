@@ -35,7 +35,8 @@ export default class DailyLog extends React.Component {
         actualDates.push(new Date(task.date));
       } else if (
         task. logType === 'daily' &&
-        moment(task.date).format('L') < moment().format('L')
+        moment(task.date).format('L') < moment().format('L') &&
+        task.status !== 3
       ) {
         expiredDates.push(new Date(task.date));
       }
