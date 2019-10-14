@@ -8,18 +8,17 @@ import {
 } from '../../store/logs/actions';
 import FutureLog from '../../components/logs/FutureLog';
 
-class FutureLogContainer extends React.Component {
-  render() {
-    return (
-      <FutureLog
-        logsState={this.props.logsState}
-        setCurrentTask={this.props.setCurrentTask}
-        addTask={this.props.addTask}
-        editTask={this.props.editTask}
-        removeTask={this.props.removeTask}
-      />
-    );
-  }
+function FutureLogContainer(props) {
+  return (
+    <FutureLog
+      logType={props.logType}
+      logsState={props.logsState}
+      setCurrentTask={props.setCurrentTask}
+      addTask={props.addTask}
+      editTask={props.editTask}
+      removeTask={props.removeTask}
+    />
+  );
 }
 
 let mapStateToProps = (state) => ({logsState: state.logsState});

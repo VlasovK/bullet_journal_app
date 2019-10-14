@@ -1,5 +1,6 @@
 import React from 'react';
-import MigrateDatepickerContainer from '../../containers/MigrateDatepickerContainer';
+import MigrateDatepickerContainer
+  from '../../containers/MigrateDatepickerContainer';
 import FutureLogContainer from '../../containers/logs/FutureLogContainer';
 import MonthlyLogContainer from '../../containers/logs/MonthlyLogContainer';
 import WeeklyLogContainer from '../../containers/logs/WeeklyLogContainer';
@@ -12,12 +13,14 @@ export default class Logs extends React.Component {
   render() {
     return (
       <div className="table">
-        <MigrateDatepickerContainer />
+        {this.props.workspaceState.isMigrateDatepickerShown && (
+          <MigrateDatepickerContainer />
+        )}
         <div className="logs-wrapper">
-          <FutureLogContainer />
-          <MonthlyLogContainer />
-          <WeeklyLogContainer />
-          <DailyLogContainer />
+          <FutureLogContainer logType={'future'} />
+          <MonthlyLogContainer logType={'monthly'} />
+          <WeeklyLogContainer logType={'weekly'} />
+          <DailyLogContainer logType={'daily'} />
         </div>
       </div>
     );

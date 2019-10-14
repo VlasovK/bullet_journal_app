@@ -11,7 +11,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 
 let store = createStore(rootReducers, applyMiddleware(thunk));
 

@@ -3,18 +3,15 @@ import {connect} from 'react-redux';
 import {setCurrentTask} from '../../store/logs/actions';
 import Task from '../../components/logs/Task';
 
-class TaskContainer extends React.Component {
-  render() {
-    return (
-      <Task
-        task={this.props.task}
-        setCurrentTask={this.props.setCurrentTask} />
-    );
-  }
+function TaskContainer(props) {
+  return (
+    <Task
+      task={props.task}
+      setCurrentTask={props.setCurrentTask}
+    />
+  );
 }
 
-let mapStateToProps = state=>{
-  return {};
-};
+let mapStateToProps = (state) => ({});
 let mapDispatchToProps = {setCurrentTask};
 export default connect(mapStateToProps, mapDispatchToProps)(TaskContainer);

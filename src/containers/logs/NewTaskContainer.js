@@ -2,17 +2,15 @@ import React from 'react';
 import {connect} from 'react-redux';
 import NewTask from '../../components/logs/NewTask';
 
-class NewTaskContainer extends React.Component {
-  render() {
-    return (
-      <NewTask
-        logsState={this.props.logsState}
-        closeNewTask={this.props.closeNewTask}
-        saveNewTask={this.props.saveNewTask}
-        logType={this.props.logType}
-      />
-    );
-  }
+function NewTaskContainer(props) {
+  return (
+    <NewTask
+      logsState={props.logsState}
+      closeNewTask={props.closeNewTask}
+      saveNewTask={props.saveNewTask}
+      logType={props.logType}
+    />
+  );
 }
 
 let mapStateToProps = (state) => ({logsState: state.logsState});

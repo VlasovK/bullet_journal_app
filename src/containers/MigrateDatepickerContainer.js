@@ -4,18 +4,16 @@ import MigrateDatepicker from '../components/MigrateDatepicker';
 import {toggleMigrateDatepicker} from '../store/workspace/actions';
 import {editTask, setCurrentTask} from '../store/logs/actions';
 
-class MigrateDatepickerContainer extends React.Component {
-  render() {
-    return (
-      <MigrateDatepicker
-        workspaceState={this.props.workspaceState}
-        logsState={this.props.logsState}
-        toggleMigrateDatepicker={this.props.toggleMigrateDatepicker}
-        setCurrentTask={this.props.setCurrentTask}
-        editTask={this.props.editTask}
-      />
-    );
-  }
+function MigrateDatepickerContainer(props) {
+  return (
+    <MigrateDatepicker
+      workspaceState={props.workspaceState}
+      logsState={props.logsState}
+      toggleMigrateDatepicker={props.toggleMigrateDatepicker}
+      setCurrentTask={props.setCurrentTask}
+      editTask={props.editTask}
+    />
+  );
 }
 
 let mapStateToProps = (state) => ({

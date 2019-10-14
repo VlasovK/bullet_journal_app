@@ -42,29 +42,17 @@ export default class EditTask extends React.Component {
     this.props.setCurrentTask({});
   };
   onDone = () => {
-    let task = {
-      ...this.state.task,
-      status: 3,
-      inProgress: false
-    };
+    let task = {...this.state.task, status: 3, inProgress: false};
     this.props.editTask(task);
     this.props.setCurrentTask({});
   };
   onNotDone = () => {
-    let task = {
-      ...this.state.task,
-      status: 1,
-      inProgress: false
-    };
+    let task = {...this.state.task, status: 1, inProgress: false};
     this.props.editTask(task);
     this.props.setCurrentTask({});
   };
   onInProgress = () => {
-    let task = {
-      ...this.state.task,
-      status: 1,
-      inProgress: true
-    };
+    let task = {...this.state.task, status: 1, inProgress: true};
     this.props.editTask(task);
     this.props.setCurrentTask({});
   };
@@ -92,13 +80,7 @@ export default class EditTask extends React.Component {
   render() {
     let {
       isTaskChanged,
-      task: {
-        mark,
-        status,
-        text,
-        inProgress,
-        id
-      }
+      task: {mark, status, text, inProgress, id}
     } = this.state;
     let isDone = status === 3;
     return (

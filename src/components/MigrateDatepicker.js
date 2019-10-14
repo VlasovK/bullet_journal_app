@@ -1,54 +1,49 @@
 import React from 'react';
+import moment from 'moment';
 import DatePicker, {registerLocale} from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
 registerLocale('en-GB', enGB);
-import moment from 'moment';
 
-export default class MigrateDatepicker extends React.Component {
-  stopPropagation = (event) => {
+export default function MigrateDatepicker(props) {
+  let stopPropagation = (event) => {
     event.stopPropagation();
   };
-  migrateTask = (date) => {
-    let {taskToMigrate: task, newLogType} = this.props.logsState.migrateData;
+  let migrateTask = (date) => {
+    let {taskToMigrate: task, newLogType} = props.logsState.migrateData;
     task.logType = newLogType;
     if (newLogType === 'weekly') {
       task.date = moment(date).startOf('isoWeek').format('L');
     } else {
       task.date = moment(date).format('L');
     }
-    this.props.editTask(task);
-    this.props.setCurrentTask({});
-    this.props.toggleMigrateDatepicker(false);
+    props.editTask(task);
+    props.setCurrentTask({});
+    props.toggleMigrateDatepicker(false);
   };
-  closeDatepicker = () => {
-    this.props.toggleMigrateDatepicker(false);
+  let closeDatepicker = () => {
+    props.toggleMigrateDatepicker(false);
   };
-  render() {
-    let {newLogType} = this.props.logsState.migrateData;
-    if (!this.props.workspaceState.isMigrateDatepickerShown) {
-      return null;
-    }
-    return (
+  let {newLogType} = props.logsState.migrateData;
+  return (
+    <div
+      className="fullscreen-mask migrate-datepicker-mask"
+      onClick={closeDatepicker}
+    >
       <div
-        className="fullscreen-mask migrate-datepicker-mask"
-        onClick={this.closeDatepicker}
+        onClick={stopPropagation}
+        className={
+          `datepicker-container${newLogType === 'monthly' ? '-small' : ''}`
+        }
       >
-        <div
-          onClick={this.stopPropagation}
-          className={
-            `datepicker-container${newLogType === 'monthly' ? '-small' : ''}`
-          }
-        >
-          <DatePicker
-            inline
-            showMonthYearPicker={newLogType === 'monthly'}
-            showWeekNumbers={newLogType === 'weekly'}
-            locale="en-GB"
-            className="date-picker"
-            onChange={this.migrateTask}
-          />
-        </div>
+        <DatePicker
+          inline
+          showMonthYearPicker={newLogType === 'monthly'}
+          showWeekNumbers={newLogType === 'weekly'}
+          locale="en-GB"
+          className="date-picker"
+          onChange={migrateTask}
+        />
       </div>
-    );
-  }
+    </div>
+  );
 }

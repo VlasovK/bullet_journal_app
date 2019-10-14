@@ -3,22 +3,19 @@ import {connect} from 'react-redux';
 import {setCurrentTime} from '../store/common/actions';
 import Header from '../components/Header';
 
-class HeaderContainer extends React.Component {
-  render() {
-    return (
-      <Header commonState={this.props.commonState}
-        workspaceState={this.props.workspaceState}
-        setCurrentTime={this.props.setCurrentTime}
-      />
-    );
-  }
+function HeaderContainer(props) {
+  return (
+    <Header
+      commonState={props.commonState}
+      workspaceState={props.workspaceState}
+      setCurrentTime={props.setCurrentTime}
+    />
+  );
 }
 
-let mapStateToProps = state=>{
-  return {
+let mapStateToProps = (state) => ({
     commonState: state.commonState,
     workspaceState: state.workspaceState
-  };
-};
+});
 let mapDispatchToProps = {setCurrentTime};
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);

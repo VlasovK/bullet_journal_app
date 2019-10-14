@@ -8,26 +8,22 @@ import LogsContainer from './logs/LogsContainer';
 import NotesContainer from './notes/NotesContainer';
 import LifestyleContainer from './lifestyle/LifestyleContainer';
 
-export default class MainView extends React.Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <div className="bg-img">
-          <HeaderContainer />
-          <SpinnerContainer />
-          <ServerErrorContainer />
-          <Switch>
-            <Redirect exact path="/" to="/logs" />
-            <Route path="/projects" component={ProjectsContainer} />
-            <Route path="/logs" component={LogsContainer} />
-            <Route path="/notes" component={NotesContainer} />
-            <Route path="/lifestyle" component={LifestyleContainer} />
-          </Switch>
-          <div className="footer">
-            designed by iKoss 2019
-          </div>
-        </div>
-      </BrowserRouter>
-    );
-  }
+export default function MainView() {
+  return (
+    <BrowserRouter>
+      <div className="bg-img">
+        <HeaderContainer />
+        <SpinnerContainer />
+        <ServerErrorContainer />
+        <Switch>
+          <Redirect exact path="/" to="/logs" />
+          <Route path="/projects" component={ProjectsContainer} />
+          <Route path="/logs" component={LogsContainer} />
+          <Route path="/notes" component={NotesContainer} />
+          <Route path="/lifestyle" component={LifestyleContainer} />
+        </Switch>
+        <div className="footer">2019</div>
+      </div>
+    </BrowserRouter>
+  );
 }

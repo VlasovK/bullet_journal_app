@@ -18,8 +18,8 @@ export default class Task extends React.Component {
     this.state = {
       task: {
         text: '',
-        mark: 4, // priority: 1=high, 2=middle, 3=low, 4=none
-        status: 1, // 1=active, 3=done
+        mark: 4, // priority: 1 - high, 2 - middle, 3 - low, 4 - none
+        status: 1, // status: 1 - active, 3 - done
       },
       isTaskChanged: false
     };
@@ -31,17 +31,12 @@ export default class Task extends React.Component {
       : null;
     document.getElementById('new-task').scrollIntoView({block: 'nearest'});
     this.setState({
-      task: {
-        ...this.state.task,
-        date: currentLogDate,
-        logType,
-      }
+      task: {...this.state.task, date: currentLogDate, logType}
     });
   }
   handleTextArea = (event) => {
     this.setState({
-      task: {...this.state.task, text: event.target.value},
-      isTaskChanged: true
+      task: {...this.state.task, text: event.target.value}, isTaskChanged: true
     });
   };
   markTask = (mark) => () => {
@@ -55,10 +50,7 @@ export default class Task extends React.Component {
     this.props.closeNewTask();
   };
   render() {
-    let {
-      isTaskChanged,
-      task: {mark, text}
-    } = this.state;
+    let {isTaskChanged, task: {mark, text}} = this.state;
     return (
       <MDBContainer id="new-task">
         <MDBCard>

@@ -2,10 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Spinner from '../components/Spinner';
 
-class SpinnerContainer extends React.Component {
-  render() {
-    return <Spinner logsState={this.props.logsState} />;
-  }
+function SpinnerContainer(props) {
+  return <Spinner logsState={props.logsState} />;
 }
 
 let mapStateToProps = (state) => ({logsState: state.logsState});

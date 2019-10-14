@@ -2,10 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import ServerError from '../components/ServerError';
 
-class ServerErrorContainer extends React.Component {
-  render() {
-    return <ServerError logsState={this.props.logsState} />;
-  }
+function ServerErrorContainer(props) {
+  return <ServerError logsState={props.logsState} />;
 }
 
 let mapStateToProps = (state) => ({logsState: state.logsState});
