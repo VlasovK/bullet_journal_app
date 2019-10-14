@@ -1,31 +1,31 @@
-import React from 'react';
-import {connect} from 'react-redux';
 import {
-  setCurrentTask,
   addTask,
   editTask,
-  removeTask
+  removeTask,
+  setCurrentTask
 } from '../../store/logs/actions';
+import {connect} from 'react-redux';
 import FutureLog from '../../components/logs/FutureLog';
+import React from 'react';
 
 function FutureLogContainer(props) {
   return (
     <FutureLog
-      logType={props.logType}
-      logsState={props.logsState}
-      setCurrentTask={props.setCurrentTask}
       addTask={props.addTask}
       editTask={props.editTask}
+      logsState={props.logsState}
+      logType={props.logType}
       removeTask={props.removeTask}
+      setCurrentTask={props.setCurrentTask}
     />
   );
 }
 
 let mapStateToProps = state=>({logsState: state.logsState});
 let mapDispatchToProps = {
-  setCurrentTask,
   addTask,
   editTask,
-  removeTask
+  removeTask,
+  setCurrentTask
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FutureLogContainer);

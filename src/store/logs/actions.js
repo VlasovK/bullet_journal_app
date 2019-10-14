@@ -1,11 +1,11 @@
 import logsApi from '../../api/logsApi';
 
+export const DECREASE_PENDING_REQUESTS = 'DECREASE_PENDING_REQUESTS';
+export const INCREASE_PENDING_REQUESTS = 'INCREASE_PENDING_REQUESTS';
 export const SET_CURRENT_TASK = 'SET_CURRENT_TASK';
 export const SET_LOG_DATE = 'SET_LOG_DATE';
-export const INCREASE_PENDING_REQUESTS = 'INCREASE_PENDING_REQUESTS';
-export const DECREASE_PENDING_REQUESTS = 'DECREASE_PENDING_REQUESTS';
-export const SET_TASKS = 'SET_TASKS';
 export const SET_MIGRATE_DATA = 'SET_MIGRATE_DATA';
+export const SET_TASKS = 'SET_TASKS';
 export const THROW_SERVER_ERROR = 'THROW_SERVER_ERROR';
 
 export let setCurrentTask = task=>({type: SET_CURRENT_TASK, payload: task});

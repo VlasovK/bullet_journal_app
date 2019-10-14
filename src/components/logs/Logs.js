@@ -1,10 +1,10 @@
-import React from 'react';
+import DailyLogContainer from '../../containers/logs/DailyLogContainer';
+import FutureLogContainer from '../../containers/logs/FutureLogContainer';
 import MigrateDatepickerContainer
   from '../../containers/MigrateDatepickerContainer';
-import FutureLogContainer from '../../containers/logs/FutureLogContainer';
 import MonthlyLogContainer from '../../containers/logs/MonthlyLogContainer';
+import React from 'react';
 import WeeklyLogContainer from '../../containers/logs/WeeklyLogContainer';
-import DailyLogContainer from '../../containers/logs/DailyLogContainer';
 
 export default class Logs extends React.Component {
   componentDidMount() {

@@ -1,11 +1,11 @@
-import React from 'react';
-import moment from 'moment';
 import DatePicker, {registerLocale} from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
+import moment from 'moment';
+import React from 'react';
 registerLocale('en-GB', enGB);
 
 export default function MigrateDatepicker(props) {
-  let {taskToMigrate: task, newLogType} = props.logsState.migrateData;
+  let {newLogType, taskToMigrate: task} = props.logsState.migrateData;
   let stopPropagation = event=>{
     event.stopPropagation();
   };

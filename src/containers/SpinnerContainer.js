@@ -1,5 +1,5 @@
-import React from 'react';
 import {connect} from 'react-redux';
+import React from 'react';
 import Spinner from '../components/Spinner';
 
 function SpinnerContainer(props) {

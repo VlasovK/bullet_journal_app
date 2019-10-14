@@ -1,19 +1,19 @@
-import React from 'react';
-import {MDBCardTitle} from 'mdbreact';
 import BaseLog from './BaseLog';
+import {MDBCardTitle} from 'mdbreact';
 import moment from 'moment';
+import React from 'react';
 
 export default class WeeklyLog extends BaseLog {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDates: [],
       actualDates: [],
-      expiredDates: []
+      expiredDates: [],
+      selectedDates: []
     };
   }
   static getDerivedStateFromProps(props, state) {
-    let {tasks, dates: {weekly: currentLogDate}} = props.logsState;
+    let {dates: {weekly: currentLogDate}, tasks} = props.logsState;
     let selectedDates =[];
     let actualDates = [];
     let expiredDates = [];

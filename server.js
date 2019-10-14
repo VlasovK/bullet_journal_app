@@ -1,6 +1,6 @@
+let bodyParser = require('body-parser');
 let express = require('express');
 let fs = require('fs');
-let bodyParser = require('body-parser');
 
 // create database file if not created
 if (!fs.existsSync('app_db.json')) {

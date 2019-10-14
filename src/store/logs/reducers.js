@@ -1,33 +1,33 @@
-import moment from 'moment';
 import {
+  DECREASE_PENDING_REQUESTS,
+  INCREASE_PENDING_REQUESTS,
   SET_CURRENT_TASK,
   SET_LOG_DATE,
-  INCREASE_PENDING_REQUESTS,
-  DECREASE_PENDING_REQUESTS,
-  SET_TASKS,
   SET_MIGRATE_DATA,
+  SET_TASKS,
   THROW_SERVER_ERROR
 } from './actions';
+import moment from 'moment';
 
 let defaultState = {
   currentTask: {},
-  tasks: [],
   dates: {
+    daily: moment(),
     feature: null,
     monthly: moment().startOf('month'),
-    weekly: moment().startOf('isoWeek'),
-    daily: moment()
+    weekly: moment().startOf('isoWeek')
   },
   migrateData: {
-    taskToMigrate: {},
-    newLogType: null
+    newLogType: null,
+    taskToMigrate: {}
   },
   pendingRequests: 0,
-  serverError: false
+  serverError: false,
+  tasks: []
 };
 
 export let logsReducer = (state = defaultState, action)=>{
-  let {type, payload} = action;
+  let {payload, type} = action;
   switch (type) {
     case SET_CURRENT_TASK:
       return {...state, currentTask: payload};

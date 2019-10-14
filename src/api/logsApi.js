@@ -1,4 +1,4 @@
-import {queryGet, queryPost, queryDelete} from './apiConfig';
+import {queryDelete, queryGet, queryPost} from './apiConfig';
 
 export default {
   getTasks() {

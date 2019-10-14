@@ -1,24 +1,24 @@
-import React from 'react';
 import {
-  MDBContainer,
+  MDBBtn,
+  MDBBtnGroup,
   MDBCard,
   MDBCardBody,
-  MDBIcon,
-  MDBBtnGroup,
-  MDBBtn,
+  MDBContainer,
   MDBDropdown,
-  MDBDropdownToggle,
+  MDBDropdownItem,
   MDBDropdownMenu,
-  MDBDropdownItem
+  MDBDropdownToggle,
+  MDBIcon
 } from 'mdbreact';
+import React from 'react';
 
 export default class EditTask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      task: {},
       isTaskChanged: false,
-      style: ''
+      style: '',
+      task: {}
     };
   }
   componentDidMount() {
@@ -41,23 +41,23 @@ export default class EditTask extends React.Component {
     this.props.editTask(this.state.task);
     this.props.setCurrentTask({});
   };
-  onDone = ()=>{
-    let task = {...this.state.task, status: 3, inProgress: false};
+  setStatus = status=>()=>{
+    let {task} = this.state;
+    switch (status) {
+      case 'done':
+        task.status = 3;
+        task.inProgress = false;
+        break;
+      case 'notDone':
+        task.status = 1;
+        task.inProgress = false;
+        break;
+      case 'inProgress':
+        task.status = 1;
+        task.inProgress = true;
+    }
     this.props.editTask(task);
     this.props.setCurrentTask({});
-  };
-  onNotDone = ()=>{
-    let task = {...this.state.task, status: 1, inProgress: false};
-    this.props.editTask(task);
-    this.props.setCurrentTask({});
-  };
-  onInProgress = ()=>{
-    let task = {...this.state.task, status: 1, inProgress: true};
-    this.props.editTask(task);
-    this.props.setCurrentTask({});
-  };
-  onNotInProgress = ()=>{
-    this.onNotDone();
   };
   onDelete = id=>()=>{
     this.props.deleteTask(id);
@@ -80,7 +80,7 @@ export default class EditTask extends React.Component {
   render() {
     let {
       isTaskChanged,
-      task: {mark, status, text, inProgress, id}
+      task: {id, inProgress, mark, status, text}
     } = this.state;
     let isDone = status === 3;
     return (
@@ -108,7 +108,7 @@ export default class EditTask extends React.Component {
                   outline color="blue-grey"
                   size="sm"
                   className="edit-task-btn"
-                  onClick={this.onDone}
+                  onClick={this.setStatus('done')}
                 >
                   done
                 </MDBBtn>
@@ -118,7 +118,7 @@ export default class EditTask extends React.Component {
                   outline color="blue-grey"
                   size="sm"
                   className="edit-task-btn"
-                  onClick={this.onNotDone}
+                  onClick={this.setStatus('notDone')}
                 >
                   not done
                 </MDBBtn>
@@ -128,7 +128,7 @@ export default class EditTask extends React.Component {
                   outline color="blue-grey"
                   size="sm"
                   className="edit-task-btn"
-                  onClick={this.onInProgress}
+                  onClick={this.setStatus('inProgress')}
                 >
                 in progress
                 </MDBBtn>
@@ -138,7 +138,7 @@ export default class EditTask extends React.Component {
                   outline color="blue-grey"
                   size="sm"
                   className="edit-task-btn"
-                  onClick={this.onNotInProgress}
+                  onClick={this.setStatus('notDone')}
                 >
                   not in progress
                 </MDBBtn>

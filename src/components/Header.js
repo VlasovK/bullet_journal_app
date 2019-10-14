@@ -1,6 +1,6 @@
-import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import moment from 'moment';
+import React from 'react';
 
 class Header extends React.Component {
   buttons = [

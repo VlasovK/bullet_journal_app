@@ -1,7 +1,7 @@
-import React from 'react';
-import {MDBCardTitle} from 'mdbreact';
 import BaseLog from './BaseLog';
+import {MDBCardTitle} from 'mdbreact';
 import moment from 'moment';
+import React from 'react';
 
 export default class DailyLog extends BaseLog {
   constructor(props) {

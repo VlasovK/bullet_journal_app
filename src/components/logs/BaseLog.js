@@ -1,19 +1,19 @@
-import React from 'react';
+import DatePicker, {registerLocale} from 'react-datepicker';
+import EditTaskContainer from '../../containers/logs/EditTaskContainer';
+import enGB from 'date-fns/locale/en-GB';
 import {
-  MDBContainer,
   MDBCard,
   MDBCardBody,
-  MDBCardTitle,
   MDBCardText,
+  MDBCardTitle,
+  MDBContainer,
   MDBIcon
 } from 'mdbreact';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import TaskContainer from '../../containers/logs/TaskContainer';
-import NewTaskContainer from '../../containers/logs/NewTaskContainer';
-import EditTaskContainer from '../../containers/logs/EditTaskContainer';
 import moment from 'moment';
-import DatePicker, {registerLocale} from 'react-datepicker';
-import enGB from 'date-fns/locale/en-GB';
+import NewTaskContainer from '../../containers/logs/NewTaskContainer';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import React from 'react';
+import TaskContainer from '../../containers/logs/TaskContainer';
 registerLocale('en-GB', enGB);
 
 export default class BaseLog extends React.Component {
@@ -59,9 +59,9 @@ export default class BaseLog extends React.Component {
   renderTasks = ()=>{
     let {logType} = this.props;
     let {
-      tasks,
       currentTask,
-      dates: {[logType]: currentLogDate}
+      dates: {[logType]: currentLogDate},
+      tasks
     } = this.props.logsState;
     tasks = tasks.filter(task=>(
       task.logType === logType &&
@@ -83,7 +83,7 @@ export default class BaseLog extends React.Component {
     });
   };
   render() {
-    let {logType, logsState} = this.props;
+    let {logsState ,logType} = this.props;
     let newTask = logsState.currentTask === logType;
     let customInput = this.getCustomInput
       ? this.getCustomInput()

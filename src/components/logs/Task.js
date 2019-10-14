@@ -1,11 +1,11 @@
-import React from 'react';
 import {
-  MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBCardText,
+  MDBContainer,
   MDBIcon
 } from 'mdbreact';
+import React from 'react';
 
 export default function Task(props) {
   let selectTask = task=>()=>{

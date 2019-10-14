@@ -1,5 +1,5 @@
-import React from 'react';
 import {connect} from 'react-redux';
+import React from 'react';
 import ServerError from '../components/ServerError';
 
 function ServerErrorContainer(props) {

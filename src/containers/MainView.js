@@ -1,12 +1,12 @@
-import React from 'react';
-import {BrowserRouter, Switch, Redirect, Route} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import HeaderContainer from './HeaderContainer';
-import SpinnerContainer from './SpinnerContainer';
-import ServerErrorContainer from './ServerErrorContainer';
-import ProjectsContainer from './projects/ProjectsContainer';
+import LifestyleContainer from './lifestyle/LifestyleContainer';
 import LogsContainer from './logs/LogsContainer';
 import NotesContainer from './notes/NotesContainer';
-import LifestyleContainer from './lifestyle/LifestyleContainer';
+import ProjectsContainer from './projects/ProjectsContainer';
+import React from 'react';
+import ServerErrorContainer from './ServerErrorContainer';
+import SpinnerContainer from './SpinnerContainer';
 
 export default function MainView() {
   return (

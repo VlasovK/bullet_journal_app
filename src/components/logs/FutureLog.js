@@ -1,11 +1,11 @@
-import React from 'react';
 import BaseLog from './BaseLog';
-import TaskContainer from '../../containers/logs/TaskContainer';
 import EditTaskContainer from '../../containers/logs/EditTaskContainer';
+import TaskContainer from '../../containers/logs/TaskContainer';
+import React from 'react';
 
 export default class FutureLog extends BaseLog {
   renderTasks = ()=>{
-    let {tasks, currentTask} = this.props.logsState;
+    let {currentTask, tasks} = this.props.logsState;
     tasks = tasks.filter(task=>task.logType === 'future');
     tasks = this.sortTasks(tasks);
     return tasks.map(task=>{

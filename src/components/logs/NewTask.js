@@ -1,31 +1,31 @@
-import React from 'react';
 import {
-  MDBIcon,
   MDBBtn,
-  MDBContainer,
+  MDBBtnGroup,
   MDBCard,
   MDBCardBody,
-  MDBBtnGroup,
+  MDBContainer,
   MDBDropdown,
-  MDBDropdownToggle,
+  MDBDropdownItem,
   MDBDropdownMenu,
-  MDBDropdownItem
+  MDBDropdownToggle,
+  MDBIcon
 } from 'mdbreact';
+import React from 'react';
 
 export default class Task extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isTaskChanged: false,
       task: {
-        text: '',
         mark: 4, // priority: 1 - high, 2 - middle, 3 - low, 4 - none
         status: 1, // status: 1 - active, 3 - done
-      },
-      isTaskChanged: false
+        text: ''
+      }
     };
   }
   componentDidMount() {
-    let {logType, logsState: {dates}} = this.props;
+    let {logsState: {dates}, logType} = this.props;
     let currentLogDate = dates[logType] ? dates[logType].format('L') : null;
     document.getElementById('new-task').scrollIntoView({block: 'nearest'});
     this.setState({

@@ -1,14 +1,14 @@
-import React from 'react';
 import {connect} from 'react-redux';
 import NewTask from '../../components/logs/NewTask';
+import React from 'react';
 
 function NewTaskContainer(props) {
   return (
     <NewTask
-      logsState={props.logsState}
       closeNewTask={props.closeNewTask}
-      saveNewTask={props.saveNewTask}
+      logsState={props.logsState}
       logType={props.logType}
+      saveNewTask={props.saveNewTask}
     />
   );
 }

@@ -1,6 +1,6 @@
-import React from 'react';
 import {connect} from 'react-redux';
 import Lifestyle from '../../components/lifestyle/Lifestyle';
+import React from 'react';
 
 function LifestyleContainer(props) {
   return <Lifestyle />;
